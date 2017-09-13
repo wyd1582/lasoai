@@ -1,3 +1,3 @@
-# Important README info about this repo
+# Important info about this repo
 
 Winter is coming.
