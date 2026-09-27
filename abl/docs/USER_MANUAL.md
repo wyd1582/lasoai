@@ -11,8 +11,8 @@ change, and recover. Design rationale: `docs/DESIGN.md`; data model and dashboar
 ## 1. Ten-minute start
 
 ```bash
-git clone -b claude/affectionate-franklin-ttwudk https://github.com/wyd1582/playground
-cd playground/abl
+git clone https://github.com/wyd1582/lasoai.git
+cd lasoai/abl
 python3 -m venv .venv && . .venv/bin/activate
 pip install -r requirements.txt
 make test            # 63 tests, ~6–8 min (includes a small end-to-end campaign)

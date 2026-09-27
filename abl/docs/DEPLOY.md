@@ -5,12 +5,11 @@ sequence in brief.
 
 | # | where | what |
 |---|---|---|
-| 1 | GitHub | create an **empty** private repo (no README / .gitignore / license) |
-| 2 | your machine | `bash abl/scripts/export_to_new_repo.sh https://github.com/<you>/abl.git` from the playground clone; pushes `abl/` with its history as `main` |
-| 3 | your machine | `git clone` the new repo → `python3 -m venv .venv && . .venv/bin/activate && pip install -r requirements.txt` → `make test` → `make demo` → `make watch` |
+| 1–2 | — | done: the code lives in `wyd1582/lasoai`, ABL under `abl/` |
+| 3 | your machine | `git clone https://github.com/wyd1582/lasoai.git && cd lasoai/abl` → `python3 -m venv .venv && . .venv/bin/activate && pip install -r requirements.txt` → `make test` → `make demo` → `make watch` |
 | 4 | GitHub | ruleset on `main`: require PR, require checks `test (3.9)`, `test (3.11)`, `site`, block force pushes |
-| 5 | Render | New → Blueprint → the repo; `render.yaml` is picked up; enter `ABL_DASHBOARD_PASSWORD`; first build ≈10–12 min |
-| 6 | Vercel | import the repo, preset **Other**; `vercel.json` builds `site/dist`; set `ABL_APP_URL` to the Render URL |
+| 5 | Render | New → Blueprint → the `lasoai` repo; the root `render.yaml` (rootDir `abl`) is picked up; enter `ABL_DASHBOARD_PASSWORD`; first build ≈10–12 min |
+| 6 | Vercel | import the repo, preset **Other**; the root `vercel.json` builds `abl/site/dist`; set `ABL_APP_URL` to the Render URL |
 | 7 | DNS | `app` CNAME → the Render host (verify in Render); apex + `www` per Vercel's Domains page |
 | 8 | Vercel | set `ABL_APP_URL=https://app.<domain>` and redeploy |
 

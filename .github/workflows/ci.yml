@@ -1,0 +1,49 @@
+name: ci
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  abl:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.9", "3.11"]
+    defaults:
+      run:
+        working-directory: abl
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+          cache-dependency-path: abl/requirements.txt
+      - run: pip install -r requirements.txt
+      - run: python -m pytest -q
+        env:
+          PYTHONPATH: .
+          ABL_LLM: stub
+  refpop-agent:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: refpop-agent
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: refpop-agent/requirements.txt
+      - run: pip install -r requirements.txt
+      - run: python -m pytest -q
+  site:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: cd abl && python3 scripts/build_site.py
+      - run: test -f abl/site/dist/index.html && test -f abl/site/dist/docs/USER_MANUAL.zh.md

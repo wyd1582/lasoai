@@ -58,9 +58,9 @@ the one-page argument and the operator's map.
 
 ## Deploy
 
-`docs/DEPLOY.zh.md` (step by step, Chinese) · `docs/DEPLOY.md` (summary). Dashboard on Render via
-`render.yaml` + `Dockerfile` (demo mode, password-gated); landing site and manuals on Vercel via
-`vercel.json` + `scripts/build_site.py`; CI in `.github/workflows/ci.yml` (Python 3.9 and 3.11).
+`docs/DEPLOY.zh.md` (step by step, Chinese) · `docs/DEPLOY.md` (summary). This directory lives in the
+`wyd1582/lasoai` repository; the root `render.yaml` (dashboard, Docker, demo mode, password-gated) and
+`vercel.json` (landing site and manuals) point here, and the root CI runs the tests on Python 3.9 and 3.11.
 
 ## Run it
 

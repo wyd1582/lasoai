@@ -9,8 +9,8 @@ Agentic Breeding-value Loop：一个"agents 提假设、确定性门槛决定谁
 ## 1. 十分钟上手
 
 ```bash
-git clone -b claude/affectionate-franklin-ttwudk https://github.com/wyd1582/playground
-cd playground/abl
+git clone https://github.com/wyd1582/lasoai.git
+cd lasoai/abl
 python3 -m venv .venv && . .venv/bin/activate
 pip install -r requirements.txt
 make test            # 63 项测试，约 6–8 分钟（含一个小规模端到端 campaign）
