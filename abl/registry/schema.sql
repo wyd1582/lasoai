@@ -130,6 +130,7 @@ CREATE TABLE IF NOT EXISTS recommendations (
   rank               INTEGER NOT NULL,
   pct_rank           REAL NOT NULL,
   recommended_action TEXT NOT NULL,          -- keep | cull | mate_with:<id>
+  randomized_control INTEGER NOT NULL DEFAULT 0,  -- 1 = this recommendation belongs to a randomised control mating (PRD Demo 3)
   issued_at          TEXT NOT NULL,
   owner              TEXT NOT NULL DEFAULT 'customer'
 );

@@ -223,6 +223,28 @@ class Registry:
                                         compute_seconds=compute_seconds, tokens=tokens, evaluated_at=utcnow_iso()))
         return eid
 
+    # -- layer-5 data: recommendations → decisions → outcomes (OPS.md A.1 rule 2) ----------
+    def add_recommendation(self, *, rec_id: str, customer_id: str, selection_date: str, candidate_id: str,
+                           snapshot_id: str, animal_id: str, score: float, rank: int, pct_rank: float,
+                           recommended_action: str, randomized_control: bool = False, owner: str = "customer") -> str:
+        self.insert("recommendations", dict(rec_id=rec_id, customer_id=customer_id, selection_date=selection_date,
+                                            candidate_id=candidate_id, snapshot_id=snapshot_id, animal_id=animal_id,
+                                            score=float(score), rank=int(rank), pct_rank=float(pct_rank),
+                                            recommended_action=recommended_action,
+                                            randomized_control=int(bool(randomized_control)), issued_at=utcnow_iso(), owner=owner))
+        return rec_id
+
+    def add_decision(self, *, rec_id: str, adopted: bool, actual_action: str, decided_by_role: str,
+                     decided_at: str | None = None, override_reason: str | None = None, owner: str = "customer") -> None:
+        self.insert("decisions", dict(rec_id=rec_id, adopted=int(bool(adopted)), actual_action=actual_action,
+                                      decided_by_role=decided_by_role, decided_at=decided_at or utcnow_iso(),
+                                      override_reason=override_reason, owner=owner))
+
+    def add_outcome(self, *, outcome_id: str, rec_id: str, animal_id: str, outcome_type: str, value: float | None,
+                    observed_at: str, generation: int | None = None, owner: str = "customer") -> None:
+        self.insert("outcomes", dict(outcome_id=outcome_id, rec_id=rec_id, animal_id=animal_id, outcome_type=outcome_type,
+                                     value=value, observed_at=observed_at, generation=generation, owner=owner))
+
     def add_snapshot(self, **row: Any) -> str:
         row.setdefault("snapshot_id", new_id("s"))
         self.insert("data_snapshots", row)

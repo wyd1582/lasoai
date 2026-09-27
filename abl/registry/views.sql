@@ -46,12 +46,13 @@ CREATE VIEW v_realized AS
 -- descriptive only: adoption is not randomised (OPS.md A.3)
 SELECT r.customer_id, r.selection_date, o.outcome_type,
        COALESCE(d.adopted, 0) AS adopted,
+       r.randomized_control,
        COUNT(*)               AS n,
        AVG(o.value)           AS mean_outcome
 FROM recommendations r
 JOIN outcomes o ON o.rec_id = r.rec_id
 LEFT JOIN decisions d ON d.rec_id = r.rec_id
-GROUP BY r.customer_id, r.selection_date, o.outcome_type, adopted;
+GROUP BY r.customer_id, r.selection_date, o.outcome_type, adopted, r.randomized_control;
 
 DROP VIEW IF EXISTS v_drift;
 CREATE VIEW v_drift AS
