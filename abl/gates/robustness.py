@@ -32,7 +32,7 @@ def run(cand_stats, champ_stats, cand_spec, champ_spec, evaluator, splits, thres
         total_delta: float) -> tuple[bool, list[dict]]:
     th = thresholds["robustness"]
     rows: list[dict] = []
-    group_cols = [c for c in ("farm", "line", "birth_t") if c in evaluator.cov.columns and evaluator.cov[c].nunique() > 1]
+    group_cols = [c for c in ("farm", "line", "birth_t", "batch", "breed") if c in evaluator.cov.columns and evaluator.cov[c].nunique() > 1]
     for col in group_cols:
         per = _per_group_delta(cand_stats, champ_stats, evaluator, col)
         if len(per) < int(th["min_groups"]):

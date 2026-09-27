@@ -10,3 +10,4 @@ rich>=13
 streamlit>=1.37   # st.fragment; on Python 3.9 pip resolves to the last 3.9-compatible release
 rdata>=0.11
 anthropic>=0.40
+matplotlib>=3.8

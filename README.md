@@ -6,9 +6,11 @@
 
 | 目录 | 来源 | 是什么 | 对应 PRD | 状态 |
 |---|---|---|---|---|
-| `abl/` | 本会话（17 个提交） | **Agentic Breeding-value Loop**：agents 提假设、六道确定性门槛裁判、A–F 六臂对照、负对照、台账、监护面板（中英）、Docker/Render/Vercel 部署 | **Demo 1 裁判（育种）**的核心引擎；Demo 4b 复用同一 harness | 可运行，74 项测试；Demo 1 还差 G 臂、跨客户三档、r–N 曲线、进展分解表、交付规范文件（见 `docs/NEXT.md`） |
-| `refpop-agent/` | Task B 分支 | **参考群更新 Agent 管线**（LangGraph）：到货 → QC 门禁 → 合并 → 重训 GBLUP → 前向验证 → 选配 → 中文 HTML 报告；模拟数据含 62 个注入缺陷 | **Demo 3 台账界面**的流程引擎；"现金层"影子运行的执行骨架 | 可运行，32 项测试，一条命令 15 秒跑完三个批次 |
-| `lowdensity-sku/` | Task C 分支 | **低密度 SKU 可行性**：密度–精度曲线、掩码填补（KNN vs 均值）、成本合成；wheat 数据 | 审查表第 3 行"低密度固相面板 + 填充"的证据 | 结果已落盘；Demo 1 需补"填补准确度按 MAF 分层"（猪数据） |
+| `abl/` | 本会话 | **Agentic Breeding-value Loop**：agents 提假设、六道确定性门槛裁判、A–G 七臂对照、负对照、台账、监护面板（中英）、Docker/Render/Vercel 部署；肉鸡式多品系模拟、r–N 曲线与理论上界、跨客户三档、育种者方程分解 | **Demo 1 裁判（育种）**的引擎；Demo 4b 复用同一 harness | 可运行，79 项测试 |
+| `demo1/` | 本会话 | **Demo 1 交付**：`make demo1` 跑六臂 + G 臂（模拟 + 猪）、Daetwyler 上界泄漏检查、跨客户三档、Demo 1b 分解表、猪数据填补按 MAF 分层；产出 report.html、rejected.md、CLAIMS.md、THEORY.md、RUN.json | PRD §3 Demo 1、P-D1v3 | 已交付（模拟先验；真实 eQTL 先验待 `data/priors/`） |
+| `demo3/` | 本会话 | **Demo 3 交付**：圣农流程七步的静态台账页，从 refpop-agent 产物和 ABL 台账（含 `randomized_control`、bandwidth）生成，18 秒重建 | PRD §3 Demo 3 | 已交付（模拟数据） |
+| `refpop-agent/` | Task B 分支 | **参考群更新 Agent 管线**（LangGraph）：到货 → QC 门禁 → 合并 → 重训 GBLUP → 前向验证 → 选配 → 中文 HTML 报告；模拟数据含 62 个注入缺陷 | **Demo 3** 的流程引擎；"现金层"影子运行的执行骨架 | 可运行，32 项测试；其产物是 `demo3/` 的输入 |
+| `lowdensity-sku/` | Task C 分支 | **低密度 SKU 可行性**：密度–精度曲线、掩码填补（KNN vs 均值）、成本合成；wheat 数据 | 审查表第 3 行"低密度固相面板 + 填充"的证据 | 结果已落盘；猪数据上的 MAF 分层版本在 `demo1/imputation/` |
 | `genomic-selection-pig/` | Task A（已合并到 playground master） | **ML 能否打败 BLUP 实验阶梯**：pedBLUP / GBLUP / GBM / 加权岭 × 随机 CV / 留家系 / 前向三口径；**保存的数据**：Cleveland 猪与 BGLR wheat 原件 | 审查表第 6 行"深度学习很少赢"的实测证据；Task A 的口径结论是 ABL 前向切分的依据 | 已完成；数据被 `abl/` 与 `lowdensity-sku/` 复用 |
 | `demo-station/` | Task D 分支 | **苏州演示台**（Streamlit）：把 Task A/B/C 产物包成可点击的三个 Tab | 演示壳；与 `abl/dashboard` 和 Vercel 落地页并存，后者是对外版本 | 可运行，扫描本仓库自动发现产物 |
 | `docs/` | 本次合并 | `PRD_v3.md`（PRD 原文）、`THEORY_REVIEW.md`（审查表）、`NEXT.md`（缺口分析与下一步） | — | — |
@@ -17,6 +19,10 @@
 ## 快速开始
 
 ```bash
+# Demo 1 / Demo 3 交付（需要 abl 的 venv）
+make demo1     # ≈25 分钟 → demo1/report.html
+make demo3     # ≈20 秒  → demo3/report.html
+
 # 裁判（Demo 1 引擎）
 cd abl && python3 -m venv .venv && . .venv/bin/activate && pip install -r requirements.txt
 make test && make demo && make watch          # 手册：abl/docs/USER_MANUAL.zh.md

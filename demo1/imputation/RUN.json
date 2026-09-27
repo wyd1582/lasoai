@@ -1,0 +1,76 @@
+{
+  "script": "demo1/imputation/run.py",
+  "seed": 0,
+  "k": 20,
+  "data": "genomic-selection-pig/data/pig_cleveland_curated.rdata",
+  "data_sha256": "9968d60791971d9be516a4ff681da5b14a1ccb9edfc3eee388944534ad07aa30",
+  "data_sha256_prefix_expected": "9968d60791971d9b",
+  "data_sha256_verified": true,
+  "panel_sizes": [
+    5000,
+    20000
+  ],
+  "panel_sizes_not_applicable": [
+    65000
+  ],
+  "not_applicable_reason": "panel size >= markers after QC (50436)",
+  "n_animals": 3534,
+  "n_ld_animals": 1767,
+  "n_reference_animals": 1767,
+  "n_markers_raw": 52843,
+  "n_markers": 50436,
+  "maf_min": 0.01,
+  "maf_bins": [
+    [
+      0.01,
+      0.05
+    ],
+    [
+      0.05,
+      0.1
+    ],
+    [
+      0.1,
+      0.2
+    ],
+    [
+      0.2,
+      0.3
+    ],
+    [
+      0.3,
+      0.5
+    ]
+  ],
+  "maf_computed_on": "reference half",
+  "knn": "Euclidean distance on panel dosages, unweighted mean of k nearest reference animals",
+  "baseline": "reference-half column mean dosage (allele frequency x 2); r2 undefined (constant prediction)",
+  "concordance": "floor(x+0.5) clipped to {0,1,2} for both prediction and truth",
+  "bootstrap": {
+    "reps": 200,
+    "over": "markers within bin",
+    "ci": "90% percentile"
+  },
+  "per_panel": {
+    "5000": {
+      "n_hidden": 45436,
+      "n_hidden_below_maf_bins": 62,
+      "fractional_truth_cells": 106482,
+      "knn_r2_undefined_markers": 0,
+      "seconds": 26.9
+    },
+    "20000": {
+      "n_hidden": 30436,
+      "n_hidden_below_maf_bins": 42,
+      "fractional_truth_cells": 69354,
+      "knn_r2_undefined_markers": 0,
+      "seconds": 27.7
+    }
+  },
+  "duration_seconds": 68.4,
+  "peak_rss_mb": 2196.4,
+  "python": "3.11.15",
+  "numpy": "2.4.6",
+  "pandas": "3.0.6",
+  "cpu_count": 4
+}

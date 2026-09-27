@@ -1,0 +1,72 @@
+{
+ "demo": "demo1",
+ "generated_at": "2026-09-27T15:48:05.817340+00:00",
+ "seed": 0,
+ "duration_seconds": 2338.0,
+ "thresholds_sha256": "03aced4eec69a7528e1e73bd15a9d25cfa919b151fa2aeae9efb5a605010a66e",
+ "thresholds_unchanged": true,
+ "data": {
+  "broiler_sim_config_hash": "bc5b83e5bc99",
+  "broiler_sim": {
+   "config_hash": "bc5b83e5bc99",
+   "n_animals_dev": 2880,
+   "n_markers": 2000,
+   "holdout_t": 5,
+   "n_holdout": 600,
+   "traits": [
+    "BW42",
+    "FCR",
+    "BreastYield"
+   ],
+   "h2": {
+    "BW42": 0.35,
+    "FCR": 0.25,
+    "BreastYield": 0.45
+   },
+   "n_lines": 4,
+   "n_breeds": 2,
+   "n_batches": 3,
+   "seconds": 2.9
+  },
+  "pig_cleveland_sha256_prefix": "9968d60791971d9b",
+  "pig_file_sha256": "9968d60791971d9be516a4ff681da5b14a1ccb9edfc3eee388944534ad07aa30"
+ },
+ "bandwidth": {
+  "broiler_sim": {
+   "samples_per_year": 600,
+   "label_latency_years": 1.0,
+   "bandwidth": 600.0,
+   "note": "one generation per year; BW42 recorded within the year"
+  },
+  "pig_public": {
+   "samples_per_year": null,
+   "label_latency_years": null,
+   "bandwidth": null,
+   "note": "no time axis in the public data (family blocks stand in for generations)"
+  }
+ },
+ "budgets": {
+  "n_proposals": 100,
+  "full_evals_cap": 9
+ },
+ "results": {
+  "negative_control_false_promotions_sim": 0,
+  "negative_control_false_promotions_pig": 0,
+  "leak_probes_rejected_by_critic": 31,
+  "promoted_total": 0,
+  "champion_true_accuracy": 0.41584826288562066,
+  "holdout_true_accuracy": 0.5070117128303054,
+  "bound_respected": true,
+  "tiers_passing_incremental_gate": [
+   "tier1_same_line_pooled",
+   "tier2_same_breed_other_lines",
+   "tier3_across_breeds"
+  ]
+ },
+ "inputs_sha256": {
+  "accuracy_curve.csv": "a2ef53135e6d7306be2232cfac211f7d23e6a57e257098e888c60ecc399b3f33",
+  "tiers.csv": "976fa430b962da4506a2ecc01e5868c43e3ce3370691f5b9f699a825241a4183",
+  "gain_decomposition.csv": "d86bd27f46ed2592432614c4b6f2dd219296ac13a054c846ca8afa7b4431d672",
+  "scorecard.csv": "59331e359d6e957fe13047325d435dd00cb0fd2b6aa31881e20d3361cc8d849c"
+ }
+}

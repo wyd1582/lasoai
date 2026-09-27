@@ -47,3 +47,14 @@ jobs:
       - uses: actions/checkout@v4
       - run: cd abl && python3 scripts/build_site.py
       - run: test -f abl/site/dist/index.html && test -f abl/site/dist/docs/USER_MANUAL.zh.md
+  demo3:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -r abl/requirements.txt matplotlib duckdb
+      - run: cd demo3 && make report PYTHON=python
+      - run: test -f demo3/report.html && test -f demo3/RUN.json

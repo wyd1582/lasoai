@@ -8,3 +8,5 @@ __pycache__/
 data/raw/
 data/priors/*
 !data/priors/README.md
+demo3/ledger.sqlite
+demo3/registry/

@@ -1,0 +1,193 @@
+{
+  "demo": "demo3 · 台账界面",
+  "seed": 15,
+  "inputs_sha256": {
+    "refpop-agent/artifacts/history.json": "130410a0e3b72a65482d74a125de2b5f77f23d4ead2e90fc1628b9b85b48d102",
+    "refpop-agent/artifacts/models/model_G0.json": "e7fa708ebf1f58e0a556d8ff8fea715db6c881e54b7cf7e8ddeb6acb52c053e8",
+    "refpop-agent/artifacts/models/model_G0.npz": "d1c43f1945e3f331c4a194069b5bb53711b51a5ea991c4214e7e6b51d6f14639",
+    "refpop-agent/artifacts/models/model_G1.json": "e118372cc3f91127053c0e34d788a70ef4a0a537bd4a937ce192bb9e3fbee152",
+    "refpop-agent/artifacts/models/model_G1.npz": "aa4206c5de4232a6dc36a070d36b1e6d9fcddb69d7d21b0177c0a1d3e774ac81",
+    "refpop-agent/artifacts/models/model_G2.json": "50dba8ba4e657ecd597ff8c0ee1ac2921e3ed78a106d6fd615d39da4e877686b",
+    "refpop-agent/artifacts/models/model_G2.npz": "77fa42107d818f8a3a50ffc659450d235cfcd7a231d5e950f4ebc71a785586d1",
+    "refpop-agent/artifacts/refpop/genotypes.npz": "9497a7ad2a9219e63986e1b5fefa5d57dc3f9664e2e95c262199f0df0dd90113",
+    "refpop-agent/artifacts/refpop/phenotypes.csv": "deb3690ad10dd27277879ad30591057750cc957ad197ffb499f33fa4e7a57c21",
+    "refpop-agent/artifacts/runs/G0/admitted_ids.json": "2c62598b7b9ebd05243a4f0febf79e86f8e370c3dec18da9a2e8be233de215b4",
+    "refpop-agent/artifacts/runs/G0/candidates.csv": "2579ec8a8fa58fc26df2fd6354746fba739b6f81906d61d5c80cbd77f66cd727",
+    "refpop-agent/artifacts/runs/G0/mating_pairs.csv": "370ac1b1bb9514538a1c318db6afab453d2aeb6eda689f8e5cd9a387b24f0b91",
+    "refpop-agent/artifacts/runs/G0/mating_summary.json": "98bd6c4f8c8114b493b39e06662ad920ff62d03cdf00f541f15bd33b20067440",
+    "refpop-agent/artifacts/runs/G0/merge_summary.json": "0cb87405795051ebe5aa6ae51b570eba18d58a26338d9eea6e922601578dca4c",
+    "refpop-agent/artifacts/runs/G0/predictions.csv": "a6615ad3f9519e41b79cfc437ffacefcd7259d03f8b6cadb38ef4bed1b70ecd4",
+    "refpop-agent/artifacts/runs/G0/qc_report.csv": "c06a69e49f1f016a451db2032abc523c11872b63203b2b0961c5ea206d5df057",
+    "refpop-agent/artifacts/runs/G0/qc_report.json": "97b71f5cd82f3ce97b55066e0f98676b1f8eb46ad6a6bbfc6f5d2a48b16dbb5a",
+    "refpop-agent/artifacts/runs/G0/retrain_summary.json": "5004deba8b47024a94298d3e7eed290047599a3d7b00a5a9298957c329ff660c",
+    "refpop-agent/artifacts/runs/G0/validation.json": "b9c6507a5a56cacb9531111be39d2dc14ed130bcc795c6a94b4062d11783c0d1",
+    "refpop-agent/artifacts/runs/G1/admitted_ids.json": "4408ac388fb7023927475f4d02762511f4ec738c6130cfb3d8267ed49b48db58",
+    "refpop-agent/artifacts/runs/G1/candidates.csv": "81795c95498f6b8d6ebd35f7acd9e881c549432a0085b2300f6fffef7a269efb",
+    "refpop-agent/artifacts/runs/G1/mating_pairs.csv": "ae5e0f10d2533579945da29223614c7c72b034aacc2940229fc234389a4bf5ba",
+    "refpop-agent/artifacts/runs/G1/mating_summary.json": "d76f709927e3e04098dfa71e92209d04608eb946422e61d017097e0292174456",
+    "refpop-agent/artifacts/runs/G1/merge_summary.json": "93e8fe44c30ad3fe752aebdd72087efdeb80253b26dc807ca605d60063792c3b",
+    "refpop-agent/artifacts/runs/G1/predictions.csv": "ed055f9efdd74602ac60ed093ed1f7c80ca14d8fb097dfdd26b8781f0a495d6a",
+    "refpop-agent/artifacts/runs/G1/qc_report.csv": "94bc34d786075a1814a27ba89ac4a4e6014e0062ec46c3018b4076f1f378868a",
+    "refpop-agent/artifacts/runs/G1/qc_report.json": "0d41e22fb9a6a58285f51c6c6f010dcf63d9a6ccb23df76e80f194d7e79b6dbd",
+    "refpop-agent/artifacts/runs/G1/retrain_summary.json": "ca8b2b4c7697bec00a2b9c3a4ecdffb8567d06f3e497d6742be8345ec4eed6fc",
+    "refpop-agent/artifacts/runs/G1/validation.json": "e926591f4511d5bfda5b543a2edecb9444fd5ef3a8e63db97721a53ed142f318",
+    "refpop-agent/artifacts/runs/G2/admitted_ids.json": "2c822432e0299ffc23766b62d42e7eb5efede04b629d6ccbf7ec229cf595b149",
+    "refpop-agent/artifacts/runs/G2/candidates.csv": "014493c6b3dff4a5e175daf3ef2349b724e0afc4ee4c9e6e1bcf2e9ed08cf4c2",
+    "refpop-agent/artifacts/runs/G2/mating_pairs.csv": "62019b40ae7ad78f46f9c1d36667fbb473fe416a9dced222a5d9906f512b674c",
+    "refpop-agent/artifacts/runs/G2/mating_summary.json": "848a9997dfc7e433c65e666173a4365adff36b12de754722f4650b1ff20afc43",
+    "refpop-agent/artifacts/runs/G2/merge_summary.json": "35583526ed07342163c47e3895a017d749997a01696f16cef58537b8550fc663",
+    "refpop-agent/artifacts/runs/G2/predictions.csv": "efa12d3c5e3f6abf3d98d76e00c5dc7150e0f21027ef0cc169a1153ce0d82a48",
+    "refpop-agent/artifacts/runs/G2/qc_report.csv": "dc7d15d7eeea8784a6e0406c40cfcd128d458fa47b4cd83014ec5236673d3567",
+    "refpop-agent/artifacts/runs/G2/qc_report.json": "83f0bf1f2c4d67fd9a4247186debddd0e562e8a8ce097f40007ac9935e1e0053",
+    "refpop-agent/artifacts/runs/G2/retrain_summary.json": "15f653e00ebdfd9fda7d7989a512bcb1a466d793af9bd33935698f6a332e5131",
+    "refpop-agent/artifacts/runs/G2/validation.json": "80362f9edbafe56c5c00c48826b4a21be105484e3c880e95c9906b651dd1be73",
+    "refpop-agent/data/DEFECTS.md": "d2456536742b3a9aff81932d0b5616c76f127b08eb4838688cdd96f782c4375d",
+    "refpop-agent/data/batches/G0/genotypes.npz": "3577cb71f21fac5bac00e9159abdf04a52edfe94149c9db23ee61768ce482582",
+    "refpop-agent/data/batches/G0/manifest.json": "7a7344d5fed591fc90122539ce17550cb9c94cf072c07217114f5b3037028f0d",
+    "refpop-agent/data/batches/G0/pedigree.csv": "5c6bc7a4aa742ff85d918a7cf9e7e3bf131323081e416c9bda48494e83efbc17",
+    "refpop-agent/data/batches/G0/phenotypes.csv": "f410d8f674868e6f6013a679d1e108e13c7c3f25c12954f135fd4596e92c7a18",
+    "refpop-agent/data/batches/G1/genotypes.npz": "eec61f102139fc3a639254854817d1494ffecc796965d20d6753db7ea5b09ad3",
+    "refpop-agent/data/batches/G1/manifest.json": "9ce7df39116457e71a2b2d3297068f3da4b6d6f2511d3d8cb7748b0e3ad25a49",
+    "refpop-agent/data/batches/G1/pedigree.csv": "534f3cb56346c095567ebbf79716f25224690315aa55b2956090308c9acf5e12",
+    "refpop-agent/data/batches/G1/phenotypes.csv": "0e5d6d336cc760220b93535e2a97965b631ac95d34b6e82c1527a7b441dd4e8e",
+    "refpop-agent/data/batches/G2/genotypes.npz": "02db66e31578bea9e6a89ad0ea6e569ae9a07b7e80eb2b07ae1c97e12967a206",
+    "refpop-agent/data/batches/G2/manifest.json": "1919597a5797c59b29b6e257f0e61b330ab7866057ad03622bc7306dd2e121b2",
+    "refpop-agent/data/batches/G2/pedigree.csv": "679f21c75b4a22e49eba361e6d22bd4886b0604f575af685cf39ad960ed24ca1",
+    "refpop-agent/data/batches/G2/phenotypes.csv": "6fb11f822033b1c88b7745252b50fdfb477e58d2381f805ff41d0ef538b6447e",
+    "refpop-agent/data/defects.json": "c503c5d682664778579cd53ada32fe8525789e6641f4e1d8acb4eb7a00890fd9"
+  },
+  "thresholds_sha256": {
+    "abl/gates/thresholds.yaml": "03aced4eec69a7528e1e73bd15a9d25cfa919b151fa2aeae9efb5a605010a66e"
+  },
+  "assumptions": {
+    "batches_per_year": 1.0,
+    "label_latency_years": 1.0
+  },
+  "bandwidth": {
+    "formula": "samples_per_year / label_latency_years",
+    "admitted_per_new_batch": 500.0,
+    "batches_per_year": 1.0,
+    "samples_per_year": 500.0,
+    "label_latency_years": 1.0,
+    "bandwidth": 500.0,
+    "calendar_sensitivity": {
+      "mean_interval_days": 98.0,
+      "batches_per_year": 3.727,
+      "samples_per_year": 1863.52
+    }
+  },
+  "counts": {
+    "qc": {
+      "G0": {
+        "n_arrived": 2000,
+        "n_rejected": 0,
+        "n_admitted": 2000,
+        "n_injected": 0,
+        "n_caught": 0
+      },
+      "G1": {
+        "n_arrived": 531,
+        "n_rejected": 31,
+        "n_admitted": 500,
+        "n_injected": 31,
+        "n_caught": 31
+      },
+      "G2": {
+        "n_arrived": 531,
+        "n_rejected": 31,
+        "n_admitted": 500,
+        "n_injected": 31,
+        "n_caught": 31
+      }
+    },
+    "defects": {
+      "injected": 62,
+      "caught": 62,
+      "false_rejects": 0
+    },
+    "reference_size": {
+      "G0": 2000,
+      "G1": 2500,
+      "G2": 3000
+    },
+    "mating_pairs": {
+      "G0": 150,
+      "G1": 150,
+      "G2": 150
+    },
+    "ledger_rows": {
+      "data_snapshots": 2,
+      "recommendations": 300,
+      "decisions": 300,
+      "outcomes": 16
+    }
+  },
+  "validation_r": {
+    "G0": {
+      "mode": "cv",
+      "r": 0.3186,
+      "r_recomputed": 0.318566
+    },
+    "G1": {
+      "mode": "forward",
+      "r": 0.3269,
+      "r_recomputed": 0.326945
+    },
+    "G2": {
+      "mode": "forward",
+      "r": 0.3608,
+      "r_recomputed": 0.360766
+    }
+  },
+  "lr_method": {
+    "G1": {
+      "n": 500,
+      "bias": 24.81427,
+      "dispersion_b": 1.013492,
+      "rho_wp": 0.851689
+    },
+    "G2": {
+      "n": 500,
+      "bias": 18.576622,
+      "dispersion_b": 0.994139,
+      "rho_wp": 0.852609
+    }
+  },
+  "shadow_per_animal_agreement": {
+    "agree": 7500,
+    "n": 7500,
+    "tol_g": 0.01,
+    "max_abs_diff_g": 0.0005
+  },
+  "adoption": {
+    "G0": {
+      "recommendations": 150,
+      "adopted": 0,
+      "rate": 0.0,
+      "n_progeny": 0,
+      "mean_progeny_bw42_adopted": null,
+      "mean_progeny_bw42_other": 2910.494,
+      "n_other": 500,
+      "randomized_control_flagged": 0
+    },
+    "G1": {
+      "recommendations": 150,
+      "adopted": 2,
+      "rate": 0.013333333333333334,
+      "n_progeny": 16,
+      "mean_progeny_bw42_adopted": 2935.4415,
+      "mean_progeny_bw42_other": 3045.9618,
+      "n_other": 484,
+      "randomized_control_flagged": 15
+    }
+  },
+  "ledger_content_sha256": "2dc8223b790efabee0aadb849b394cb27c3d3c1c85987b68112bc7571ee2ba31",
+  "outputs_sha256": {
+    "CLAIMS.md": "9f8bf89a0825def43056fcd17df410c8b34eacdb3c892146b2acfe2f30cb9f23",
+    "figures/a_funnel.png": "9d4a973f554794bb9efdab0a90ab0050529df97242e6d139ab9d467b40871b3a",
+    "figures/b_forward_r.png": "6a4fd29929242baf5afca311cf138e05611e24e9778d8efd6e1974d4b8385902",
+    "figures/c_adoption_progeny.png": "48f5943ce9c903d025d9ad9ada4259462d4e1e95dc8443e1286875a85369ff51",
+    "report.html": "7f9029c664a8d9598a65e4b3790eee43647acbc9921045ec34104b54df8a933f"
+  },
+  "duration_seconds": 7.02
+}

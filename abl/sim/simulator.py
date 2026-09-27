@@ -41,6 +41,25 @@ class SimConfig:
     sel_frac_female: float = 0.40
     prior_true_share: float = 0.5    # share of true QTL neighbourhoods in the "literature" prior
     seed: int = GLOBAL_SEED
+    # multi-breed / batch extensions (defaults reproduce the original single-breed stream exactly)
+    n_breeds: int = 1                # lines are assigned to breeds round-robin: breed = line * n_breeds // n_lines
+    breed_divergence: float = 0.5    # share of ancestral haplotypes private to each breed (0 = one pool)
+    n_batches: int = 1               # hatch batches per generation (contemporary groups within farm-year)
+    batch_var: float = 0.0
+    species: str = "sim_pig"
+    calendar_unit: str = "gen"       # label prefix for the time axis ("gen" or "year")
+
+    def breed_of_line(self, line: int) -> int:
+        return line * self.n_breeds // self.n_lines
+
+    def ancestral_pool(self, breed: int) -> np.ndarray:
+        """Indices of ancestral haplotypes a breed's founders may copy from."""
+        n = self.n_ancestral_haplotypes
+        if self.n_breeds <= 1 or self.breed_divergence <= 0:
+            return np.arange(n)
+        n_shared = int(round(n * (1 - self.breed_divergence)))
+        private = np.array_split(np.arange(n_shared, n), self.n_breeds)
+        return np.concatenate([np.arange(n_shared), private[breed]])
 
     def config_hash(self) -> str:
         return sha256_json(asdict(self))[:12]
@@ -54,14 +73,19 @@ class SimResult:
 
 
 def _founder_haplotypes(rng, n_hap, n_loci, cfg: SimConfig):
+    """Founder haplotypes as mosaics of ancestral haplotypes. Founder i (haplotypes 2i, 2i+1) belongs to
+    line i % n_lines, and copies only from its breed's ancestral pool, so breeds differ in allele
+    frequency and LD phase (the mechanism behind cross-breed accuracy decay, de Roos 2008)."""
     freqs = rng.beta(0.6, 0.6, size=n_loci).clip(0.02, 0.98)
     anc = (rng.random((cfg.n_ancestral_haplotypes, n_loci)) < freqs).astype(np.int8)
     hap = np.empty((n_hap, n_loci), dtype=np.int8)
+    pools = [cfg.ancestral_pool(b) for b in range(max(1, cfg.n_breeds))]
     for h in range(n_hap):
+        pool = pools[cfg.breed_of_line((h // 2) % cfg.n_lines)]
         pos = 0
         while pos < n_loci:
             seg = max(1, int(rng.exponential(cfg.mosaic_segment_mean)))
-            src = rng.integers(cfg.n_ancestral_haplotypes)
+            src = pool[rng.integers(len(pool))]
             hap[h, pos:pos + seg] = anc[src, pos:pos + seg]
             pos += seg
     return hap
@@ -119,6 +143,8 @@ def simulate(cfg: SimConfig | None = None) -> SimResult:
     line_eff = rng.normal(scale=np.sqrt(cfg.line_var), size=cfg.n_lines)
     farm_eff = rng.normal(scale=np.sqrt(cfg.farm_var), size=cfg.n_farms)
     year_eff = rng.normal(scale=np.sqrt(cfg.year_var), size=cfg.n_gens)
+    batch_eff = (rng.normal(scale=np.sqrt(cfg.batch_var), size=(cfg.n_gens, cfg.n_batches))
+                 if cfg.n_batches > 1 else np.zeros((cfg.n_gens, 1)))
 
     # scale additive effects so Var(TBV) = h2 in founders (phenotypic variance ~ 1)
     X0 = (hapA + hapB).astype(float)
@@ -137,8 +163,10 @@ def simulate(cfg: SimConfig | None = None) -> SimResult:
         aid = f"a{counter:06d}"
         x = (hA + hB).astype(float)
         sex = "M" if rng.random() < 0.5 else "F"
+        batch = int(rng.integers(cfg.n_batches)) if cfg.n_batches > 1 else 0
         animals.append(dict(animal_id=aid, sire=sire, dam=dam, sex=sex, line=f"L{line+1}",
-                            farm=f"F{farm+1}", birth_t=gen))
+                            farm=f"F{farm+1}", birth_t=gen, breed=f"B{cfg.breed_of_line(line)+1}",
+                            batch=f"H{batch+1}"))
         geno_rows.append((hA + hB)[marker_idx].astype(np.int8))
         geno_ids.append(aid)
         het = ((hA[qtl_idx] != hB[qtl_idx])).astype(float)
@@ -147,7 +175,7 @@ def simulate(cfg: SimConfig | None = None) -> SimResult:
             tbv = float((x[qtl_idx] - 2 * p0[qtl_idx]) @ add_eff[ti])
             dom = float(het @ dom_eff[ti]) - float(np.mean(dom_eff[ti]) * len(qtl_idx) * 0.5)
             e = rng.normal(scale=np.sqrt(max(1e-6, 1 - cfg.h2[ti] - cfg.dominance_var)))
-            y = 10.0 + line_eff[line] + farm_eff[farm] + year_eff[gen] + tbv + dom + e
+            y = 10.0 + line_eff[line] + farm_eff[farm] + year_eff[gen] + batch_eff[gen, batch] + tbv + dom + e
             tbv_rows.append(dict(animal_id=aid, trait=tr, tbv=tbv))
             phen_rows.append(dict(animal_id=aid, trait=tr, value=float(y), available_at=gen))
             ys[tr] = y
@@ -186,10 +214,11 @@ def simulate(cfg: SimConfig | None = None) -> SimResult:
                       map_source="declared")
     frame = GenoFrame(
         animals=pd.DataFrame(animals), phenotypes=pd.DataFrame(phen_rows), genotypes=G,
-        geno_ids=np.array(geno_ids), markers=markers, calendar={g: f"gen{g}" for g in range(cfg.n_gens)},
+        geno_ids=np.array(geno_ids), markers=markers, calendar={g: f"{cfg.calendar_unit}{g}" for g in range(cfg.n_gens)},
         genotype_source="sim",
-        meta={"species": "sim_pig", "source": "sim/simulator.py", "config_hash": cfg.config_hash(),
-              "calendar_source": "generation_index", "map_source": "declared", "pedigree": "complete"},
+        meta={"species": cfg.species, "source": "sim/simulator.py", "config_hash": cfg.config_hash(),
+              "calendar_source": "generation_index", "map_source": "declared", "pedigree": "complete",
+              "n_breeds": cfg.n_breeds, "n_lines": cfg.n_lines, "h2": dict(zip(cfg.traits, cfg.h2))},
         true_bv=pd.DataFrame(tbv_rows),
     ).validate().fill_versions(code_hash="sim:" + cfg.config_hash())
 
@@ -208,3 +237,17 @@ def simulate(cfg: SimConfig | None = None) -> SimResult:
     random_prior = np.zeros(m); random_prior[prng.choice(m, size=int(noisy.sum()), replace=False)] = 1.0
     priors = {"sim_noisy_qtl_prior": noisy, "random_prior": random_prior}
     return SimResult(frame=frame, priors=priors, config=cfg)
+
+
+def broiler_config(seed: int = GLOBAL_SEED, **overrides) -> SimConfig:
+    """PRD v3 Demo 1: a multi-line broiler-style pure-line programme. Two breeds × two pure lines,
+    generation ≈ 1 year, three hatch batches per year, traits body weight / feed conversion / breast
+    yield with h² in 0.2–0.5, farm and batch effects. Every parameter is an assumption, not an estimate
+    of any real population (see demo1/CLAIMS.md)."""
+    cfg = dict(n_founders=480, n_per_gen=600, n_gens=6, n_chrom=5, markers_per_chrom=400, qtl_per_chrom=20,
+               n_lines=4, n_breeds=2, breed_divergence=0.8, n_farms=3, n_batches=3, batch_var=0.05,
+               traits=("BW42", "FCR", "BreastYield"), h2=(0.35, 0.25, 0.45), genetic_corr=0.3,
+               farm_var=0.10, line_var=0.05, year_var=0.03, sel_frac_male=0.08, sel_frac_female=0.40,
+               species="broiler_sim", calendar_unit="year", seed=seed)
+    cfg.update(overrides)
+    return SimConfig(**cfg)

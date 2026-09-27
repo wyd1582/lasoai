@@ -21,7 +21,7 @@ class NeedOperator(DSLError):
 # is checked row by row; "external" = published prior, dated before the campaign.
 FIELD_AVAILABILITY: dict[str, str] = {
     "animals.farm": "birth", "animals.line": "birth", "animals.sex": "birth", "animals.birth_t": "birth",
-    "animals.sire": "birth", "animals.dam": "birth", "genotypes": "birth",
+    "animals.sire": "birth", "animals.dam": "birth", "animals.batch": "birth", "animals.breed": "birth", "genotypes": "birth",
     "phenotypes.value": "label", "priors.*": "external", "markers.chrom": "external",
 }
 
@@ -47,7 +47,7 @@ OPERATORS: dict[str, dict[str, Any]] = {
                       "fields": ["genotypes", "markers.chrom"], "status": "implemented"},
     "qtl_prior": {"args": {"source": (str, lambda v: None, "-"), "weight": (float, _in(0.0, 10.0), "-")},
                   "fields": ["genotypes", "priors.*"], "status": "implemented"},
-    "covariate": {"args": {"field": (str, _enum("farm", "line", "sex", "birth_t"), "categorical")},
+    "covariate": {"args": {"field": (str, _enum("farm", "line", "sex", "birth_t", "batch", "breed"), "categorical")},
                   "fields": ["animals.{field}"], "status": "implemented"},
     "blend_pedigree": {"args": {"w": (float, _in(0.0, 1.0), "fraction")},
                        "fields": ["animals.sire", "animals.dam"], "status": "implemented"},

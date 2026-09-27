@@ -22,7 +22,7 @@ from common.seeds import derive_seed
 from common.timeutil import utcnow_iso
 from dsl import DSLError, compile_program, parse, random_program, validate
 from engine import Evaluator, freeze_champion
-from gates import GateRunner, load_thresholds
+from gates import GateRunner, load_thresholds, thresholds_hash
 from genoframe import GenoFrame, forward_splits
 from registry import Registry, append_event
 
@@ -76,6 +76,8 @@ class Campaign:
         self.llm = llm or get_llm(stub_handlers=HANDLERS)
         self.probe_every = probe_every
         self.th = load_thresholds()
+        self.thresholds_hash = thresholds_hash()
+        print(f"[campaign {bundle.name}] thresholds sha256 at start: {self.thresholds_hash}")
         pub = bundle.frame.public_view()
         self.pub = pub
         self.truth = _truth(bundle.frame, bundle.trait)
@@ -116,7 +118,8 @@ class Campaign:
                           snapshot_id=snapshot_id or self.snapshot_id, known_priors=set(self.b.priors), truth=truth if truth is not None else self.truth,
                           null_rho=self.null, seed=self.seed)
 
-    def _run_candidate(self, gates: GateRunner, cid: str, dsl_text: str, cluster: str, mechanism: str, agent_model: str) -> dict:
+    def _run_candidate(self, gates: GateRunner, cid: str, dsl_text: str, cluster: str, mechanism: str, agent_model: str,
+                       max_evals: int | None = None) -> dict:
         """Register → (implicit PASS review) → implement → validity → full evaluation. Used by arms B, C, F."""
         pid = self.reg.add_proposal(campaign_id=cid, agent_model=agent_model, mechanism_text=mechanism, mechanism_cluster=cluster, direction="n/a",
                                     falsifiers=[], expected_gain={}, novelty_hash=dsl_text, source_refs=[], owner=self.b.owner, sharing_tier=self.b.sharing_tier)
@@ -135,7 +138,7 @@ class Campaign:
             decl = []
         v = gates.run_validity(cand, dsl_text, decl)
         out = {"candidate_id": cand, "dsl": dsl_text, "state": v.state, "cluster": cluster}
-        if v.passed and gates.n_full_evaluations < self.budget_full_evals:
+        if v.passed and gates.n_full_evaluations < (self.budget_full_evals if max_evals is None else max_evals):
             full = gates.run_full(cand, v.stats["spec"])
             out.update(state=full.state, delta_oos=full.stats["delta_oos"], ci_low=full.stats["delta_oos_ci_low"],
                        gate_pass=full.stats["gate_pass"], true_accuracy=full.stats.get("true_accuracy"))
@@ -244,6 +247,30 @@ class Campaign:
         self.results["arms"]["F_random_snp"] = summ
         return summ
 
+    def arm_G_prior(self, weights=(1.0, 2.0, 4.0)) -> dict:
+        """Challenger arm G: GRM re-weighted by an external prior (eQTL / QTLdb / foundation-model
+        embedding). Runs every prior in the bundle; a prior named random_prior is the prior's own
+        negative control. Skipped, with a note, when the bundle carries no prior (needs data/priors)."""
+        if not self.b.priors:
+            self.results["arms"]["G_prior"] = {"skipped": True, "reason": "no prior in data catalog (see data/SOURCES.md, data/priors/)"}
+            return self.results["arms"]["G_prior"]
+        n = len(self.b.priors) * len(weights)
+        cid = self._new_registry_campaign("G", n, n)
+        gates = self._gates(cid)
+        rows = []
+        for src in sorted(self.b.priors):
+            for w in weights:
+                dsl = f"champion() + qtl_prior(source='{src}', weight={w})"
+                cluster = "negative_control_prior" if src == "random_prior" else f"challenger_prior_{src}"
+                rows.append(self._run_candidate(gates, cid, dsl, cluster, f"external prior {src} weight {w}", "prior_search", max_evals=n))
+        summ = self._summarise(rows, cid)
+        summ["false_promotions_random_prior"] = sum(1 for r in rows if r["cluster"] == "negative_control_prior" and r["state"] == "promoted")
+        for k in ("promoted", "full_evaluations", "best_delta_oos"):
+            self.reg.add_control(campaign_id=cid, arm="abl_loop", metric=f"G_{k}", value=summ.get(k))
+        self.reg.end_campaign(cid)
+        self.results["arms"]["G_prior"] = summ
+        return summ
+
     def _summarise(self, rows, cid: str) -> dict:
         ev = self.reg.df("SELECT e.candidate_id, e.delta_oos, e.delta_oos_ci_low, e.rho, e.dispersion, c.state, c.dsl_text, p.mechanism_cluster, e.compute_seconds "
                          "FROM evaluations e JOIN candidates c ON c.candidate_id=e.candidate_id JOIN proposals p ON p.proposal_id=c.proposal_id WHERE p.campaign_id=?", (cid,))
@@ -266,6 +293,12 @@ class Campaign:
         if "D" in arms: self.arm_D_abl_loop()
         if "E" in arms: self.arm_E_shuffled_labels()
         if "F" in arms: self.arm_F_random_snp()
+        if "G" in arms: self.arm_G_prior()
+        end_hash = thresholds_hash()
+        print(f"[campaign {self.b.name}] thresholds sha256 at end:   {end_hash}")
+        if end_hash != self.thresholds_hash:
+            raise RuntimeError(f"gates/thresholds.yaml changed during the campaign ({self.thresholds_hash[:12]} -> {end_hash[:12]}); results void")
+        self.results["thresholds_hash"] = self.thresholds_hash
         self.results["seconds"] = round(time.perf_counter() - t0, 1)
         self.results["ended_at"] = utcnow_iso()
         out = paths.reports_dir() / f"campaign_{self.b.name}.json"
