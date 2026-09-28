@@ -12,11 +12,11 @@ verify: report
 	$(PYTHON) -c "import json,re,os,sys; \
 a=json.load(open('.RUN.first.json')); b=json.load(open('RUN.json')); \
 [d.pop(k) for d in (a,b) for k in ('duration_seconds','generated_at')]; \
-h=open('report.html',encoding='utf-8').read(); \
+h=''.join(open(f,encoding='utf-8').read() for f in ['report.html', 'report.en.html']); \
 imgs=re.findall(r'<img[^>]+src=\"([^\"]+)\"',h); miss=[i for i in imgs if not os.path.exists(i)]; \
 ext=re.findall(r'(?:src|href)=\"(?:https?:)?//',h); \
 print('deterministic:',a==b,'| imgs:',len(imgs),'missing:',miss,'| external refs:',len(ext)); \
 sys.exit(0 if (a==b and not miss and not ext) else 1)"
 	rm -f .RUN.first.json
 clean:
-	rm -f report.html audit_report.md RUN.json CLAIMS.md hla_accuracy.csv .RUN.first.json figures/*.png
+	rm -f report.html report.en.html audit_report.md audit_report.en.md RUN.json CLAIMS.md CLAIMS.en.md hla_accuracy.csv hla_callrate.csv .RUN.first.json figures/*.png figures/en/*.png

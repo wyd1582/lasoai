@@ -165,4 +165,4 @@ for s in splits:
 
 ## 12. 展示站（给投资人、董事会、育种与 AI 专家看的版本）
 
-仓库根目录 `make site` 生成 `site/dist/`（Vercel 自动构建同一个目录）。它把四个 Demo 讲成一个故事：首页是愿景（读出 · 裁判 · 记忆）、四个 Demo 的状态与关键数字、五件成果承诺、三级路线图；每个 Demo 一页，页面顶部按"育种的人 / 做 AI 的人 / 董事会"三种读法各有一段导读，末尾是"可以说 / 不能说 / 需要什么数据"。Demo 1 与 Demo 3 是真实计算，Demo 2 与 Demo 4 是**内部预测版**（引擎真、数据模拟，每个假设都在各自的 RUN.json 里）。页面上的数字全部来自各 demo 的 RUN.json，构建脚本不允许手填。本地预览：`python3 -m http.server -d site/dist 8000`。
+仓库根目录 `make site` 生成 `site/dist/`（Vercel 自动构建同一个目录）。它把四个 Demo 讲成一个故事：首页是愿景（读出 · 裁判 · 记忆）、四个 Demo 的状态与关键数字、五件成果承诺、三级路线图；每个 Demo 一页，页面顶部按"育种的人 / 做 AI 的人 / 董事会"三种读法各有一段导读，末尾是"可以说 / 不能说 / 需要什么数据"。Demo 1 与 Demo 3 是真实计算，Demo 2 与 Demo 4 是**内部预测版**（引擎真、数据模拟，每个假设都在各自的 RUN.json 里）。页面上的数字全部来自各 demo 的 RUN.json，构建脚本不允许手填。每页右上角可切换中文 / English（`name.html` 与 `name.en.html`），浏览器会记住选择；另有术语表与数据解锁清单两页。本地预览：`python3 -m http.server -d site/dist 8000`。

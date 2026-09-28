@@ -184,10 +184,10 @@
   "ledger_content_sha256": "2dc8223b790efabee0aadb849b394cb27c3d3c1c85987b68112bc7571ee2ba31",
   "outputs_sha256": {
     "CLAIMS.md": "9f8bf89a0825def43056fcd17df410c8b34eacdb3c892146b2acfe2f30cb9f23",
-    "figures/a_funnel.png": "9d4a973f554794bb9efdab0a90ab0050529df97242e6d139ab9d467b40871b3a",
-    "figures/b_forward_r.png": "6a4fd29929242baf5afca311cf138e05611e24e9778d8efd6e1974d4b8385902",
-    "figures/c_adoption_progeny.png": "48f5943ce9c903d025d9ad9ada4259462d4e1e95dc8443e1286875a85369ff51",
+    "figures/a_funnel.png": "40e1d72db43b2d0160821490b7a5881fa6aa721480ccbb3a3229c4add2b9ac0c",
+    "figures/b_forward_r.png": "8127d460974213069c57e069d10d68d8c7c7f68389576214fd6ca4deeeb07956",
+    "figures/c_adoption_progeny.png": "a2dea5c88d106d27aed1640b2633a67f60e8d506c12e5fa4ca2455022c1b2cd3",
     "report.html": "7f9029c664a8d9598a65e4b3790eee43647acbc9921045ec34104b54df8a933f"
   },
-  "duration_seconds": 7.02
+  "duration_seconds": 13.85
 }

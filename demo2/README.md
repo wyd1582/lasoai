@@ -26,3 +26,7 @@ make verify PYTHON=/path/to/python                # 连跑两次，RUN.json 除�
 | `RUN.json` | 种子、模拟配置哈希与全部假设、每物种 r 与区间、验收结论、带宽、输出哈希 | 生成 |
 | `CLAIMS.md` | 可以说 / 不能说 / 需要什么数据（含数字） | 生成 |
 | `THEORY.md` | 依据的审查表行、模型、极限、可证伪点 | 手写 |
+
+## 语言 / Language
+
+计算只做一次，报告、图与 CLAIMS 各出中英两套：`clock_report.html` / `clock_report.en.html`、`figures/` / `figures/en/`、`CLAIMS.md` / `CLAIMS.en.md`、`THEORY.md` / `THEORY.en.md`。图中的中文字体由 `tools/cjkfont.py` 按机器自动选择（容器用文泉驿，Mac 用 Hiragino / PingFang，Windows 用微软雅黑）。

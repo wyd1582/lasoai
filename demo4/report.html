@@ -1,5 +1,5 @@
 <!doctype html><html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Demo 4 · 新抗原审计 + HLA 填充（内部预测版）</title><style>
+<title>Demo 4 · 新抗原审计 + HLA 填充</title><style>
 :root{--bg:#fbfaf7;--ink:#1d1d1b;--muted:#5f5e5a;--line:#e4e1d9;--accent:#2B59A6;--warnbg:#fff7e6;--warnln:#8E6A10;--code:#f1efe9}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141412;--ink:#ecebe6;--muted:#a8a69f;--line:#2e2d2a;--accent:#7fa3e0;--warnbg:#2a2415;--warnln:#c9a24a;--code:#24231f}}
 :root[data-theme="dark"]{--bg:#141412;--ink:#ecebe6;--muted:#a8a69f;--line:#2e2d2a;--accent:#7fa3e0;--warnbg:#2a2415;--warnln:#c9a24a;--code:#24231f}
@@ -9,47 +9,23 @@
 figure{margin:14px 0} img{width:100%;height:auto;border:1px solid var(--line);border-radius:8px;background:#fff} figcaption{color:var(--muted);font-size:13px;margin-top:6px}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:18px 0} .stat{background:rgba(255,255,255,.6);border:1px solid var(--line);border-radius:10px;padding:12px} .stat b{display:block;font-size:26px} .stat span{color:var(--muted);font-size:13px}
 code{background:var(--code);padding:1px 5px;border-radius:4px} .note{background:var(--warnbg);border-left:4px solid var(--warnln);padding:8px 12px;margin:12px 0} .badge{display:inline-block;font-size:12px;padding:2px 8px;border-radius:999px;background:#9C2F57;color:#fff;margin-left:6px;vertical-align:middle}
-ul{padding-left:20px} li{margin:3px 0}
+.lang{float:right;font-size:13px} ul{padding-left:20px} li{margin:3px 0}
 </style></head><body><div class="wrap">
-<h1>Demo 4 · 新抗原审计 + HLA 填充 <span class="badge">内部预测版 · 模拟引擎</span></h1>
-<p class="lede">对照 PRD v3 §3 Demo 4 与 P-D4v3。它要证明 Deck 上的一句话：<b>裁判不只审育种——任何要冻结 5–7 年的排序算法，都可以在冻结前接受同一套独立验证；HLA 分型是进入人类线的楔子。</b>
-真实数据（1000 Genomes、中国人群 HLA 参考面板、TESLA）尚未到位，本页用明示参数的模拟器跑通流水线与报告格式。生成时间 2026-09-28 08:00 UTC，种子 4，配置哈希 <code>21fe7dd196eb</code>，时长 2 秒。</p>
-<div class="note"><b>先读这个：</b>人群、基因型、患者、肽段、免疫原性标签全部是模拟的。4b 里"表达量、克隆性带信号"是模拟植入的，所以 D 臂能找到增量<b>不说明</b>真实数据上找得到；
-本页真正的证据是<b>负对照 E/F 的晋级数必须为 0</b>（裁判不被打乱的数据骗到）和<b>审计报告不含算法内部也能写成</b>。HLA 部分的频率分布是形状假设，不是任何真实人群的频谱。</div>
-
-<div class="stats">
-<div class="stat"><b>0</b><span>负对照误晋级（E 打乱标签 + F 打乱特征），必须为 0</span></div>
-<div class="stat"><b>0.22 → 0.27</b><span>前 20 命中率：基线 → D 臂最好候选</span></div>
-<div class="stat"><b>3 / 3</b><span>D 臂晋级 / 全量评估</span></div>
-<div class="stat"><b>0.87 / 0.75 / 0.60</b><span>HLA 四位分辨率正确率：参考 / 65K / 20K（三基因座均值）</span></div>
-<div class="stat"><b>5%</b><span>模拟免疫原性基率（随机挑选的命中率）</span></div>
-<div class="stat"><b>300</b><span>验证带宽（患者/年 ÷ 标签延迟年，假设）</span></div>
-</div>
-
-<h2>1. 流水线与假设</h2>
-<table><thead><tr><th>模块</th><th>本版本用什么</th><th>真实版本用什么</th><th>状态</th></tr></thead><tbody><tr><td>4a 人群与基因型</td><td>模拟 3,000 人，三个 I 类基因座，各 30/50/30 个四位分辨率等位基因，Zipf 型频谱</td><td>1000 Genomes + 中国人群 HLA 参考面板（PRD 决定 3）</td><td>模拟</td></tr><tr><td>4a 填充模型</td><td>属性装袋 KNN（12 袋 × 40% 位点，k=15）</td><td>HIBAG（Zheng 2014）/ SNP2HLA（Jia 2013）</td><td>思路同，实现为简化版</td></tr><tr><td>4a 面板密度</td><td>保留 MHC 区位点的 100% / 25% / 8% 模拟参考面板 / 65K / 20K</td><td>从公开面板抽样到拉索固相面板的实际位点</td><td>算法同</td></tr><tr><td>4b 患者 × 肽段</td><td>模拟 40 名患者 × 200 条肽段，免疫原性基率 ≈ 5%</td><td>TESLA 联盟公开部分（Wells 2020）</td><td>模拟</td></tr><tr><td>4b 冻结基线</td><td>结合亲和力 %rank 排名（NetMHCpan 类）</td><td>NetMHCpan-4.1 输出（学术许可）</td><td>格式同</td></tr><tr><td>4b 六臂与门</td><td>留患者 5 折；配对 top-20 命中率增益 bootstrap 区间；Bonferroni 按尝试数校正；负对照 E/F</td><td>同（复用 Demo 1 的裁判纪律）</td><td>已实现</td></tr><tr><td>4b 审计报告</td><td>audit_report.md：冻结前独立验证报告，不含算法内部（权重不出现在报告里）</td><td>同</td><td>已实现</td></tr></tbody></table>
-
+<a class="lang" href="report.en.html">English version →</a><h1>Demo 4 · 新抗原审计 + HLA 填充 <span class="badge">内部预测版 · 模拟引擎</span></h1>
+<p class="lede">对照 PRD v3 §3 Demo 4 与 P-D4v3。它要证明 Deck 上的一句话：<b>裁判不只审育种——任何要冻结 5–7 年的排序算法，都可以在冻结前接受同一套独立验证；HLA 分型是进入人类线的楔子。</b>真实数据（1000 Genomes、中国人群 HLA 参考面板、TESLA）尚未到位，本页用明示参数的模拟器跑通流水线与报告格式。生成时间 2026-09-28 09:39 UTC，种子 4，配置哈希 <code>db66c66a1b84</code>。</p><div class="note"><b>先读这个：</b>人群、基因型、患者、肽段、免疫原性标签全部是模拟的。4b 里"表达量、克隆性带信号"是模拟植入的，所以 D 臂能找到增量<b>不说明</b>真实数据上找得到；本页真正的证据是<b>负对照 E/F 的晋级数必须为 0</b>（裁判不被打乱的数据骗到）和<b>审计报告不含算法内部也能写成</b>。HLA 部分的频率分布是形状假设，不是任何真实人群的频谱。</div>
+<div class="stats"><div class="stat"><b>0</b><span>负对照误晋级（E 打乱标签 + F 打乱特征），必须为 0</span></div><div class="stat"><b>0.22 → 0.27</b><span>前 20 命中率：基线 → D 臂最好候选</span></div><div class="stat"><b>3 / 3</b><span>D 臂晋级 / 全量评估</span></div><div class="stat"><b>0.87 / 0.75 / 0.60</b><span>HLA 四位分辨率正确率：参考 / 65K / 20K（三基因座均值）</span></div><div class="stat"><b>47%</b><span>20K 面板上正确率 ≥ 95% 时可自动调用的比例（其余送测序）</span></div><div class="stat"><b>300</b><span>验证带宽（患者/年 ÷ 标签延迟年，假设）</span></div></div>
+<h2>1. 流水线与假设</h2><table><thead><tr><th>模块</th><th>本版本用什么</th><th>真实版本用什么</th><th>状态</th></tr></thead><tbody><tr><td>4a 人群与基因型</td><td>模拟 3,000 人，三个 I 类基因座，各 30/50/30 个四位分辨率等位基因，Zipf 型频谱</td><td>1000 Genomes + 中国人群 HLA 参考面板（PRD 决定 3）</td><td>模拟</td></tr><tr><td>4a 填充模型</td><td>属性装袋 KNN（12 袋 × 40% 位点，k=15），置信度 = 票数份额</td><td>HIBAG（Zheng 2014）/ SNP2HLA（Jia 2013）</td><td>思路同，实现为简化版</td></tr><tr><td>4a 面板密度</td><td>保留 MHC 区位点的 100% / 25% / 8% 模拟参考面板 / 65K / 20K</td><td>从公开面板抽样到拉索固相面板的实际位点</td><td>算法同</td></tr><tr><td>4b 患者 × 肽段</td><td>模拟 40 名患者 × 200 条肽段，免疫原性基率 ≈ 5%</td><td>TESLA 联盟公开部分（Wells 2020）</td><td>模拟</td></tr><tr><td>4b 冻结基线</td><td>结合亲和力 %rank 排名（NetMHCpan 类）</td><td>NetMHCpan-4.1 输出（学术许可）</td><td>格式同</td></tr><tr><td>4b 六臂与门</td><td>留患者 5 折；配对 top-20 命中率增益 bootstrap 区间；Bonferroni 按尝试数校正；负对照 E/F</td><td>同（复用 Demo 1 的裁判纪律）</td><td>已实现</td></tr><tr><td>4b 审计报告</td><td>audit_report.md：冻结前独立验证报告，不含算法内部（权重不出现在报告里）</td><td>同</td><td>已实现</td></tr></tbody></table>
 <h2>2. 4a · HLA 填充准确度按频率分层 × 面板密度</h2>
-<figure><img src="figures/fig1_hla_accuracy.png" alt="HLA 填充准确度"><figcaption>测试 600 人（训练 2,400）。稀有等位基因的正确率随面板变稀下降最快——这是审查表第 9 行预期的形状：若稀有等位基因不足，产品定位为"筛查 + 测序确认"。</figcaption></figure>
-<h3>按基因座 × 频率档</h3>
-<table><thead><tr><th>locus</th><th>freq_bin</th><th>参考面板（全部 MHC 位点）</th><th>65K 固相面板</th><th>20K 固相面板</th></tr></thead><tbody><tr><td>HLA-A</td><td>中等 1–5%</td><td>0.790</td><td>0.578</td><td>0.246</td></tr><tr><td>HLA-A</td><td>常见 ≥ 5%</td><td>1.000</td><td>0.997</td><td>0.897</td></tr><tr><td>HLA-A</td><td>稀有 &lt; 1%</td><td>0.304</td><td>0.130</td><td>0.000</td></tr><tr><td>HLA-B</td><td>中等 1–5%</td><td>0.847</td><td>0.588</td><td>0.380</td></tr><tr><td>HLA-B</td><td>常见 ≥ 5%</td><td>1.000</td><td>0.989</td><td>0.910</td></tr><tr><td>HLA-B</td><td>稀有 &lt; 1%</td><td>0.260</td><td>0.088</td><td>0.034</td></tr><tr><td>HLA-C</td><td>中等 1–5%</td><td>0.826</td><td>0.535</td><td>0.247</td></tr><tr><td>HLA-C</td><td>常见 ≥ 5%</td><td>1.000</td><td>0.991</td><td>0.928</td></tr><tr><td>HLA-C</td><td>稀有 &lt; 1%</td><td>0.339</td><td>0.214</td><td>0.054</td></tr></tbody></table>
-<h3>各基因座全部拷贝</h3>
-<table><thead><tr><th>locus</th><th>参考面板（全部 MHC 位点）</th><th>65K 固相面板</th><th>20K 固相面板</th></tr></thead><tbody><tr><td>HLA-A</td><td>0.891</td><td>0.799</td><td>0.607</td></tr><tr><td>HLA-B</td><td>0.818</td><td>0.689</td><td>0.568</td></tr><tr><td>HLA-C</td><td>0.900</td><td>0.773</td><td>0.617</td></tr></tbody></table>
-<p>各基因座等位基因数按频率档：{&quot;HLA-A&quot;: {&quot;常见 ≥ 5%&quot;: 5, &quot;中等 1–5%&quot;: 20, &quot;稀有 &lt; 1%&quot;: 5}, &quot;HLA-B&quot;: {&quot;常见 ≥ 5%&quot;: 4, &quot;中等 1–5%&quot;: 18, &quot;稀有 &lt; 1%&quot;: 28}, &quot;HLA-C&quot;: {&quot;常见 ≥ 5%&quot;: 5, &quot;中等 1–5%&quot;: 20, &quot;稀有 &lt; 1%&quot;: 5}}。原始表 <code>hla_accuracy.csv</code>。</p>
-
-<h2>3. 4b · 六臂审计</h2>
-<figure><img src="figures/fig2_audit_arms.png" alt="六臂"><figcaption>每臂显示其最好候选的前 20 命中率；晋级要过配对增量门（bootstrap 区间下界 &gt; 0 且增益 ≥ 1%），α 按尝试数 Bonferroni 校正。</figcaption></figure>
+<figure><img src="figures/fig1_hla_accuracy.png" alt="HLA accuracy"><figcaption>测试 600 人（训练 2,400）。稀有等位基因的正确率随面板变稀下降最快——这是审查表第 9 行预期的形状：若稀有等位基因不足，产品定位为"筛查 + 测序确认"。</figcaption></figure>
+<h3>按基因座 × 频率档</h3><table><thead><tr><th>基因座</th><th>频率档</th><th>参考面板（全部 MHC 位点）</th><th>65K 固相面板</th><th>20K 固相面板</th></tr></thead><tbody><tr><td>HLA-A</td><td>常见 ≥ 5%</td><td>1.000</td><td>0.997</td><td>0.897</td></tr><tr><td>HLA-A</td><td>中等 1–5%</td><td>0.790</td><td>0.578</td><td>0.246</td></tr><tr><td>HLA-A</td><td>稀有 &lt; 1%</td><td>0.304</td><td>0.130</td><td>0.000</td></tr><tr><td>HLA-B</td><td>常见 ≥ 5%</td><td>1.000</td><td>0.989</td><td>0.910</td></tr><tr><td>HLA-B</td><td>中等 1–5%</td><td>0.847</td><td>0.588</td><td>0.380</td></tr><tr><td>HLA-B</td><td>稀有 &lt; 1%</td><td>0.260</td><td>0.088</td><td>0.034</td></tr><tr><td>HLA-C</td><td>常见 ≥ 5%</td><td>1.000</td><td>0.991</td><td>0.928</td></tr><tr><td>HLA-C</td><td>中等 1–5%</td><td>0.826</td><td>0.535</td><td>0.247</td></tr><tr><td>HLA-C</td><td>稀有 &lt; 1%</td><td>0.339</td><td>0.214</td><td>0.054</td></tr></tbody></table><h3>各基因座全部拷贝</h3><table><thead><tr><th>基因座</th><th>参考面板（全部 MHC 位点）</th><th>65K 固相面板</th><th>20K 固相面板</th></tr></thead><tbody><tr><td>HLA-A</td><td>0.891</td><td>0.799</td><td>0.607</td></tr><tr><td>HLA-B</td><td>0.818</td><td>0.689</td><td>0.568</td></tr><tr><td>HLA-C</td><td>0.900</td><td>0.773</td><td>0.617</td></tr></tbody></table>
+<h2>3. 4a · 置信度 → 调用率："筛查 + 测序确认"要送多少去测序</h2><p>把每个调用按置信度（票数份额）从高到低排，只接受置信度足够高的调用，其余送测序确认。曲线回答产品问题：<b>要保证被接受的调用正确率 ≥ 95%，芯片能自己决定多大比例？</b>其余比例就是测序确认的成本。</p><table><thead><tr><th>面板</th><th>全部调用的正确率</th><th>正确率 ≥ 95% 时可自动调用的比例</th><th>需要送测序确认的比例</th></tr></thead><tbody><tr><td>参考面板（全部 MHC 位点）</td><td>0.870</td><td>92%</td><td>8%</td></tr><tr><td>65K 固相面板</td><td>0.754</td><td>79%</td><td>21%</td></tr><tr><td>20K 固相面板</td><td>0.597</td><td>47%</td><td>53%</td></tr></tbody></table>
+<figure><img src="figures/fig4_hla_callrate.png" alt="call rate"><figcaption>各面板的正确率随调用率的变化。面板越稀，能自动调用的比例越低；这条曲线就是芯片密度与测序成本之间的定价依据（模拟数据，形状可信，数字不可外推）。</figcaption></figure>
+<p>各基因座等位基因数按频率档：{&quot;HLA-A&quot;: {&quot;common&quot;: 5, &quot;intermediate&quot;: 20, &quot;rare&quot;: 5}, &quot;HLA-B&quot;: {&quot;common&quot;: 4, &quot;intermediate&quot;: 18, &quot;rare&quot;: 28}, &quot;HLA-C&quot;: {&quot;common&quot;: 5, &quot;intermediate&quot;: 20, &quot;rare&quot;: 5}}。原始表 <code>hla_accuracy.csv</code>、<code>hla_callrate.csv</code>。</p>
+<h2>4. 4b · 六臂审计</h2>
+<figure><img src="figures/fig2_audit_arms.png" alt="arms"><figcaption>每臂显示其最好候选的前 20 命中率；晋级要过配对增量门（bootstrap 区间下界 &gt; 0 且增益 ≥ 1%），α 按尝试数 Bonferroni 校正。</figcaption></figure>
 <table><thead><tr><th>臂</th><th>提案数</th><th>全量评估数</th><th>晋级数</th><th>最好候选的 top-20 命中率</th><th>配对增益（vs 基线）</th><th>校正后 α</th></tr></thead><tbody><tr><td>A 基线 · 冻结（亲和力排名，NetMHCpan 类）</td><td>—</td><td>0</td><td>0</td><td>0.223</td><td>—</td><td>—</td></tr><tr><td>B 对照 · 随机搜索</td><td>30</td><td>30</td><td>0</td><td>0.219</td><td>-0.004 [-0.039, +0.033]</td><td>0.0033</td></tr><tr><td>C 对照 · 一次性规则</td><td>1</td><td>1</td><td>1</td><td>0.271</td><td>+0.049 [+0.026, +0.073]</td><td>0.1000</td></tr><tr><td>D 主实验 · 留患者搜索闭环</td><td>90</td><td>3</td><td>3</td><td>0.271</td><td>+0.049 [+0.019, +0.079]</td><td>0.0333</td></tr><tr><td>E 负对照 · 打乱标签</td><td>90</td><td>3</td><td>0</td><td>0.060</td><td>+0.003 [-0.014, +0.020]</td><td>0.0333</td></tr><tr><td>F 负对照 · 打乱特征</td><td>90</td><td>2</td><td>0</td><td>0.211</td><td>-0.011 [-0.031, +0.008]</td><td>0.0500</td></tr></tbody></table>
-<figure><img src="figures/fig3_topk_curve.png" alt="top-k 曲线"><figcaption>命中率随 k 的变化。审计口径固定 k = 20（TESLA 的报告方式）。</figcaption></figure>
+<figure><img src="figures/fig3_topk_curve.png" alt="top-k"><figcaption>命中率随 k 的变化。审计口径固定 k = 20（TESLA 的报告方式）。</figcaption></figure>
 <p>正式的"冻结前独立验证报告"见 <code>audit_report.md</code>：它只包含协议、数据哈希、门槛与结果，不包含任何候选算法的内部（权重、特征组合方式），可在不看算法源码的情况下写成——这是审计产品的形态。</p>
-
-<h2>4. 验证带宽</h2>
-<p><code>bandwidth = samples_per_year / label_latency_years</code> = 300 / 1.0 = 300（假设：一家个性化疗法公司每年 300 名患者进入审计，免疫原性 / 响应标签一年回流）。</p>
-
-<h2>5. 依据、限制与可以说的话</h2>
-<ul>
-<li><b>依据</b>：Zheng et al. 2014（HIBAG）；Jia et al. 2013（SNP2HLA）；Reynisson et al. 2020（NetMHCpan-4.1）；Wells et al. 2020 Cell（TESLA）。详见 THEORY.md。</li>
-<li><b>限制</b>：绝对精度低是新抗原领域现状（TESLA），价值在相对排序、泄漏控制与可复现；HLA 稀有等位基因需要中国人群参考面板。</li>
-<li><b>可以说 / 不能说 / 需要什么数据</b>：见 CLAIMS.md。</li>
-</ul>
+<h2>5. 验证带宽</h2><p><code>bandwidth = samples_per_year / label_latency_years</code> = 300 / 1.0 = 300（假设：一家个性化疗法公司每年 300 名患者进入审计，免疫原性 / 响应标签一年回流）。</p>
+<h2>6. 依据、限制与可以说的话</h2><ul><li><b>依据</b>：Zheng et al. 2014（HIBAG）；Jia et al. 2013（SNP2HLA）；Reynisson et al. 2020（NetMHCpan-4.1）；Wells et al. 2020 Cell（TESLA）。详见 THEORY.md。</li><li><b>限制</b>：绝对精度低是新抗原领域现状（TESLA），价值在相对排序、泄漏控制与可复现；HLA 稀有等位基因需要中国人群参考面板。</li><li><b>可以说 / 不能说 / 需要什么数据</b>：见 CLAIMS.md。</li></ul>
 </div></body></html>

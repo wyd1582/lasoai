@@ -17,6 +17,20 @@
       set(document.body.getAttribute("data-persona") === p ? null : p);
     });
   });
+  // language: the header switch stores a preference; a page in the other language redirects to its twin
+  var LKEY = "laso_lang";
+  var here = document.body.getAttribute("data-lang") || "zh";
+  document.querySelectorAll("[data-lang-switch]").forEach(function (a) {
+    a.addEventListener("click", function () { try { localStorage.setItem(LKEY, a.getAttribute("data-lang-switch")); } catch (e) {} });
+  });
+  try {
+    var want = localStorage.getItem(LKEY);
+    if (want && want !== here && !sessionStorage.getItem("laso_lang_redirected")) {
+      var twin = document.querySelector("[data-lang-switch='" + want + "']");
+      if (twin) { sessionStorage.setItem("laso_lang_redirected", "1"); location.replace(twin.getAttribute("href")); return; }
+    }
+    sessionStorage.removeItem("laso_lang_redirected");
+  } catch (e) {}
   // dashboard link: disabled until ABL_APP_URL is configured at build time
   var link = document.getElementById("app-link");
   if (link && (link.getAttribute("href") === "#" || !link.getAttribute("href"))) link.setAttribute("aria-disabled", "true");

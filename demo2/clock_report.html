@@ -1,5 +1,5 @@
 <!doctype html><html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Demo 2 · 跨物种时钟（内部预测版）</title><style>
+<title>Demo 2 · 跨物种时钟</title><style>
 :root{--bg:#fbfaf7;--ink:#1d1d1b;--muted:#5f5e5a;--line:#e4e1d9;--accent:#2B59A6;--warnbg:#fff7e6;--warnln:#8E6A10;--code:#f1efe9}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141412;--ink:#ecebe6;--muted:#a8a69f;--line:#2e2d2a;--accent:#7fa3e0;--warnbg:#2a2415;--warnln:#c9a24a;--code:#24231f}}
 :root[data-theme="dark"]{--bg:#141412;--ink:#ecebe6;--muted:#a8a69f;--line:#2e2d2a;--accent:#7fa3e0;--warnbg:#2a2415;--warnln:#c9a24a;--code:#24231f}
@@ -9,49 +9,22 @@
 figure{margin:14px 0} img{width:100%;height:auto;border:1px solid var(--line);border-radius:8px;background:#fff} figcaption{color:var(--muted);font-size:13px;margin-top:6px}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:18px 0} .stat{background:rgba(255,255,255,.6);border:1px solid var(--line);border-radius:10px;padding:12px} .stat b{display:block;font-size:26px} .stat span{color:var(--muted);font-size:13px}
 code{background:var(--code);padding:1px 5px;border-radius:4px} .note{background:var(--warnbg);border-left:4px solid var(--warnln);padding:8px 12px;margin:12px 0} .badge{display:inline-block;font-size:12px;padding:2px 8px;border-radius:999px;background:#9C2F57;color:#fff;margin-left:6px;vertical-align:middle}
-ul{padding-left:20px} li{margin:3px 0}
+.lang{float:right;font-size:13px} ul{padding-left:20px} li{margin:3px 0}
 </style></head><body><div class="wrap">
-<h1>Demo 2 · 跨物种时钟 <span class="badge">内部预测版 · 模拟引擎</span></h1>
-<p class="lede">对照 PRD v3 §3 Demo 2 与 P-D2v3。它要证明 Deck 上的一句话：<b>同一套读出与裁判，在育种之外的第二个领域零改动可用——生物年龄可以被跨物种一致地读出。</b>
-真实 GEO 数据尚未到位（docs/NEXT.md §2），本页用明示参数的模拟器把整条流水线跑通。生成时间 2026-09-28 09:17 UTC，种子 2，模拟配置哈希 <code>e0f028db15c7</code>，时长 72 秒。</p>
-<div class="note"><b>先读这个：</b>页面上所有甲基化值、年龄、结局都是模拟的；"留物种 r ≥ 0.8"在模拟里达标只说明<b>流水线与验收口径成立</b>，不说明真实数据会达标。
-猪的"年龄加速度 vs 使用年限"关联是模拟里<b>故意植入</b>的，用来演示报告格式。鸟类（白羽鸡）不在本 demo 范围：鸟类甲基化模式与哺乳动物不同，需要单独设计面板（审查表第 8 行）。</div>
-
-<div class="stats">
-<div class="stat"><b>660</b><span>模拟样本（猪 / 犬 / 牛 / 人）</span></div>
-<div class="stat"><b>2,748 / 20,000</b><span>通过保守筛选的探针</span></div>
-<div class="stat"><b>148</b><span>弹性网选出的时钟位点</span></div>
-<div class="stat"><b>0.94 / 0.93</b><span>留物种 r：猪 / 犬（验收线 0.8）</span></div>
-<div class="stat"><b>达标</b><span>模拟数据上的验收结论</span></div>
-<div class="stat"><b>8,000</b><span>结局标签的验证带宽（样本/年 ÷ 延迟年）</span></div>
-</div>
-
-<h2>1. 流水线（与真实数据版本完全相同的步骤）</h2>
-<p>读出（甲基化阵列）→ QC → 保守 CpG 筛选（各物种序列一致性）→ 弹性网时钟（目标为相对年龄的对数）→ 随机拆分与留物种验证 → 年龄加速度与结局 → 探针清单。每一步的"本版本 / 真实版本 / 状态"：</p>
-<table><thead><tr><th>模块</th><th>本版本用什么</th><th>真实版本用什么</th><th>状态</th></tr></thead><tbody><tr><td>读出面板</td><td>模拟阵列 20,000 探针，血液单一组织，每物种 2 个批次</td><td>国产跨物种甲基化芯片（保守 CpG 面板）；GEO 泛哺乳动物阵列数据先行</td><td>模拟</td></tr><tr><td>QC</td><td>检出率与批次记录（模拟数据无缺失）</td><td>检出 p 值、性别校验、批次校正（ComBat 类）、细胞组成估计</td><td>待真实数据</td></tr><tr><td>保守 CpG 筛选</td><td>四物种最小序列一致性 ≥ 0.85（模拟一致性）</td><td>探针序列对各物种基因组比对（minimap2 / BLAST），同阈值</td><td>算法同，数据待接</td></tr><tr><td>时钟模型</td><td>弹性网（l1_ratio 0.5，5 折 CV 选 α），目标 = 相对年龄的对数</td><td>同（Zou &amp; Hastie 2005；Lu et al. 2023 的相对年龄变换）</td><td>已实现</td></tr><tr><td>验证</td><td>每物种 70/30 随机拆分 + 留物种（LOSO），90% bootstrap 区间</td><td>同；验收线留物种 r ≥ 0.8（猪或犬），不为过线调参</td><td>已实现</td></tr><tr><td>年龄加速度 → 结局</td><td>猪的模拟&#x27;使用年限&#x27;标签（关联为植入，斜率 -18.0 月/单位 δ）</td><td>客户台账里的淘汰 / 生产寿命记录；犬猫的干预终点</td><td>只演示格式</td></tr><tr><td>探针清单</td><td>top5k / top20k：时钟系数、各物种一致性、SantaLucia 1998 ΔH/ΔS/Tm</td><td>同；序列来自真实设计，热力学按拉索工艺条件重算</td><td>算法同，序列为随机</td></tr></tbody></table>
-
+<a class="lang" href="clock_report.en.html">English version →</a><h1>Demo 2 · 跨物种时钟 <span class="badge">内部预测版 · 模拟引擎</span></h1>
+<p class="lede">对照 PRD v3 §3 Demo 2 与 P-D2v3。它要证明 Deck 上的一句话：<b>同一套读出与裁判，在育种之外的第二个领域零改动可用——生物年龄可以被跨物种一致地读出。</b>真实 GEO 数据尚未到位，本页用明示参数的模拟器把整条流水线跑通。生成时间 2026-09-28 09:51 UTC，种子 2，模拟配置哈希 <code>e0f028db15c7</code>。</p>
+<div class="note"><b>先读这个：</b>页面上所有甲基化值、年龄、结局都是模拟的；"留物种 r ≥ 0.8"在模拟里达标只说明<b>流水线与验收口径成立</b>，不说明真实数据会达标。猪的"年龄加速度 vs 使用年限"关联是模拟里<b>故意植入</b>的，用来演示报告格式。鸟类（白羽鸡）不在本 demo 范围：鸟类甲基化模式与哺乳动物不同，需要单独设计面板（审查表第 8 行）。</div>
+<div class="stats"><div class="stat"><b>660</b><span>模拟样本（猪 / 犬 / 牛 / 人）</span></div><div class="stat"><b>2,748 / 20,000</b><span>通过保守筛选的探针</span></div><div class="stat"><b>148</b><span>弹性网选出的时钟位点</span></div><div class="stat"><b>0.94 / 0.93</b><span>留物种 r：猪 / 犬（验收线 0.8）</span></div><div class="stat"><b>达标</b><span>模拟数据上的验收结论</span></div><div class="stat"><b>8,000</b><span>结局标签的验证带宽（样本/年 ÷ 延迟年）</span></div></div>
+<h2>1. 流水线（与真实数据版本完全相同的步骤）</h2><p>读出（甲基化阵列）→ QC → 保守 CpG 筛选（各物种序列一致性）→ 弹性网时钟（目标为相对年龄的对数）→ 随机拆分与留物种验证 → 年龄加速度与结局 → 探针清单。每一步的"本版本 / 真实版本 / 状态"：</p><table><thead><tr><th>模块</th><th>本版本用什么</th><th>真实版本用什么</th><th>状态</th></tr></thead><tbody><tr><td>读出面板</td><td>模拟阵列 20,000 探针，血液单一组织，每物种 2 个批次</td><td>国产跨物种甲基化芯片（保守 CpG 面板）；GEO 泛哺乳动物阵列数据先行</td><td>模拟</td></tr><tr><td>QC</td><td>检出率与批次记录（模拟数据无缺失）</td><td>检出 p 值、性别校验、批次校正（ComBat 类）、细胞组成估计</td><td>待真实数据</td></tr><tr><td>保守 CpG 筛选</td><td>四物种最小序列一致性 ≥ 0.85（模拟一致性）</td><td>探针序列对各物种基因组比对（minimap2 / BLAST），同阈值</td><td>算法同，数据待接</td></tr><tr><td>时钟模型</td><td>弹性网（l1_ratio 0.5，5 折 CV 选 α），目标 = 相对年龄的对数</td><td>同（Zou &amp; Hastie 2005；Lu et al. 2023 的相对年龄变换）</td><td>已实现</td></tr><tr><td>验证</td><td>每物种 70/30 随机拆分 + 留物种（LOSO），90% bootstrap 区间</td><td>同；验收线留物种 r ≥ 0.8（猪或犬），不为过线调参</td><td>已实现</td></tr><tr><td>年龄加速度 → 结局</td><td>猪的模拟&#x27;使用年限&#x27;标签（关联为植入，斜率 -18.0 月/单位 δ）</td><td>客户台账里的淘汰 / 生产寿命记录；犬猫的干预终点</td><td>只演示格式</td></tr><tr><td>探针清单</td><td>top5k / top20k：时钟系数、各物种一致性、SantaLucia 1998 ΔH/ΔS/Tm</td><td>同；序列来自真实设计，热力学按拉索工艺条件重算</td><td>算法同，序列为随机</td></tr></tbody></table>
 <h2>2. 每个物种的准确度</h2>
-<figure><img src="figures/fig1_scatter_by_species.png" alt="预测年龄 vs 实际年龄"><figcaption>上排：随机拆分（每物种 30% 测试）。下排：留物种——该物种的样本完全不参与训练，只靠其余三个物种学到的保守位点预测。对数轴。</figcaption></figure>
-<figure><img src="figures/fig2_r_by_species.png" alt="各物种 r"><figcaption>留物种是更严格的口径，也是 PRD 的验收口径（猪或犬 r ≥ 0.8）。</figcaption></figure>
+<figure><img src="figures/fig1_scatter_by_species.png" alt="scatter"><figcaption>上排：随机拆分（每物种 30% 测试）。下排：留物种——该物种的样本完全不参与训练，只靠其余三个物种学到的保守位点预测。对数轴。</figcaption></figure>
+<figure><img src="figures/fig2_r_by_species.png" alt="r by species"><figcaption>留物种是更严格的口径，也是 PRD 的验收口径（猪或犬 r ≥ 0.8）。</figcaption></figure>
 <table><thead><tr><th>物种</th><th>样本数</th><th>最大寿命（年，假设）</th><th>随机拆分 r</th><th>随机拆分 90% 区间</th><th>留物种 r</th><th>留物种 90% 区间</th><th>留物种中位绝对误差（年）</th><th>留物种是否 ≥ 0.8</th></tr></thead><tbody><tr><td>猪</td><td>160</td><td>27.000</td><td>0.921</td><td>[0.88, 0.95]</td><td>0.943</td><td>[0.93, 0.95]</td><td>1.163</td><td>是</td></tr><tr><td>犬</td><td>160</td><td>24.000</td><td>0.918</td><td>[0.88, 0.95]</td><td>0.928</td><td>[0.92, 0.94]</td><td>0.889</td><td>是</td></tr><tr><td>牛</td><td>140</td><td>20.000</td><td>0.949</td><td>[0.92, 0.97]</td><td>0.939</td><td>[0.92, 0.95]</td><td>0.782</td><td>是</td></tr><tr><td>人</td><td>200</td><td>122.500</td><td>0.939</td><td>[0.91, 0.96]</td><td>0.935</td><td>[0.92, 0.95]</td><td>5.632</td><td>是</td></tr></tbody></table>
-
 <h2>3. 年龄加速度 vs 结局（只演示格式）</h2>
-<figure><img src="figures/fig3_acceleration_vs_outcome.png" alt="年龄加速度 vs 结局"><figcaption>年龄加速度 = 时钟预测减去按实际年龄的期望；结局 = 猪的模拟"使用年限"（已扣除实际年龄）。偏相关 r = -0.41 [-0.51, -0.31]。
-时钟估出的加速度与模拟真值 δ 的相关为 0.83。<b>关联是植入的</b>，真实数据上这一格可能为零——那时读出定位为"生物年龄"而非"寿命预测"（审查表第 7 行）。</figcaption></figure>
-
-<h2>4. 探针清单（top5k / top20k）</h2>
-<p>排序规则：弹性网系数绝对值 → 是否通过保守筛选 → 最小一致性。每条探针带各物种序列一致性、GC 含量、SantaLucia 1998 最近邻 ΔH / ΔS / Tm（50 mM Na⁺，0.25 µM）。文件：<code>probes_top5k.csv</code>、<code>probes_top20k.csv</code>。前 12 条：</p>
-<table><thead><tr><th>rank</th><th>probe_id</th><th>tier</th><th>min_identity</th><th>Tm_C</th><th>clock_coef</th></tr></thead><tbody><tr><td>1</td><td>cg_sim_000283</td><td>时钟位点（弹性网系数非零）</td><td>0.972</td><td>74.110</td><td>-0.038</td></tr><tr><td>2</td><td>cg_sim_000145</td><td>时钟位点（弹性网系数非零）</td><td>0.922</td><td>71.690</td><td>-0.036</td></tr><tr><td>3</td><td>cg_sim_000220</td><td>时钟位点（弹性网系数非零）</td><td>0.959</td><td>69.340</td><td>-0.032</td></tr><tr><td>4</td><td>cg_sim_000266</td><td>时钟位点（弹性网系数非零）</td><td>0.907</td><td>69.160</td><td>-0.030</td></tr><tr><td>5</td><td>cg_sim_000143</td><td>时钟位点（弹性网系数非零）</td><td>0.953</td><td>66.170</td><td>-0.030</td></tr><tr><td>6</td><td>cg_sim_000151</td><td>时钟位点（弹性网系数非零）</td><td>0.902</td><td>77.830</td><td>0.028</td></tr><tr><td>7</td><td>cg_sim_000093</td><td>时钟位点（弹性网系数非零）</td><td>0.947</td><td>65.860</td><td>0.023</td></tr><tr><td>8</td><td>cg_sim_000231</td><td>时钟位点（弹性网系数非零）</td><td>0.972</td><td>72.730</td><td>-0.022</td></tr><tr><td>9</td><td>cg_sim_000164</td><td>时钟位点（弹性网系数非零）</td><td>0.951</td><td>70.570</td><td>-0.021</td></tr><tr><td>10</td><td>cg_sim_000042</td><td>时钟位点（弹性网系数非零）</td><td>0.945</td><td>71.960</td><td>-0.021</td></tr><tr><td>11</td><td>cg_sim_000225</td><td>时钟位点（弹性网系数非零）</td><td>0.940</td><td>68.390</td><td>-0.020</td></tr><tr><td>12</td><td>cg_sim_000049</td><td>时钟位点（弹性网系数非零）</td><td>0.914</td><td>74.930</td><td>0.020</td></tr></tbody></table>
-<figure><img src="figures/fig4_probes.png" alt="探针一致性与 Tm"><figcaption>左：保守筛选。右：热力学参数分布，时钟位点高亮。序列是随机生成的，只用于演示清单格式与热力学计算。</figcaption></figure>
-
-<h2>5. 验证带宽</h2>
-<p><code>bandwidth = samples_per_year / label_latency_years</code>。年龄标签在采样时即可得（延迟 ≈ 0），带宽不受限；结局标签（使用年限、淘汰）平均要等 2.5 年，按每年 20,000 个样本的假设，带宽 = 8,000。两个数都是假设口径。</p>
-
-<h2>6. 依据、限制与可以说的话</h2>
-<ul>
-<li><b>依据</b>：Horvath 2013（表观时钟）；Arneson et al. 2022（泛哺乳动物阵列）；Lu et al. 2023 Nature Aging（泛哺乳动物通用时钟，相对年龄）；Frommer 1992（亚硫酸氢盐化学）；Zou &amp; Hastie 2005（弹性网）；SantaLucia 1998（最近邻热力学）。详见 THEORY.md。</li>
-<li><b>限制</b>：时钟测的是年龄，不是寿命；组织、细胞组成与批次效应在真实数据里是主要噪声源；鸟类不在范围内。</li>
-<li><b>可以说 / 不能说 / 需要什么数据</b>：见 CLAIMS.md（由本脚本生成，含数字）。</li>
-</ul>
+<figure><img src="figures/fig3_acceleration_vs_outcome.png" alt="acceleration vs outcome"><figcaption>年龄加速度 = 时钟预测减去按实际年龄的期望；结局 = 猪的模拟"使用年限"（已扣除实际年龄）。偏相关 r = -0.41 [-0.51, -0.31]。时钟估出的加速度与模拟真值 δ 的相关为 0.83。<b>关联是植入的</b>，真实数据上这一格可能为零——那时读出定位为"生物年龄"而非"寿命预测"（审查表第 7 行）。</figcaption></figure>
+<h2>4. 探针清单（top5k / top20k）</h2><p>排序规则：弹性网系数绝对值 → 是否通过保守筛选 → 最小一致性。每条探针带各物种序列一致性、GC 含量、SantaLucia 1998 最近邻 ΔH / ΔS / Tm（50 mM Na⁺，0.25 µM）。文件：<code>probes_top5k.csv</code>、<code>probes_top20k.csv</code>。前 12 条：</p><table><thead><tr><th>rank</th><th>probe_id</th><th>tier</th><th>min_identity</th><th>Tm_C</th><th>clock_coef</th></tr></thead><tbody><tr><td>1</td><td>cg_sim_000283</td><td>时钟位点（弹性网系数非零）</td><td>0.972</td><td>74.110</td><td>-0.038</td></tr><tr><td>2</td><td>cg_sim_000145</td><td>时钟位点（弹性网系数非零）</td><td>0.922</td><td>71.690</td><td>-0.036</td></tr><tr><td>3</td><td>cg_sim_000220</td><td>时钟位点（弹性网系数非零）</td><td>0.959</td><td>69.340</td><td>-0.032</td></tr><tr><td>4</td><td>cg_sim_000266</td><td>时钟位点（弹性网系数非零）</td><td>0.907</td><td>69.160</td><td>-0.030</td></tr><tr><td>5</td><td>cg_sim_000143</td><td>时钟位点（弹性网系数非零）</td><td>0.953</td><td>66.170</td><td>-0.030</td></tr><tr><td>6</td><td>cg_sim_000151</td><td>时钟位点（弹性网系数非零）</td><td>0.902</td><td>77.830</td><td>0.028</td></tr><tr><td>7</td><td>cg_sim_000093</td><td>时钟位点（弹性网系数非零）</td><td>0.947</td><td>65.860</td><td>0.023</td></tr><tr><td>8</td><td>cg_sim_000231</td><td>时钟位点（弹性网系数非零）</td><td>0.972</td><td>72.730</td><td>-0.022</td></tr><tr><td>9</td><td>cg_sim_000164</td><td>时钟位点（弹性网系数非零）</td><td>0.951</td><td>70.570</td><td>-0.021</td></tr><tr><td>10</td><td>cg_sim_000042</td><td>时钟位点（弹性网系数非零）</td><td>0.945</td><td>71.960</td><td>-0.021</td></tr><tr><td>11</td><td>cg_sim_000225</td><td>时钟位点（弹性网系数非零）</td><td>0.940</td><td>68.390</td><td>-0.020</td></tr><tr><td>12</td><td>cg_sim_000049</td><td>时钟位点（弹性网系数非零）</td><td>0.914</td><td>74.930</td><td>0.020</td></tr></tbody></table>
+<figure><img src="figures/fig4_probes.png" alt="probes"><figcaption>左：保守筛选。右：热力学参数分布，时钟位点高亮。序列是随机生成的，只用于演示清单格式与热力学计算。</figcaption></figure>
+<h2>5. 验证带宽</h2><p><code>bandwidth = samples_per_year / label_latency_years</code>。年龄标签在采样时即可得（延迟 ≈ 0），带宽不受限；结局标签（使用年限、淘汰）平均要等 2.5 年，按每年 20,000 个样本的假设，带宽 = 8,000。两个数都是假设口径。</p>
+<h2>6. 依据、限制与可以说的话</h2><ul><li><b>依据</b>：Horvath 2013（表观时钟）；Arneson et al. 2022（泛哺乳动物阵列）；Lu et al. 2023 Nature Aging（泛哺乳动物通用时钟，相对年龄）；Frommer 1992（亚硫酸氢盐化学）；Zou &amp; Hastie 2005（弹性网）；SantaLucia 1998（最近邻热力学）。详见 THEORY.md。</li><li><b>限制</b>：时钟测的是年龄，不是寿命；组织、细胞组成与批次效应在真实数据里是主要噪声源；鸟类不在范围内。</li><li><b>可以说 / 不能说 / 需要什么数据</b>：见 CLAIMS.md（由本脚本生成，含数字）。</li></ul>
 <p class="lede">RUN.json 记录种子、模拟配置哈希、每一步时长、每个物种的 r 与区间、验收结论、带宽与输出文件哈希。</p>
 </div></body></html>

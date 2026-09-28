@@ -1,0 +1,61 @@
+<h1>Demo 4 · Neoantigen audit + HLA imputation<span class="badge sim">Internal preview · simulated engine</span><span class="en">新抗原审计 + HLA 填充：冻结前独立验证；HLA 分型是人类线的楔子。</span></h1>
+<p class="lede">The sentence it serves: <b>the judge is not only for breeding. Any ranking algorithm about to be frozen for 5–7 years can take the same independent validation before the freeze; HLA typing is the wedge into the human line.</b></p>
+<p class="toc">Generated {{d4.date}} · seed 4 · config hash <code>{{d4.config_hash}}</code> · {{d4.seconds}} s · <a href="demo4/report.en.html">full report</a> · <a href="view.html?f=demo4/audit_report.en.md">sample audit report</a> · <a href="view.html?f=demo4/THEORY.en.md">theory</a></p>
+<div class="preview" style="margin-top:12px"><b>Why "internal preview":</b> the 1000 Genomes data, the Chinese-population HLA reference panel (decision 3) and the TESLA data the PRD calls for are not yet in hand. The audit discipline on this page is real (leave-patient-out validation, six arms, negative controls, multiple-testing correction); the data are simulated. In 4b the signal in expression and clonality was planted, so the main arm finding an increment <b>says nothing</b> about real data; the real evidence here is that the negative controls promote zero and that the audit report is written without any algorithm internals.</div>
+
+<div class="howto ai" data-for="ai"><b>For AI people:</b> the same judge as Demo 1: a frozen baseline (affinity %rank order, NetMHCpan-style), paired gain, bootstrap intervals, α Bonferroni-adjusted by attempts, negative controls E/F. Leave-patient-out is Demo 1's "leave-generation-out" with patients in place of generations. HLA imputation uses attribute-bagged KNN (HIBAG's idea, simplified), reports by frequency stratum, and is re-reported after thinning the panel to 25 % / 8 % of loci.</div>
+<div class="howto board" data-for="board"><b>For the board:</b> the product shape of line E (audit and licensing). The deck's "why now" page: a personalised-therapy algorithm cannot change for 5–7 years once in the clinic, so it needs auditable validation before the freeze; 61 % of the top-20 pharma late-stage pipeline is sourced externally, and what is bought is a validated asset. The <a href="view.html?f=demo4/audit_report.en.md">sample audit report</a> is the deliverable: protocol, data hashes, gates and results only.</div>
+<div class="howto breeder" data-for="breeder"><b>For breeders:</b> this page is not about breeding, but you will recognise its skeleton: a frozen baseline, challengers, negative controls, increments only. One judge for pig and chicken breeding values and for human peptide ranking — that is what "read-out, judge and memory share one set of assets" means.</div>
+
+<div class="stats">
+  <div class="stat"><b>{{d4.neg_false}}</b><span>false promotions on negative controls (E shuffled labels + F shuffled features); must be 0</span></div>
+  <div class="stat"><b>{{d4.base_hit}} → {{d4.bestD_hit}}</b><span>top-20 hit rate: frozen baseline → best main-arm candidate</span><i>simulated, planted signal</i></div>
+  <div class="stat"><b>{{d4.D_promoted}} / {{d4.D_evals}}</b><span>main arm promoted / full evaluations</span><i>simulated</i></div>
+  <div class="stat"><b>{{d4.hla_ref}} / {{d4.hla_65k}} / {{d4.hla_20k}}</b><span>four-digit HLA accuracy: reference / 65K / 20K panel (mean of three loci)</span><i>simulated population</i></div>
+  <div class="stat"><b>{{d4.cr_20k}}</b><span>share of calls the 20K panel makes on its own at ≥ {{d4.target_acc}} accuracy (rest to sequencing)</span><i>simulated</i></div>
+  <div class="stat"><b>{{d4.bandwidth}}</b><span>validation bandwidth ({{d4.samples_per_year}} patients / yr ÷ {{d4.latency}} yr)</span><i>assumption</i></div>
+</div>
+
+<h2>4a · HLA imputation: by frequency stratum × panel density</h2>
+<p>{{d4.n_individuals}} simulated people ({{d4.n_train}} training, {{d4.n_test}} test), three class-I loci, one signature haplotype per allele with a mismatch rate rising from the gene centre to the window edge to mimic linkage decay. Imputation by attribute-bagged KNN; accuracy by the <b>true allele's frequency</b> in three strata, re-reported on panels keeping 100 % / 25 % / 8 % of MHC loci.</p>
+{{d4.hla_table}}
+<figure><img src="demo4/figures/en/fig1_hla_accuracy.png" alt="HLA imputation accuracy" loading="lazy"><figcaption>Rare alleles lose accuracy fastest as the panel thins — the shape review-table row 9 predicts. If the rare stratum falls short on real data, the product is positioned as "screen, then confirm by sequencing" and is still a wedge.</figcaption></figure>
+<h3>Confidence → call rate: how much goes to sequencing</h3>
+<p>Calls are ordered by confidence and only those above a threshold are accepted; the rest go to sequencing confirmation. The curve answers a product question: <b>to guarantee ≥ {{d4.target_acc}} accuracy on accepted calls, what share can the array decide by itself?</b> Simulated: reference panel {{d4.cr_ref}}, 65K panel {{d4.cr_65k}}, 20K panel {{d4.cr_20k}}; the remainder is sequenced. This is the pricing basis between array density and sequencing cost; only the shape is credible.</p>
+{{d4.callrate_table}}
+<figure><img src="demo4/figures/en/fig4_hla_callrate.png" alt="confidence and call rate" loading="lazy"><figcaption>Accuracy versus call rate per panel (simulated population). The thinner the panel, the smaller the auto-callable share.</figcaption></figure>
+<div class="howto board" data-for="board breeder"><b>What "wedge" means:</b> HLA typing is the first sellable read-out on the human line — a solid-phase SNP panel plus imputation, at a fraction of sequencing cost. Its feasibility hinges on where the Chinese-population reference panel comes from (PRD decision 3, input needed from Mr Xu or a partner institute). Without it, 4a can only run on a European panel and the conclusion means nothing for the product.</div>
+
+<h2>4b · Six-arm audit: leave-patient-out validation</h2>
+<p>{{d4.n_patients}} simulated patients × 200 candidate peptides each ({{d4.n_peptides}} in total, {{d4.n_immunogenic}} immunogenic). Metric: immunogenic peptides among each patient's top 20. Incremental gate: paired hit-rate difference against the frozen baseline, bootstrap ({{d4.n_boot}} resamples) lower bound &gt; 0 and mean gain ≥ {{d4.min_effect}} percentage point; α = {{d4.alpha}} / attempts.</p>
+{{d4.arms_table}}
+<figure><img src="demo4/figures/en/fig2_audit_arms.png" alt="six-arm audit" loading="lazy"><figcaption>Best candidate's top-20 hit rate per arm with promoted / full evaluations. Negative controls E / F must promote 0.</figcaption></figure>
+<figure><img src="demo4/figures/en/fig3_topk_curve.png" alt="hit rate versus k" loading="lazy"><figcaption>Hit rate versus k: frozen baseline versus the main arm's best candidate (paired gain {{d4.bestD_gain}}). The audit fixes k = 20, the TESLA reporting convention.</figcaption></figure>
+<div class="howto ai" data-for="ai"><b>How to read arm C:</b> the one-shot rule (affinity + expression) also passes the gate — because the planted expression signal is strong. On real data that is exactly the question an audit answers: whether a plausible-looking rule has a reproducible increment. The judge's value is that "no" is stated just as cleanly.</div>
+
+<h2>The audit report: written without reading the algorithm</h2>
+<p>One of the PRD's acceptance criteria is "the report can be produced without reading the algorithm's source". <a href="view.html?f=demo4/audit_report.en.md">audit_report.en.md</a> follows the pre-freeze independent validation format: mandate and scope → data and splits (patients, peptides, leave-patient-out, hashes) → frozen baseline and acceptance gate → results table → negative controls → conclusion (can say / cannot say) → reproduction command. Candidate algorithms appear by name only; no weights or feature recipe are in the report. In a real audit the subject party supplies a frozen prediction file (patient × peptide × score) and the auditor holds the labels.</p>
+
+<h2>Engine and assumptions</h2>
+<div class="tw"><table>
+<thead><tr><th>Module</th><th>This version (simulated engine)</th><th>Production version</th><th>Status</th></tr></thead>
+<tbody>
+<tr><td>4a population and genotypes</td><td>Simulated population, three class-I loci, Zipf-shaped frequency spectrum (a shape assumption, no real population)</td><td>1000 Genomes + a Chinese-population HLA reference panel (decision 3)</td><td><span class="tag">simulated</span></td></tr>
+<tr><td>4a imputation model</td><td>Attribute-bagged KNN (12 bags × 40 % of loci, k = 15); confidence = vote share</td><td>HIBAG (Zheng 2014) / SNP2HLA (Jia 2013)</td><td><span class="tag">same idea, simplified</span></td></tr>
+<tr><td>4a panel density</td><td>100 % / 25 % / 8 % of MHC loci kept, standing in for reference / 65K / 20K</td><td>Down-sampling to the actual loci of the solid-phase panel</td><td><span class="tag">same algorithm</span></td></tr>
+<tr><td>4b patients × peptides</td><td>Simulated features: binding affinity, expression, clonality, agretopicity, hydrophobicity (planted as no signal), foreignness; patient random effect</td><td>Public part of the TESLA consortium data (Wells 2020)</td><td><span class="tag">simulated</span></td></tr>
+<tr><td>4b frozen baseline</td><td>Binding-affinity %rank order</td><td>NetMHCpan-4.1 output (academic licence)</td><td><span class="tag">same format</span></td></tr>
+<tr><td>4b six arms and gate</td><td>5-fold leave-patient-out; paired top-20 gain; Bonferroni; negative controls E/F</td><td>Same (Demo 1's judging discipline reused)</td><td><span class="tag">implemented</span></td></tr>
+<tr><td>4b audit report</td><td>audit_report.md, no algorithm internals</td><td>Same</td><td><span class="tag">implemented</span></td></tr>
+</tbody></table></div>
+
+<h2>Commercial meaning</h2>
+<div class="grid" data-for="board">
+  <div class="card"><h3>Line E · audit and licensing</h3><p>Audit fees plus pipeline milestones and revenue share; the highest assumed gross margin. Customers are personalised-therapy companies, breeding companies and pharma: what they buy is the fact of auditable validation before the freeze.</p></div>
+  <div class="card"><h3>The selling point is not "more accurate"</h3><p>Low absolute precision is the state of the neoantigen field (TESLA). An audit product sells reproducibility, leak-freedom and comparability: the same labels, the same gates, the same report format, for any algorithm alike.</p></div>
+  <div class="card"><h3>The order of the human line</h3><p>HLA typing first (read-out, the wedge), then algorithm audit (judge), then human cohorts and data licensing (memory) — matching roadmap steps two and three.</p></div>
+</div>
+
+<h2>Can say / cannot say / what data would settle it</h2>
+{{d4.claims}}
+<p class="toc">Review-table rows 5, 9, 10. Rebuild with one command: <code>make demo4</code> (about 5 s).</p>

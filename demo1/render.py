@@ -18,12 +18,15 @@ import pandas as pd  # noqa: E402
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
+sys.path.insert(0, str(ROOT))
+from tools.cjkfont import use_cjk_font  # noqa: E402
+use_cjk_font()
 OUT = HERE / "out"
 FIG = HERE / "figures"
 FIG.mkdir(exist_ok=True)
 BLUE, OCHRE, MAGENTA, PURPLE, GREEN = "#2B59A6", "#8E6A10", "#9C2F57", "#6A3FA0", "#2F7D5B"   # PRD palette, fixed order
 GRAY, INK, MUTED, GRID = "#8a8a8a", "#1d1d1b", "#5f5e5a", "#e6e4de"
-plt.rcParams.update({"font.family": ["WenQuanYi Zen Hei", "PingFang SC", "Noto Sans CJK SC", "DejaVu Sans"],
+plt.rcParams.update({
                      "axes.spines.top": False, "axes.spines.right": False, "axes.edgecolor": GRID, "axes.labelcolor": INK,
                      "xtick.color": MUTED, "ytick.color": MUTED, "axes.grid": True, "grid.color": GRID, "grid.linewidth": 0.6,
                      "axes.axisbelow": True, "font.size": 10, "figure.dpi": 200, "savefig.dpi": 200})
@@ -239,6 +242,42 @@ def main() -> int:
 - 一轮随机化对照配种：把台账从观察数据升级为实验（审查表第 4 行）。
 """
     (HERE / "CLAIMS.md").write_text(claims)
+    tier_en = {"tier1_same_line_pooled": "same line, pooled across customers", "tier2_same_breed_other_lines": "same breed, other lines", "tier3_across_breeds": "across breeds"}
+    def tier_line_en(t):
+        r = t1.loc[t]; return f"{tier_en[t]}: ΔOOS {r.delta_oos:+.3f} [{r.delta_ci_low:+.3f}, {r.delta_ci_high:+.3f}], true-accuracy Δ {r.delta_true_acc:+.3f} (lower bound {r.delta_true_acc_ci_low:+.3f}), {'passes' if r.passes_incremental_gate else 'fails'} the incremental gate"
+    claims_en = f"""# Demo 1 · CLAIMS ({stamp})
+
+## Can say
+
+- On simulated data (true breeding values known) the judge promoted no negative control: {int(E['false_promotions'])} false promotions with shuffled labels, {int(F['false_promotions'])} with random SNP subsets{', ' + str(int(G.get('false_promotions_random_prior', 0))) + ' with a random prior' if not G.get('skipped') else ''}{'; ' + str(pig_neg) + ' on the public pig data' if pig else ''}.
+- The Critic stopped all {leak_probe_rejects} deliberately planted temporal-leak probes before any code was written ({int((crit.verdict=='REJECT').sum())} REJECT).
+- The frozen champion's accuracy on next-generation true breeding values is {A['true_accuracy']:.3f} (simulation, BW42) and {float(d['final'].true_accuracy.iloc[0]):.3f} on the sealed generation; measured r stays below the Daetwyler bound at every reference size from {int(cur.N.min())} to {int(cur.N.max())} (largest excess {max_over:+.3f}; rule: exceeding the bound is treated as leakage and stops the run).
+- Cross-customer tiers (target line L1, customer farm F1, {int(t1.loc['tier1_same_line_pooled','n_test'])} test animals):
+  - {tier_line_en('tier1_same_line_pooled')}
+  - {tier_line_en('tier2_same_breed_other_lines')}
+  - {tier_line_en('tier3_across_breeds')}
+  Tiers passing the incremental gate: {(', '.join(tier_en[t] for t in passing)) if passing else 'none'}.
+- Breeder's-equation decomposition (simulation, {run['steps']['gain_decomposition']['selected_fraction']:.0%} selected):
+  - BW42 (recorded on the candidate itself): genomic vs phenotypic selection, r alone {bw_gain.loc['genomic_champion_same_L','vs_baseline_pct']:+.0f}% [{bw_gain.loc['genomic_champion_same_L','vs_baseline_lo']:+.0f}%, {bw_gain.loc['genomic_champion_same_L','vs_baseline_hi']:+.0f}%] ΔG per year; with L shortened by 15 % as well {bw_gain.loc['genomic_champion_shorter_L','vs_baseline_pct']:+.0f}% [{bw_gain.loc['genomic_champion_shorter_L','vs_baseline_lo']:+.0f}%, {bw_gain.loc['genomic_champion_shorter_L','vs_baseline_hi']:+.0f}%].
+  - BreastYield (carcass trait, no own record; baseline = full-sib index): r alone {by_gain.loc['genomic_champion_same_L','vs_baseline_pct']:+.0f}% [{by_gain.loc['genomic_champion_same_L','vs_baseline_lo']:+.0f}%, {by_gain.loc['genomic_champion_same_L','vs_baseline_hi']:+.0f}%]; r and L together {by_gain.loc['genomic_champion_shorter_L','vs_baseline_pct']:+.0f}% [{by_gain.loc['genomic_champion_shorter_L','vs_baseline_lo']:+.0f}%, {by_gain.loc['genomic_champion_shorter_L','vs_baseline_hi']:+.0f}%].
+- The challenger arms (B random operators, C one-shot LLM, D ABL loop{', G external prior' if not G.get('skipped') else ''}) promoted {promoted_total} candidates in total on the simulation{' and the pig data' if pig else ''}, consistent with review-table row 6 ("linear models are hard to beat at scale") and with the Task A ladder (genomic-selection-pig/SUMMARY.md).
+
+## Cannot say
+
+- Any genetic-gain figure for a real population: the decomposition rests on simulated parameters (h², QTL architecture, Ne, farm and batch variances are assumptions).
+- Whether "+50 % per year" holds: the table only shows what the r term and the L term each contribute; the 15 % shorter generation interval is a design assumption, not a measurement. Decision 2 should wait for the customer's shadow run.
+- That "cross-customer learning holds": the tier results hold for this simulation only; real LD-phase differences between lines must be measured on real multi-line data.
+- Any temporal extrapolation on the pig data: the public pig data have no time axis, so forward splits use genomic family blocks as a proxy.
+- The value of arm G's prior: the simulated prior is "50 % true-QTL neighbourhoods + 50 % noise", not FarmGTEx eQTL.
+
+## What data would settle it
+
+- A customer's genotypes, phenotypes and current manual index: a shadow run giving per-animal agreement and delivery time (the cash layer).
+- Real multi-line / multi-farm data: the real tier results and whether the deck keeps "cross-customer learning".
+- FarmGTEx / QTLdb prior files (data/priors/): arm G rerun with a real prior.
+- One round of randomised control matings: the ledger upgraded from observational data to an experiment (review-table row 4).
+"""
+    (HERE / "CLAIMS.en.md").write_text(claims_en)
 
     # ---------------- THEORY.md
     theory = f"""# Demo 1 · THEORY（依据，不是证明）

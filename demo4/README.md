@@ -25,3 +25,7 @@ make verify PYTHON=/path/to/python
 | `RUN.json` | 种子、配置哈希与全部假设、4a 表、4b 各臂结果、验收、带宽、输出哈希 | 生成 |
 | `CLAIMS.md` | 可以说 / 不能说 / 需要什么数据 | 生成 |
 | `THEORY.md` | 依据的审查表行、模型、极限、可证伪点 | 手写 |
+
+## 语言 / Language
+
+计算只做一次，报告、图、CLAIMS 与审计报告各出中英两套：`report.html` / `report.en.html`、`figures/` / `figures/en/`、`CLAIMS.md` / `CLAIMS.en.md`、`audit_report.md` / `audit_report.en.md`、`THEORY.md` / `THEORY.en.md`。新增 `hla_callrate.csv` 与 `figures/fig4_hla_callrate.png`：置信度 → 调用率曲线。

@@ -1,0 +1,98 @@
+<h1>Every generation better.<br>This one longer.<span class="en">每一代都更好，包括我们自己这一代的时间。</span></h1>
+<p class="lede">From pigs, chickens and cattle to dogs, cats and people: make every generation arrive sooner, with less disease and more healthy years. The method is to turn the largest biological experiment on Earth into a laboratory with a memory.</p>
+<p class="lede">This site breaks the company's plan into four demos you can open. Each answers three questions: which sentence of the deck it proves, which product line it lands on, and what theory it rests on and what result would falsify it.</p>
+<a class="cta" href="#demos">See the four demos ↓</a>
+<a class="cta ghost" id="app-link" href="{{site.app_url}}">Open the judge's dashboard →</a>
+<p class="toc">Pick a persona in the top-right corner and the page highlights what matters to you: breeders see workflow and per-animal traceability; AI people see models, validation and negative controls; the board sees targets, timelines and revenue lines.</p>
+
+<h2>In one minute</h2>
+<ul>
+  <li><b>What we do:</b> turn breeding decisions into an experiment with a memory: one array panel reads out, one judge validates, one ledger remembers every recommendation and its outcome one generation later.</li>
+  <li><b>What is already proven:</b> the judge works (zero false promotions on negative controls, every leak probe intercepted, measured accuracy never above the theoretical bound); the ledger's three tables and per-animal reproducibility run end to end (Demo 1, Demo 3).</li>
+  <li><b>What is being proven:</b> that the same read-out and judge work unchanged outside breeding: a cross-species clock (Demo 2) and algorithm audit plus the HLA wedge (Demo 4), currently as internal previews.</li>
+  <li><b>What is missing:</b> data, not code. Which dataset unlocks which conclusion is on the <a href="data.en.html">data-unlock page</a>; unfamiliar words are in the <a href="glossary.en.html">glossary</a>.</li>
+</ul>
+
+<h2>Method: Read-out · Judge · Memory</h2>
+<p>Three layers share one set of assets; every new value pool costs one new panel and one new batch of customers.</p>
+<div class="layers">
+  <div class="layer read"><h3>Read-out</h3><p>Fixed panels: genotypes, methylation, HLA typing; the same measurements across pig, dog and human.</p></div>
+  <div class="layer judge"><h3>Judge</h3><p>One set of gates every prediction method must pass: forward validation, paired increments, negative controls, reproducibility.</p></div>
+  <div class="layer memory"><h3>Memory</h3><p>An append-only ledger: every recommendation, every adoption, every outcome one generation later. Raw data belong to the customer; aggregates and models to the platform.</p></div>
+</div>
+<div class="howto breeder" data-for="breeder"><b>For breeders:</b> Demo 3 is the selection workflow you already run — array batches, reference-population updates, breeding values, selection and mating advice, adoption, progeny outcomes — except that every step is recorded and traceable per animal. Demo 1 answers "is the AI actually more accurate than ssGBLUP?", and the answer comes from the judge, not from the vendor.</div>
+<div class="howto ai" data-for="ai"><b>For AI people:</b> frozen ssGBLUP is always the champion; any large model, deep net or functional prior is a challenger. Promotion requires a paired win on the same candidates and the same cutoff date, plus negative controls and multiple-testing correction. Demo 1 and Demo 4 are one judge applied to two fields.</div>
+<div class="howto board" data-for="board"><b>For the board and investors:</b> the four demos map onto five revenue lines: Demo 1/3 are the breeding agent and data platform (lines A, B, C), Demo 2 is cross-species read-out (line D), Demo 4 is audit and licensing (line E). Each page ends with "Commercial meaning": the number it wants to prove, how far it is proven, and what is still missing.</div>
+
+<h2 id="demos">The four demos</h2>
+<div class="grid two">
+  <a class="card demo" href="demo1.en.html" style="text-decoration:none;color:inherit">
+    <h3>Demo 1 · The Judge (breeding)<span class="badge real">Delivered · real computation</span></h3>
+    <p class="q">A judge every method has to pass — and it has already rejected good-looking false positives.</p>
+    <p>Seven experimental arms (frozen champion, random search, one-shot AI, the full loop, two negative controls, an external prior) compared on a broiler-style simulation and public pig data.</p>
+    <p>False promotions on negative controls <b>{{d1.neg_sim}} / {{d1.neg_pig}}</b> (simulation / pig) · leak probes intercepted <b>{{d1.leak}} / {{d1.leak}}</b> · measured accuracy below the theoretical bound: <b>{{d1.bound_ok}}</b></p>
+    <p class="foot">→ the arms explained · r–N curve · cross-customer tiers · breeder's-equation decomposition</p>
+  </a>
+  <a class="card demo sim" href="demo2.en.html" style="text-decoration:none;color:inherit">
+    <h3>Demo 2 · Cross-species clock<span class="badge sim">Internal preview · simulated engine</span></h3>
+    <p class="q">Biological age can be read consistently across species — the same read-out and judge, unchanged, beyond breeding.</p>
+    <p>A methylation clock for pig, dog, cattle and human: conserved-CpG screen, elastic net, leave-species-out validation, age acceleration vs outcome, probe lists. Until the GEO data arrive, the engine runs on simulated data with declared assumptions.</p>
+    <p>Leave-species-out r: pig <b>{{d2.loso_pig}}</b> · dog <b>{{d2.loso_dog}}</b> (acceptance 0.8, {{d2.accepted}} on simulated data)</p>
+    <p class="foot">→ pipeline · assumed models · result format · commercial meaning for pets and the human line</p>
+  </a>
+  <a class="card demo" href="demo3.en.html" style="text-decoration:none;color:inherit">
+    <h3>Demo 3 · The Ledger<span class="badge real">Delivered · simulated data</span></h3>
+    <p class="q">The cash layer: per-animal reproducibility in a shadow run, auditable delivery; a ledger customers cannot leave.</p>
+    <p>The customer's seven-step selection workflow, end to end: array batch → genotypes → reference update → breeding values → selection and mating → adoption record → progeny outcomes, all written to an append-only ledger.</p>
+    <p>Defects caught <b>{{d3.defects_caught}} / {{d3.defects_injected}}</b> · breeding values reproduced per animal <b>{{d3.agree}} / {{d3.agree_n}}</b> · forward r <b>{{d3.r_g1}} → {{d3.r_g2}}</b></p>
+    <p class="foot">→ seven steps · three ledger tables · validation bandwidth · three compounding loops</p>
+  </a>
+  <a class="card demo sim" href="demo4.en.html" style="text-decoration:none;color:inherit">
+    <h3>Demo 4 · Neoantigen audit + HLA imputation<span class="badge sim">Internal preview · simulated engine</span></h3>
+    <p class="q">The judge is not only for breeding: an algorithm frozen for 5–7 years needs independent validation before the freeze; HLA typing is the wedge into the human line.</p>
+    <p>4a four-digit HLA imputation by frequency stratum × panel density; 4b a six-arm audit of patient × peptide ranking with a pre-freeze independent validation report. Simulated until the real data arrive.</p>
+    <p>False promotions on negative controls <b>{{d4.neg_false}}</b> · HLA accuracy reference / 65K / 20K panel <b>{{d4.hla_ref}} / {{d4.hla_65k}} / {{d4.hla_20k}}</b></p>
+    <p class="foot">→ 4a and 4b results · sample audit report · commercial meaning of the audit line</p>
+  </a>
+</div>
+<p class="toc">A common confusion: the A–G in Demo 1 are <b>seven experimental arms</b> — legs of one controlled experiment — not the four demos; the four demos are the four things the PRD sets out to prove. <a href="demo1.en.html#arms">The arms explained →</a></p>
+
+<h2>Three layers between the grand vision and what can be proven</h2>
+<div class="tw"><table>
+<thead><tr><th>Layer</th><th>The deck says</th><th>Smallest proposition a demo must prove</th><th>Theory</th><th>How far it is proven</th></tr></thead>
+<tbody>
+<tr><td>Destination</td><td>Every generation better, including our own generation's time</td><td>Genetic gain can be raised auditably; biological age can be read consistently across species</td><td>Breeder's equation ΔG = i·r·σA / L; epigenetic clocks</td><td>Demo 1's decomposition (simulation); Demo 2's pipeline (simulated engine)</td></tr>
+<tr><td>Method</td><td>Read-out, judge, memory</td><td>One set of gates works unchanged in two fields; the ledger feeds back and improves prediction</td><td>Forward validation, the LR method, permutation tests; decision–outcome paired data</td><td>Demo 1 and Demo 4 share the judge; Demo 3's three ledger tables are live</td></tr>
+<tr><td>Cash</td><td>The customer's selection loop</td><td>Shadow-run per-animal agreement ≥ 99 %, delivery ≤ 4 weeks</td><td>Deterministic reproduction of ssGBLUP</td><td>Demo 3: the same formula recomputed independently agrees on {{d3.agree}} / {{d3.agree_n}} animals (simulation); real customer data pending</td></tr>
+<tr><td>Promise</td><td>Ten years of progress in five</td><td>Decompose +50 % per year into measurable changes in r and L</td><td>The decomposed breeder's equation</td><td>Demo 1b: carcass trait {{d1.by_r}} from r alone; a trait recorded on the animal needs r and L together, {{d1.bw42_rl}} (simulation)</td></tr>
+</tbody></table></div>
+
+<h2 data-for="board">Five visible outcomes</h2>
+<p data-for="board">Each with a year, a number, a reference and a revenue line. The first two we deliver ourselves; the last three need customers, partners and regulators. This is the deck's promise page; the right-hand column says which demo on this site is laying the ground.</p>
+<div class="tw" data-for="board"><table>
+<thead><tr><th>Year</th><th>Promise</th><th>Reference</th><th>Line</th><th>On this site</th></tr></thead>
+<tbody>
+<tr><td>2031</td><td>Domestic stock catches up with imports: domestic white-feather broilers and breeding pigs on the platform match imported lines on core economic traits</td><td>Domestic broiler share 30 % →; national seed-industry revitalisation plan</td><td>A, B</td><td>Demo 1 judge + Demo 3 ledger</td></tr>
+<tr><td>2031</td><td>Ten years of progress in five: annual genetic gain up 50 %+ for connected customers, realised gain auditable per animal</td><td>Genus's roughly three-year genetic lag</td><td>C</td><td>Demo 1b decomposition (wording per trait; number after the shadow run)</td></tr>
+<tr><td>2033</td><td>Disease resistance becomes selectable: connected farms cut antibiotic use by a third through resistance and tolerance traits</td><td>Genus's PRRS-resistant pig approved in 8 jurisdictions</td><td>B, C, D</td><td>Demo 1's challenger mechanism (arm G priors) + Demo 3 outcome feedback</td></tr>
+<tr><td>2035</td><td>Two more healthy years for dogs and cats: cross-species read-out becomes the default efficacy endpoint for companion-animal anti-ageing interventions</td><td>Loyal's mission; 67 % of Zoetis revenue from companion animals</td><td>D</td><td>Demo 2 cross-species clock (internal preview)</td></tr>
+<tr><td>2040</td><td>Biological age becomes a routine reading: biological age and immune status enter routine check-ups and are adopted as a surrogate endpoint by at least one intervention evaluation</td><td>Moderna phase III uses recurrence-free survival; ageing has no accepted endpoint yet</td><td>D, E</td><td>Demo 2 + Demo 4 (audit and HLA)</td></tr>
+</tbody></table></div>
+
+<h2 data-for="board ai">Roadmap: three steps, each a good outcome on its own</h2>
+<div class="grid" data-for="board ai">
+  <div class="card"><h3>Step 1 · 2027–2029</h3><p class="q">A closed-loop breeding-decision platform</p><p>Cross-customer data custody and decisions for pigs, chickens and cattle; gain-sharing contracts; validation bandwidth ≥ 3 million samples per year. Benchmark: Neogen genomics + Genus royalties.</p><p class="foot">On this site: Demo 1, Demo 3</p></div>
+  <div class="card"><h3>Step 2 · 2028–2031</h3><p class="q">The cross-species read-out layer</p><p>A domestic cross-species methylation array; companion-animal efficacy read-outs; HLA typing + algorithm audit; research-use products for the human line. Benchmark: Illumina EPIC + Tempus.</p><p class="foot">On this site: Demo 2, Demo 4 (internal previews)</p></div>
+  <div class="card"><h3>Step 3 · 2031–2038</h3><p class="q">The default memory of life data</p><p>Human cohorts, data licensing, milestones on companion pipelines; read-out and audit adopted by regulators or industry standards. Benchmark: IQVIA, Veeva, Tempus.</p><p class="foot">On this site: the ledger and audit-report shapes already exist in Demo 3 / Demo 4</p></div>
+</div>
+
+<h2>What on this site is real and what is simulated</h2>
+<div class="tw"><table>
+<thead><tr><th>Demo</th><th>Data</th><th>Engine</th><th>Force of the conclusion</th></tr></thead>
+<tbody>
+<tr><td>Demo 1 The Judge</td><td>Broiler-style multi-line simulation (true breeding values known) + public PIC pig data</td><td>The real judge: six gates, seven arms, negative controls, DSR-style correction — the production code</td><td>Properties of the judge itself (zero false promotions, intercepted leaks, never above the bound) are real conclusions; gain numbers hold for the simulation only</td></tr>
+<tr><td>Demo 2 Cross-species clock</td><td>Simulated methylation matrix (assumptions declared)</td><td>The real pipeline (elastic net, leave-species-out, thermodynamics) on simulated data</td><td>Shows the pipeline, the acceptance criterion and the report format; accuracy numbers do not transfer</td></tr>
+<tr><td>Demo 3 The Ledger</td><td>refpop-agent simulator (seed 15, 62 injected defects)</td><td>The real pipeline and ledger API</td><td>Workflow and ledger mechanics are real; the adoption rate is simulator behaviour</td></tr>
+<tr><td>Demo 4 Audit + HLA</td><td>Simulated population haplotypes; simulated patients × peptides</td><td>The real audit discipline (leave-patient-out, six arms, Bonferroni) on simulated data</td><td>Zero promoted negative controls and "a report without algorithm internals" are real conclusions; hit rates do not transfer</td></tr>
+</tbody></table></div>
+<p>Every demo directory carries <code>CLAIMS.md</code> (can say / cannot say / what data would settle it) and <code>RUN.json</code> (seed, data hashes, threshold hash, duration, validation bandwidth) and rebuilds with one command. Technical depth is on the <a href="engine.en.html">technology route</a> page; operating manuals are under <a href="abl/index.html">Manuals</a>.</p>

@@ -1,0 +1,53 @@
+<h1>Demo 1 · The Judge (breeding)<span class="badge real">Delivered · real computation</span><span class="en">裁判（育种）：任何方法都要过的裁判，它已经拒绝了看起来很好的假阳性。</span></h1>
+<p class="lede">It proves one sentence of the deck: <b>what we deliver is a judge every method has to pass, and it has already rejected good-looking false positives.</b> Frozen ssGBLUP is the champion; any large model, random search or external prior is a challenger, and the only way up is a paired win on the same candidates and the same cutoff date.</p>
+<p class="toc">Generated {{d1.date}} · seed 0 · thresholds-file hash <code>{{d1.thr_hash8}}…</code> (identical at start and end) · {{d1.minutes}} minutes of compute · <a href="demo1/report.html">full report (Chinese)</a> · <a href="view.html?f=demo1/rejected.md">what the judge rejected</a> · <a href="view.html?f=demo1/THEORY.md">theory</a></p>
+
+<div class="howto breeder" data-for="breeder"><b>For breeders:</b> arm A is the method you use today (ssGBLUP). The other six arms are various ways of "doing better". The judge's job is to let something through only if it is genuinely more accurate on the next generation, and not by luck or by peeking at the future. So far nothing has been let through — that is not a failure, that is the judge working.</div>
+<div class="howto ai" data-for="ai"><b>For AI people:</b> six deterministic gates (validity; accuracy against a shuffled-label null; paired ΔOOS; plan-level ΔF and gain; robustness by stratum; a research gate with DSR-style expected-maximum deflation). Agents only recommend; only gates change state. Arms E/F are negative controls that must promote zero; arm G's random prior is its own negative control.</div>
+<div class="howto board" data-for="board"><b>For the board:</b> three things. One, the judge holds (zero false promotions on negative controls, every leak probe intercepted, measured accuracy never above the theoretical bound). Two, challengers rarely win — which supports "the judge is the product, the data are the asset" rather than "we have a magic model". Three, Demo 1b splits "ten years of progress in five" into an r term and an L term and tells you how the promise should be worded.</div>
+
+<div class="stats">
+  <div class="stat"><b>{{d1.neg_sim}} / {{d1.neg_pig}}</b><span>false promotions on negative controls (simulation / pig data); must be 0</span></div>
+  <div class="stat"><b>{{d1.leak}} / {{d1.leak}}</b><span>deliberately planted temporal-leak probes, all intercepted by the Critic</span></div>
+  <div class="stat"><b>{{d1.champ_r}} → {{d1.holdout_r}}</b><span>champion true accuracy: next generation → sealed generation</span></div>
+  <div class="stat"><b>{{d1.promoted_total}}</b><span>challenger promotions (B / C / D / G)</span></div>
+  <div class="stat"><b>{{d1.bound_ok}}</b><span>measured r below the Daetwyler bound throughout (exceeding it = leakage, run stops)</span></div>
+  <div class="stat"><b>{{d1.bandwidth}}</b><span>validation bandwidth (samples / yr ÷ label latency yr, simulation)</span></div>
+</div>
+
+<h2 id="arms">Seven experimental arms — they are not the four demos</h2>
+<p>A name like <code>sim_D_s0_r20260927T1506</code> on the dashboard is a machine id: <b>dataset _ arm _ seed _ run time</b>. The seven arms are seven legs of one controlled experiment, all inside Demo 1. Each leg answers one question:</p>
+{{d1.arms_table}}
+<p>Simulation: {{d1.n_lines}} pure lines · {{d1.n_breeds}} breeds · {{d1.n_batches}} hatch batches per year · development set {{d1.n_dev}} birds · sealed generation {{d1.n_holdout}} birds · {{d1.n_markers}} markers · true breeding values known. Budget: {{d1.n_proposals}} proposals, at most {{d1.evals_cap}} full evaluations.</p>
+<figure><img src="demo1/figures/fig4_arms.png" alt="full evaluations and promotions per arm" loading="lazy"><figcaption>Full evaluations and promotions per arm (figure labels in Chinese). Negative controls E / F must promote 0; the zeros elsewhere say that on these data no method beat the frozen champion reliably at the paired incremental gate.</figcaption></figure>
+
+<h2>Accuracy versus reference size against the theoretical bound</h2>
+<p data-for="ai board">The Daetwyler bound r = √(N·h² / (N·h² + Me)) depends on reference size N, heritability h² and the number of effective chromosome segments Me — hardly on model complexity. A measured curve above it has one explanation: leakage. It is a hard rule: exceed it and the run stops. Here h² = {{d1.h2}}, Me ≈ {{d1.me}}, largest excess {{d1.curve_max_excess}} (negative = never exceeded).</p>
+<figure><img src="demo1/figures/fig1_accuracy_vs_N.png" alt="accuracy versus N with the theoretical bound" loading="lazy"><figcaption>Measured r (champion GBLUP, five draws) against the theoretical bound. A larger reference means higher accuracy, always below the bound.</figcaption></figure>
+
+<h2>Cross-customer tiers: does cross-customer learning hold?</h2>
+<p>The deck says "cross-customer learning". The review table says: pooling reference populations within a line works; across lines and breeds the gain is small and may be negative. So it is tested in three tiers, and only tier 1 passing counts as support.</p>
+{{d1.tiers_table}}
+<figure><img src="demo1/figures/fig2_cross_customer_tiers.png" alt="cross-customer tiers" loading="lazy"><figcaption>Paired ΔOOS relative to "own-customer data only", 90 % bootstrap intervals.</figcaption></figure>
+<div class="howto board" data-for="board"><b>An honest footnote:</b> all three tiers pass, but breed divergence in this simulation is weak and the across-breed decay is faint, so the claim is "holds in this simulation". Whether the deck keeps "cross-customer learning" waits for real multi-line data; if only tier 1 holds, the story narrows to "same line, across farms" and the valuation anchor is unchanged.</div>
+
+<h2>Breeder's-equation decomposition (Demo 1b): where +50 % comes from</h2>
+<p>ΔG = i·r·σA / L. Genomic selection moves two terms: it raises accuracy r and shortens the generation interval L. Measuring them apart tells you how "ten years of progress in five" should be worded:</p>
+{{d1.gain_table}}
+<figure><img src="demo1/figures/fig3_gain_decomposition.png" alt="breeder's-equation decomposition" loading="lazy"><figcaption>Which term moves and by how much ΔG per year changes (90 % bootstrap intervals). The 15 % shorter interval is a design assumption, not a measurement.</figcaption></figure>
+<div class="howto board" data-for="board"><b>What it means for promise two:</b> a trait recorded on the animal itself (body weight) gives {{d1.bw42_r}} from r alone and {{d1.bw42_rl}} only with r and L together; a carcass trait with no own record (breast yield, baseline = full-sib index) gives {{d1.by_r}} from r alone and {{d1.by_rl}} with both. Word it per trait; fix the number after the customer's shadow run.</div>
+
+<h2 data-for="breeder ai">Low-density panel + imputation: accuracy by MAF</h2>
+<p data-for="breeder ai">The solid-phase array strategy is "low density + imputation". On public pig data (5K / 20K panels, KNN imputation) overall concordance is about 0.70, only 0.58–0.67 for loci with MAF ≥ 0.2, and 5K ≈ 20K — KNN ignores local linkage, so this is a floor for the method, not a verdict on panel density. Real panels must be re-measured with Beagle / FImpute-type methods.</p>
+<figure data-for="breeder ai"><img src="demo1/figures/fig5_imputation_by_maf.png" alt="imputation accuracy by MAF" loading="lazy"><figcaption>Imputation accuracy by MAF (public pig data).</figcaption></figure>
+
+<h2>Commercial meaning</h2>
+<div class="grid" data-for="board">
+  <div class="card"><h3>The judge is the product</h3><p>Customers are not buying "a better model"; they are buying a validation no vendor can game: every method — theirs, ours — passes the same gates. That challengers rarely win supports the positioning.</p></div>
+  <div class="card"><h3>The data are the asset</h3><p>Every proposal, rejection and cost enters a permanent ledger; false positives the judge rejected are knowledge too. The longer the ledger, the better the next round's priors — the first compounding loop.</p></div>
+  <div class="card"><h3>How to state promise two</h3><p>The decomposition decides the wording: per trait, with intervals, and with the L term marked as a design assumption. "+50 %" or "+25 %" earns a place in external material only after a shadow run on real customer data.</p></div>
+</div>
+
+<h2>Can say / cannot say / what data would settle it</h2>
+{{d1.claims}}
+<p class="toc">Review-table rows 1, 2, 3, 5, 6, 7. Data sources and hashes: <a href="demo1/RUN.json">RUN.json</a>.</p>

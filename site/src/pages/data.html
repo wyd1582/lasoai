@@ -1,0 +1,35 @@
+<h1>数据解锁清单<span class="en">What data unlocks what — the shortest path from "internal preview" to "real result".</span></h1>
+<p class="lede">代码这边能推进的都推进了。下面每一行是一份数据：它从哪来、放到哪、拿到以后哪个 Demo 会从"模拟"变成"真实"、哪一句 Deck 上的话会因此站住或改写。董事会看最右两列就够了。</p>
+
+<div class="howto board" data-for="board"><b>董事会这样读：</b>本站四个 Demo 里，Demo 1 和 Demo 3 已是真实计算；Demo 2 和 Demo 4 差的不是代码，是三份公开数据和一份需要决策的参考面板。拿到第一行的客户数据，"现金层"的两个数字（逐头一致率、交付时长）就能从机制变成承诺。</div>
+
+<h2>按优先级</h2>
+<div class="tw"><table>
+<thead><tr><th>#</th><th>数据</th><th>来源 / 谁能拿到</th><th>放到哪</th><th>解锁什么</th><th>Deck 上哪句话</th><th>工作量（数据到位后）</th></tr></thead>
+<tbody>
+<tr><td>1</td><td><b>客户的基因型 + 表型 + 现行手工指数 + 配种记录</b></td><td>白羽鸡客户（数据权属协议）</td><td>客户本地部署；不出客户环境</td><td>影子运行：逐头一致率、交付时长；跨客户三档的第一档真实结论；承诺二（+50% 还是 +25%）的措辞</td><td>现金层"逐头一致率 ≥ 99%、交付 ≤ 4 周"；承诺一、二</td><td>1–2 周（管线已就绪：refpop-agent 的验证节点 + ABL 的回放阶段）</td></tr>
+<tr><td>2</td><td><b>FarmGTEx 猪 / 鸡 eQTL 表、Animal QTLdb 区域</b></td><td>公开下载（需要有外网的机器）</td><td><code>data/priors/</code>，在 <code>data/SOURCES.md</code> 登记 sha256</td><td>Demo 1 的 G 臂用真实先验重跑：功能先验到底有没有增量</td><td>技术路线 2/3 的 E2 引擎；24 个月路线的 Q2–Q3 止损线</td><td>半天接入 + 40 分钟重跑</td></tr>
+<tr><td>3</td><td><b>GEO 泛哺乳动物甲基化 series（猪、犬、牛、人）</b></td><td>公开下载（Arneson 2022 / Lu 2023 配套 accession），体量数 GB</td><td><code>data/raw/</code>，登记 sha256</td><td>Demo 2 从内部预测版变成真实结果：留物种 r 能不能到 0.8</td><td>"跨物种读出"；承诺四、五</td><td>替换输入矩阵 + 探针比对 1 周</td></tr>
+<tr><td>4</td><td><b>探针序列 + 各物种参考基因组</b></td><td>拉索芯片设计团队 + 公开基因组</td><td><code>data/raw/</code></td><td>Demo 2 真实的保守筛选与热力学参数；芯片内容团队可直接接手的探针清单</td><td>读出层"固定面板"</td><td>1 周（minimap2 / BLAST 比对）</td></tr>
+<tr><td>5</td><td><b>带结局标签的甲基化数据（母猪淘汰记录、犬猫干预试验）</b></td><td>客户台账（猪）；宠物合作方</td><td>客户环境 / <code>data/raw/</code></td><td>Demo 2 第 3 节从"演示格式"变成真实检验：年龄加速度到底能不能预测结局</td><td>承诺四"犬猫多两个健康年"的措辞是"寿命"还是"生物年龄"</td><td>数据到位后 3 天</td></tr>
+<tr><td>6</td><td><b>1000 Genomes SNP + 中国人群 HLA 参考面板</b></td><td>公开（1000G）+ <b>PRD 决定 3</b>：许总或合作院所</td><td><code>data/raw/</code></td><td>Demo 4a 真实的四位分辨率准确度按频率分层、真实的调用率曲线（送多少去测序）</td><td>人类线楔子；路线图第二级</td><td>1 周</td></tr>
+<tr><td>7</td><td><b>TESLA 公开部分 + NetMHCpan-4.1 输出</b></td><td>公开（TESLA）；NetMHCpan 学术许可</td><td><code>data/raw/</code></td><td>Demo 4b 真实的六臂审计与公开基线对比</td><td>E 线"审计与授权"的第一份真实样报</td><td>1 周（harness 已复用 Demo 1）</td></tr>
+<tr><td>8</td><td><b>一轮随机化对照配种</b></td><td>客户同意执行（台账字段已预留）</td><td>客户台账</td><td>Demo 3 从观察数据升级为实验：采纳建议是否<b>导致</b>子代更好</td><td>承诺二的因果证据；"台账 → 实验"</td><td>一个世代（鸡 1 年）</td></tr>
+<tr><td>9</td><td><b>真实多品系 / 多场数据</b></td><td>第 2、3 家客户</td><td>客户环境</td><td>跨客户三档的真实结论：Deck 上"跨客户学习"能否保留，还是收窄为"同品系跨场"</td><td>Q3–Q4 止损线</td><td>2 周</td></tr>
+<tr><td>10</td><td><b>Evo 2 / AlphaGenome 嵌入</b></td><td>开源模型（需要 GPU）；AlphaGenome 商用需授权</td><td><code>data/priors/</code></td><td>G 臂的第二种先验：DNA 基础模型的"语法理解"能否迁移到复杂性状</td><td>技术路线 3/3：只有证据出现才考虑自训模型</td><td>2 周（含部署）</td></tr>
+</tbody></table></div>
+
+<h2>拿到之后会发生什么</h2>
+<div class="grid" data-for="board ai">
+  <div class="card"><h3>页面自动变真</h3><p>每个 Demo 的构建脚本只认输入文件；换成真实数据后，RUN.json、图、CLAIMS 和本站的每个数字自动更新，"内部预测版"徽章由构建脚本撤下。</p></div>
+  <div class="card"><h3>可以说的话会变</h3><p>每个 Demo 的"可以说 / 不能说 / 需要什么数据"由脚本按数字生成；真实数据到位后，右栏的条目逐条移到左栏，或者被证伪后留在中栏——两种结果都写进 CLAIMS。</p></div>
+  <div class="card"><h3>止损线是事先写好的</h3><p>负对照晋级 → 方法作废；功能先验增益 &lt; 1% → 只留科研合作；留物种 r &lt; 0.8 → 单物种时钟；稀有 HLA 等位基因不足 → 筛查 + 测序确认。数据决定走哪条路，不由我们的偏好决定。</p></div>
+</div>
+
+<h2>三个要一号位决定的事（PRD §6）</h2>
+<ol>
+  <li><b>白羽鸡客户的读出产品是否承诺甲基化。</b>鸟类需要单独面板，建议先不承诺；先做基因型与台账。</li>
+  <li><b>承诺二的措辞：+50% 还是 +25%。</b>Demo 1b 的分解表说：个体不可测的性状只改 r 已够 50%，个体可测的性状需要 r 与 L 一起；建议按性状分开，等第 1 行数据的影子运行再定数字。</li>
+  <li><b>中国人群 HLA 参考面板从哪来。</b>这决定人类线楔子的可行性（第 6 行）。</li>
+</ol>
+<p class="toc">仓库里的对应文件：<code>docs/NEXT.md</code>（缺口分析）、<code>data/SOURCES.md</code>（数据登记与哈希）、各 demo 的 <code>CLAIMS.md</code>。</p>

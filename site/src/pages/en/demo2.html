@@ -1,0 +1,66 @@
+<h1>Demo 2 · Cross-species clock<span class="badge sim">Internal preview · simulated engine</span><span class="en">跨物种时钟：同一套读出与裁判，在育种之外零改动可用。</span></h1>
+<p class="lede">The sentence it serves: <b>biological age can be read consistently across species; the same read-out and judge work, unchanged, in a second field beyond breeding.</b> This is the bridge from breeding to companion-animal and human health.</p>
+<p class="toc">Generated {{d2.date}} · seed 2 · simulation config hash <code>{{d2.config_hash}}</code> · {{d2.seconds}} s · <a href="demo2/clock_report.en.html">full report</a> · <a href="view.html?f=demo2/THEORY.en.md">theory</a> · <a href="view.html?f=demo2/README.md">how to rebuild</a></p>
+<div class="preview" style="margin-top:12px"><b>Why "internal preview":</b> the GEO pan-mammalian methylation data the PRD calls for (pig, dog, cattle, human) are not yet in hand. The engine on this page is real; the data are simulated, with every assumption listed in <a href="demo2/RUN.json">RUN.json</a>. When real data arrive only the input matrix changes, and every number on this page updates itself.</div>
+
+<div class="howto breeder" data-for="breeder"><b>For breeders:</b> a methylation clock reads an animal's biological age, not its genotype. Its direct use in breeding is productive lifespan — sow longevity, cow productive life — turning "which animals age slowly" into a trait that can be selected and validated. <b>Broilers are not in this demo:</b> avian methylation differs from mammals and needs its own panel.</div>
+<div class="howto ai" data-for="ai"><b>For AI people:</b> the target is log relative age (age / maximum lifespan, after Lu et al. 2023); the model is an elastic net (Zou &amp; Hastie 2005); validation has two grades: a random split (lenient) and leave-species-out (strict) — the held-out species never enters training and is predicted only through conserved sites learned from the others. Acceptance is leave-species-out r ≥ 0.8 for pig or dog, with no tuning to pass.</div>
+<div class="howto board" data-for="board"><b>For the board:</b> this is the technical shape of line D (cross-species read-out). Promise four (2035, two more healthy years for dogs and cats) and promise five (2040, biological age as a routine reading) both rest on it. This page shows the pipeline, the acceptance criterion and the report format; whether real data reach 0.8 waits for the data.</div>
+
+<div class="stats">
+  <div class="stat"><b>{{d2.n_total}}</b><span>simulated samples: pig {{d2.n_pig}} · dog {{d2.n_dog}} · cattle {{d2.n_cattle}} · human {{d2.n_human}}</span><i>simulated</i></div>
+  <div class="stat"><b>{{d2.n_conserved}} / {{d2.n_probes}}</b><span>probes passing the conservation screen (minimum identity across four species ≥ {{d2.identity_min}})</span><i>simulated</i></div>
+  <div class="stat"><b>{{d2.n_clock}}</b><span>clock sites chosen by the elastic net</span><i>simulated</i></div>
+  <div class="stat"><b>{{d2.loso_pig}} / {{d2.loso_dog}}</b><span>leave-species-out r: pig / dog (acceptance 0.8)</span><i>{{d2.accepted}} on simulated data</i></div>
+  <div class="stat"><b>{{d2.accel_r}}</b><span>pig: partial correlation of age acceleration with productive lifespan</span><i>association planted in the simulation</i></div>
+  <div class="stat"><b>{{d2.bandwidth_outcome}}</b><span>validation bandwidth for outcome labels ({{d2.samples_per_year}} samples / yr ÷ {{d2.latency}} yr)</span><i>assumption</i></div>
+</div>
+
+<h2>Pipeline (identical for the real-data version)</h2>
+<div class="flow">
+  <span class="step">Read-out<small>methylation array · blood</small></span><span class="arrow">→</span>
+  <span class="step">QC<small>detection · batch</small></span><span class="arrow">→</span>
+  <span class="step">Conserved-CpG screen<small>per-species identity</small></span><span class="arrow">→</span>
+  <span class="step">Elastic-net clock<small>log relative age</small></span><span class="arrow">→</span>
+  <span class="step">Validation<small>random split + leave-species-out</small></span><span class="arrow">→</span>
+  <span class="step">Age acceleration<small>vs outcome</small></span><span class="arrow">→</span>
+  <span class="step">Probe list<small>top5k / top20k</small></span>
+</div>
+
+<h2>Engine and assumptions: what this version uses, what production will use</h2>
+<div class="tw"><table>
+<thead><tr><th>Module</th><th>This version (simulated engine)</th><th>Production version</th><th>Status</th></tr></thead>
+<tbody>
+<tr><td>Read-out panel</td><td>Simulated array of {{d2.n_probes}} probes, blood only, two batches per species</td><td>Domestic cross-species methylation array (conserved-CpG panel); GEO pan-mammalian data first</td><td><span class="tag">simulated</span></td></tr>
+<tr><td>QC</td><td>Detection rate and batch record (no missingness in simulation)</td><td>Detection p-values, sex check, batch correction (ComBat-type), cell-composition estimates</td><td><span class="tag">awaits real data</span></td></tr>
+<tr><td>Conserved-CpG screen</td><td>Minimum identity across four species ≥ {{d2.identity_min}} (simulated identity)</td><td>Probe sequences aligned to each genome (minimap2 / BLAST), same threshold</td><td><span class="tag">same algorithm, data pending</span></td></tr>
+<tr><td>Clock model</td><td>Elastic net, l1_ratio 0.5, 5-fold cross-validation for the penalty; target = log relative age</td><td>Same (Zou &amp; Hastie 2005; Lu et al. 2023 transform); optionally a Horvath-style age transform as control</td><td><span class="tag">implemented</span></td></tr>
+<tr><td>Validation</td><td>70/30 random split per species + leave-species-out, 90 % bootstrap intervals</td><td>Same; acceptance = leave-species-out r ≥ 0.8 (pig or dog), no tuning to pass</td><td><span class="tag">implemented</span></td></tr>
+<tr><td>Age acceleration → outcome</td><td>Simulated pig "productive lifespan" label; association planted (slope {{d2.slope}} months per unit acceleration)</td><td>Culling / productive-life records from the customer ledger; intervention endpoints in dogs and cats</td><td><span class="tag">format demo only</span></td></tr>
+<tr><td>Probe list</td><td>top5k / top20k: clock coefficients, per-species identity, GC, SantaLucia 1998 nearest-neighbour ΔH / ΔS / Tm</td><td>Same; real probe sequences, thermodynamics recomputed under the array maker's process conditions</td><td><span class="tag">same algorithm, random sequences</span></td></tr>
+</tbody></table></div>
+<p data-for="ai">Open models that can serve as inputs (not competitors): DNA foundation models (Evo 2, Apache 2.0) and regulatory models (AlphaGenome, free for non-commercial use, licence for commercial) can supply a prior on whether a conserved CpG sits in a regulatory element and feed the probe ranking; the pan-mammalian array's probe set (Arneson 2022) is the starting point of the conservation screen. See the <a href="engine.en.html">technology route</a>.</p>
+
+<h2>Results (simulated data)</h2>
+{{d2.loso_table}}
+<figure><img src="demo2/figures/en/fig1_scatter_by_species.png" alt="predicted versus chronological age" loading="lazy"><figcaption>Top row random split, bottom row leave-species-out. Log axes. Leave-species-out is the stricter grade and the PRD's acceptance criterion.</figcaption></figure>
+<figure><img src="demo2/figures/en/fig2_r_by_species.png" alt="r per species with the acceptance line" loading="lazy"><figcaption>Clock accuracy per species with the acceptance line. Passing here shows only that the pipeline and the criterion work.</figcaption></figure>
+
+<h3>Age acceleration vs outcome: format demonstration only</h3>
+<p>Clock prediction minus the expectation at true age = age acceleration; age-adjusted, its partial correlation with the simulated pig productive lifespan is r = {{d2.accel_r}} {{d2.accel_ci}}. The estimated acceleration correlates {{d2.accel_vs_truth}} with the simulated truth. <b>The association is planted.</b> On real data it may be zero — in which case the read-out is positioned as "biological age", not "lifespan prediction", and promise four is reworded. That is why the report keeps "measures age" and "predicts an outcome" as two separate claims.</p>
+<figure><img src="demo2/figures/en/fig3_acceleration_vs_outcome.png" alt="age acceleration versus outcome" loading="lazy"><figcaption>Pig: age acceleration versus the productive-lifespan residual (planted association).</figcaption></figure>
+
+<h3 data-for="ai breeder">Probe list and thermodynamics</h3>
+<p data-for="ai breeder">Ranking: absolute elastic-net coefficient → conservation pass → minimum identity. Each probe carries per-species sequence identity, GC content and SantaLucia 1998 nearest-neighbour thermodynamics (ΔH / ΔS / Tm) — a format an array-content team can pick up directly: <a href="demo2/probes_top5k.csv">probes_top5k.csv</a>. In this version the sequences are random and only demonstrate the format and the calculation.</p>
+<figure data-for="ai breeder"><img src="demo2/figures/en/fig4_probes.png" alt="conservation screen and Tm distribution" loading="lazy"><figcaption>Left: conservation screen. Right: probe Tm distribution, clock sites highlighted.</figcaption></figure>
+
+<h2>Commercial meaning</h2>
+<div class="grid" data-for="board breeder">
+  <div class="card"><h3>Line D · cross-species read-out</h3><p>Array consumables plus read-out service. Companion-animal and longevity companies want a reproducible efficacy endpoint that is consistent across species (promise four); livestock want productive lifespan; human research cohorts want biological age as a routine reading (promise five). The deck records this as the largest addressable pool (bottom-up assumption).</p></div>
+  <div class="card"><h3>Why us</h3><p>Only a fixed-panel array platform can give a read-out that is consistent across species; the judge turns "is the clock accurate" into auditable numbers (leave-species-out r, intervals, an acceptance line) — the precondition for pharma and regulators to adopt it as a surrogate endpoint.</p></div>
+  <div class="card"><h3>The broiler boundary</h3><p>Birds need their own panel. For a white-feather broiler customer the read-out product starts with genotypes and the ledger and promises no methylation (PRD decision 1, recommended).</p></div>
+</div>
+
+<h2>Can say / cannot say / what data would settle it</h2>
+{{d2.claims}}
+<p class="toc">Review-table rows 7, 8, 11. Rebuild with one command: <code>make demo2</code> (about a minute).</p>

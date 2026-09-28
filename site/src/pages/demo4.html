@@ -20,6 +20,10 @@
 <p>模拟 {{d4.n_individuals}} 人（训练 {{d4.n_train}}，测试 {{d4.n_test}}），三个 I 类基因座，每个等位基因一条特征单倍型，错配率从基因中心向窗口边缘上升以模拟连锁衰减。填充用属性装袋 KNN；正确率按<b>真值等位基因的频率</b>分三档，并在保留 100% / 25% / 8% MHC 位点的三种面板上重报。</p>
 {{d4.hla_table}}
 <figure><img src="demo4/figures/fig1_hla_accuracy.png" alt="HLA 填充准确度" loading="lazy"><figcaption>稀有等位基因的正确率随面板变稀下降最快——审查表第 9 行预期的形状。若真实数据上稀有档不足，产品定位为"筛查 + 测序确认"，仍是楔子。</figcaption></figure>
+<h3>置信度 → 调用率：要送多少去测序</h3>
+<p>把每个调用按置信度从高到低排，只接受置信度足够高的，其余送测序确认。这条曲线回答一个产品问题：<b>要保证被接受的调用正确率 ≥ {{d4.target_acc}}，芯片能自己决定多大比例？</b>模拟结果：参考面板 {{d4.cr_ref}}、65K 面板 {{d4.cr_65k}}、20K 面板 {{d4.cr_20k}}，其余送测序。这就是芯片密度与测序成本之间的定价依据；数字只有形状可信。</p>
+{{d4.callrate_table}}
+<figure><img src="demo4/figures/fig4_hla_callrate.png" alt="置信度与调用率" loading="lazy"><figcaption>各面板的正确率随调用率的变化（模拟人群）。面板越稀，能自动调用的比例越低。</figcaption></figure>
 <div class="howto board" data-for="board breeder"><b>楔子的意思：</b>HLA 分型是人类线第一个能卖的读出：固相 SNP 面板 + 填充，成本远低于测序。它的可行性取决于中国人群参考面板从哪来（PRD 决定 3，需要许总或合作院所的输入）。没有它，4a 只能在欧洲人群面板上做，结论对产品没有意义。</div>
 
 <h2>4b · 六臂审计：留患者验证</h2>

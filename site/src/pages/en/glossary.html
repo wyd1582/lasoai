@@ -1,0 +1,50 @@
+<h1>Glossary<span class="en">术语表：二十几个词，读懂本站每一页。</span></h1>
+<p class="lede">After this page a reader halfway into the field can place every term in the four demos and on the dashboard. Each entry says what the thing is and why it matters, without derivations.</p>
+
+<h2>Breeding and genetics</h2>
+<div class="tw"><table>
+<thead><tr><th>Term</th><th>What it is</th><th>Why it matters</th></tr></thead>
+<tbody>
+<tr><td><b>Breeding value (EBV / GEBV)</b></td><td>The estimated genetic merit an animal passes to its offspring; the G prefix means it was estimated from genomic markers.</td><td>Selection is ranking by it; "is the ranking accurate" throughout this site refers to it.</td></tr>
+<tr><td><b>ssGBLUP</b></td><td>Single-step genomic best linear unbiased prediction: pedigree and genomic relationships combined into one matrix to estimate breeding values — the industry standard.</td><td>The site's <b>frozen champion</b>. Any new method must prove itself more accurate than this to count.</td></tr>
+<tr><td><b>Accuracy r</b></td><td>The correlation between predicted breeding values and true ones (known in simulation) or later-realised ones, from 0 to 1.</td><td>The r term of the breeder's equation; raising it is genomic selection's main contribution.</td></tr>
+<tr><td><b>Breeder's equation ΔG = i·r·σA / L</b></td><td>Genetic gain per year = selection intensity × accuracy × genetic standard deviation ÷ generation interval.</td><td>Demo 1b splits "+50 % per year" into these four terms to see how much each can move.</td></tr>
+<tr><td><b>Generation interval L</b></td><td>Average years from a parent's birth to its offspring's birth (about 1 for chickens, 1.5 for pigs, 3 for cattle).</td><td>Shortening it is genomic selection's second contribution, and the source of "time is the moat": every ledger record waits a generation to return.</td></tr>
+<tr><td><b>Daetwyler bound</b></td><td>The theoretical accuracy ceiling √(N·h² / (N·h² + Me)) from reference size N, heritability h² and the number of effective chromosome segments Me.</td><td>A measurement above it can only be leakage; Demo 1 treats it as a hard rule.</td></tr>
+<tr><td><b>Reference population</b></td><td>The animals with both genotypes and phenotypes that train the breeding-value model.</td><td>Bigger is more accurate (curve in Demo 1); pooling references across customers is what "cross-customer learning" means.</td></tr>
+<tr><td><b>LR method (ρ, μ, b)</b></td><td>Legarra &amp; Reverter 2018: compare predictions from partial data with predictions from full data to get correlation ρ, bias μ and dispersion b.</td><td>b should be near 1; departures mean breeding values are systematically inflated or compressed. "Dispersion" on the dashboard is this.</td></tr>
+<tr><td><b>Inbreeding / ΔF</b></td><td>The rate at which homozygosity rises through mating of relatives.</td><td>The plan-level gate caps it: no ranking, however accurate, may buy gain with inbreeding.</td></tr>
+<tr><td><b>Imputation</b></td><td>Inferring untyped loci from the loci a low-density array did measure.</td><td>"Low-density solid-phase panel + imputation" is the economics of the array route.</td></tr>
+<tr><td><b>MAF</b></td><td>Minor allele frequency.</td><td>Low-MAF loci are hard to impute and hard to estimate; Demo 1 reports imputation accuracy by MAF.</td></tr>
+</tbody></table></div>
+
+<h2>Judge and validation</h2>
+<div class="tw"><table>
+<thead><tr><th>Term</th><th>What it is</th><th>Why it matters</th></tr></thead>
+<tbody>
+<tr><td><b>Champion / challenger</b></td><td>The champion is the frozen incumbent method; a challenger is anything that wants to replace it.</td><td>Promotion requires a paired win on the same candidates and the same cutoff date.</td></tr>
+<tr><td><b>Forward validation</b></td><td>Only past data predict later generations (or later batches, or other patients).</td><td>Random cross-validation is inflated by relatedness; forward validation is what actually happens in industry.</td></tr>
+<tr><td><b>Sealed generation (holdout)</b></td><td>The last generation's data are locked, unreadable by agents, opened once when a campaign ends.</td><td>Prevents peeking of any kind.</td></tr>
+<tr><td><b>Paired increment ΔOOS</b></td><td>The accuracy difference between challenger and champion on the same held-out animals, with a bootstrap interval.</td><td>The incremental gate: the lower bound must exceed 0. "More accurate" can only be shown this way.</td></tr>
+<tr><td><b>Negative control</b></td><td>The same procedure run after shuffling the labels (arm E) or dropping loci at random (arm F).</td><td>Promotions must be zero, or the judge itself does not hold — the falsifier of the whole method.</td></tr>
+<tr><td><b>Leak probe</b></td><td>A deliberately planted hypothesis that uses future information.</td><td>The Critic must intercept it before any code is written; the interception rate is the core "agent reliability" number.</td></tr>
+<tr><td><b>Multiple testing / DSR-style deflation</b></td><td>With many candidates the best one passes by luck; the bar rises with the number of attempts.</td><td>The research gate and Demo 4's Bonferroni correction both mean this.</td></tr>
+<tr><td><b>Six gates</b></td><td>Validity, accuracy, paired increment, plan level (ΔF and gain), robustness (by farm / batch stratum), research (multiple testing).</td><td>Only gates change a candidate's state; agents only recommend.</td></tr>
+<tr><td><b>Arms A–G</b></td><td>The seven legs of Demo 1's one controlled experiment: baseline, random search, one-shot AI, the full loop, two negative controls, an external prior.</td><td>They are not the four demos. The letter in the middle of a campaign id on the dashboard is the arm.</td></tr>
+<tr><td><b>Validation bandwidth</b></td><td>Samples entering the ledger per year ÷ years of label latency.</td><td>Industry counts in millions, laboratories in thousands; the quantified form of "time is the moat".</td></tr>
+</tbody></table></div>
+
+<h2>Read-out and memory</h2>
+<div class="tw"><table>
+<thead><tr><th>Term</th><th>What it is</th><th>Why it matters</th></tr></thead>
+<tbody>
+<tr><td><b>Ledger</b></td><td>An append-only record: every recommendation, adoption and outcome one generation later, traceable per animal.</td><td>The carrier of the data asset and the customer's switching cost; three tables in Demo 3.</td></tr>
+<tr><td><b>Randomised control mating</b></td><td>Random assignment decides which pairs follow the advice and which serve as controls.</td><td>The only way observational data become an experiment; the ledger already has the field.</td></tr>
+<tr><td><b>Methylation clock</b></td><td>Age estimated from methylation levels at a set of CpG sites; the cross-species version uses relative age = age / maximum lifespan.</td><td>Line D's read-out; it measures age, not lifespan.</td></tr>
+<tr><td><b>Age acceleration</b></td><td>Clock prediction minus the expectation at chronological age.</td><td>Only when it links to an outcome (productive life, treatment effect) does "biological age" carry commercial meaning.</td></tr>
+<tr><td><b>Conserved CpG</b></td><td>A site whose sequence is identical across several species.</td><td>A cross-species array can carry only these; the screening threshold sets the panel size.</td></tr>
+<tr><td><b>HLA typing / imputation</b></td><td>Inferring four-digit human leukocyte antigen alleles from an SNP panel.</td><td>The wedge into the human line; rare-allele accuracy depends on the population reference panel.</td></tr>
+<tr><td><b>Neoantigen ranking</b></td><td>Ordering the candidate peptides produced by tumour mutations by how likely they are to trigger immunity.</td><td>The subject of line E audits; the selling point is reproducible, leak-free, comparable — not "more accurate".</td></tr>
+<tr><td><b>Pre-freeze independent validation</b></td><td>An algorithm cannot change for 5–7 years once in the clinic; before the freeze a third party validates it on held-out data.</td><td>Demo 4's report format: protocol, hashes, gates and results only.</td></tr>
+</tbody></table></div>
+<p class="toc">Engineering terms (DSL, campaign, GenoFrame, snapshot, the PAUSE switch) are in section 2 of the <a href="abl/index.html">manual</a>.</p>
