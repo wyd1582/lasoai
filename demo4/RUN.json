@@ -1,6 +1,6 @@
 {
  "demo": "demo4 · 新抗原审计 + HLA 填充（内部预测版，模拟数据）/ neoantigen audit + HLA imputation (internal preview, simulated)",
- "generated_at": "2026-09-28T09:39:41.377518+00:00",
+ "generated_at": "2026-09-28T13:46:33.886178+00:00",
  "seed": 4,
  "config_hash": "db66c66a1b84",
  "assumptions": {
@@ -80,7 +80,7 @@
   }
  },
  "data": "simulated (no 1000G / Chinese HLA panel / TESLA in repo; see CLAIMS.md)",
- "font": "WenQuanYi Zen Hei",
+ "font": "Laso CJK",
  "hla": {
   "n_train": 2400,
   "n_test": 600,
@@ -1195,24 +1195,24 @@
   "note": "assumed patients per year and label latency"
  },
  "duration_seconds": {
-  "hla": 3.0,
-  "neo": 0.9,
-  "total": 6.7
+  "hla": 3.8,
+  "neo": 0.6,
+  "total": 6.3
  },
  "outputs_sha256": {
-  "audit_report.md": "f0b29e1b35257ba4e00d0ea5403d5e532e5baef135b46847fabbea472d91e76c",
-  "audit_report.en.md": "60589ce3a4e53abe694538337a64dae4293741164045e708a89be1d785f21842",
+  "audit_report.md": "df648b0864a8e65bb8e9f7d76f670b5001ad01ff275dcc53ce2e55b90f8a5db8",
+  "audit_report.en.md": "252ffe1ee0b2c5034a36ebeadf82978467905d37eb770b2bb1227f63396336af",
   "CLAIMS.md": "0dbc0b8a157c11b180121d20bfe69e331bb9db0115160bac261a7d60049fd629",
   "CLAIMS.en.md": "481e6adcadbb6d45c953526e82a6894f27cd8475e59f1247714738ffaaf0ee5c",
   "hla_accuracy.csv": "4155a8ed8f06c6caff588cb11191fd60ea4cd3c60b309dd72ef206a5623e9620",
   "hla_callrate.csv": "7157bc848c73e1b7dfbe2cdd76e6738dee246bba45dba1892a720a475ba1eca6",
-  "figures/fig1_hla_accuracy.png": "e38ba34c3e14b160f8696df1b058e517fa760ef93d28906f59979ff024cb2a0c",
-  "figures/fig2_audit_arms.png": "ec25108ffe7911b2107c4c977034c77da7b7f7dc1d2044430e57579dc74b1f36",
-  "figures/fig3_topk_curve.png": "47c8bd58fde3d26f7a3769fc2087047f5306f5027b602f958e3aff7e1eacf138",
-  "figures/fig4_hla_callrate.png": "260b18c3a7cc149fc6a5caae2408b9fbd8705a2f4b97900c0e94340525f57558",
-  "figures/en/fig1_hla_accuracy.png": "3a2d0ebb0e46f08d344c06ba26b36513aef9869fcb94f69145d78c77a2ce730b",
-  "figures/en/fig2_audit_arms.png": "17927c822f72f48ede3e4436b3bf99216b84c808598096a68ff5a76c173bf64d",
-  "figures/en/fig3_topk_curve.png": "3b61b9a982f1b82e1ca115ae47266ceb76a14aea74a4d7c332936a97f8866d1c",
-  "figures/en/fig4_hla_callrate.png": "00d3bd8ae7f2a5f5370da172ac96cb7397082a6b07062478067a29f4c89bd7a0"
+  "figures/fig1_hla_accuracy.png": "f5a99294bee0c6ed670c1f72244995d5728806f4e9e3b02168f1a333b53cc530",
+  "figures/fig2_audit_arms.png": "7547ec469b91c50534513789e800a283d0c79d671b873228425ef1a0cfa6228c",
+  "figures/fig3_topk_curve.png": "6466739d4c9d3b6e2b61910dea0aaf558e9488b46e6ce61561d0b99602d53e35",
+  "figures/fig4_hla_callrate.png": "80da29b3c8e5f335ebd3636cc27c66ba84a9fc7376e4b73735c645c9e54db959",
+  "figures/en/fig1_hla_accuracy.png": "df9a158fd57d6c71083f0b74cbc7ada7c069019fe3a41cb21143c4602b05ca1b",
+  "figures/en/fig2_audit_arms.png": "018bb493eb6d67ba2452545aead2ed68de4b29a25087337c931cc9c89eb3efbb",
+  "figures/en/fig3_topk_curve.png": "992234fe31902ad16eda4dc73a71b5169bd8feef90ac64ffd8ad7a6344c31cd7",
+  "figures/en/fig4_hla_callrate.png": "851da802f5979853cd018576d0143fe52f0b4a464a4c1b1833ac330e18c6cb58"
  }
 }

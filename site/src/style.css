@@ -33,7 +33,13 @@ nav.main a:hover { color: var(--text); }
 .persona { margin-left: auto; display: flex; gap: 6px; align-items: center; flex-wrap: wrap; font-size: 13px; color: var(--muted); }
 .persona button { border: 1px solid var(--line); background: var(--surface); color: var(--text); padding: 3px 10px; border-radius: 999px; cursor: pointer; font: inherit; font-size: 13px; }
 .persona button[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); font-weight: 600; }
-.persona a.switch { margin-left: 8px; padding: 3px 10px; border-radius: 999px; background: var(--accent); color: var(--accent-ink); text-decoration: none; font-size: 13px; font-weight: 600; }
+/* language toggle (segmented control after the brand) */
+.langbar { display: inline-flex; border: 1px solid var(--accent); border-radius: 999px; overflow: hidden; font-size: 13px; line-height: 1; flex-shrink: 0; }
+.langbar a { padding: 6px 12px; text-decoration: none; color: var(--accent); font-weight: 600; }
+.langbar a.on { background: var(--accent); color: var(--accent-ink); }
+.langbar a:not(.on):hover { background: color-mix(in srgb, var(--accent) 12%, transparent); }
+.banner-lang { display: inline-block; margin-left: 6px; white-space: nowrap; }
+.banner-lang a { color: var(--accent); font-weight: 600; }
 body[data-persona="breeder"] [data-for]:not([data-for~="breeder"]),
 body[data-persona="ai"] [data-for]:not([data-for~="ai"]),
 body[data-persona="board"] [data-for]:not([data-for~="board"]) { opacity: var(--dim); }

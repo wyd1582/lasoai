@@ -1,6 +1,6 @@
 # Pre-freeze independent validation report · neoantigen ranking (internal preview, simulated data)
 
-Generated 2026-09-28 09:39 UTC · seed 4 · config hash `db66c66a1b84` · data hash `d89b57184fcd95d9…`
+Generated 2026-09-28 13:46 UTC · seed 4 · config hash `db66c66a1b84` · data hash `d89b57184fcd95d9…`
 
 ## 1. Mandate and scope
 

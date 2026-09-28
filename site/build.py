@@ -318,8 +318,14 @@ def shell(name: str, lang: str, body: str, ctx: dict) -> str:
         cur = ' aria-current="page"' if href == name else ""
         parts.append(f'<a href="{url}"{cur}>{esc(label)}</a>')
     nav = "".join(parts)
-    switch = (f'<a class="switch" data-lang-switch="en" href="{out_name(name, "en")}">English</a>' if zh else
-              f'<a class="switch" data-lang-switch="zh" href="{out_name(name, "zh")}">中文</a>')
+    # language toggle: a segmented control right after the brand (both links carry data-lang-switch so
+    # app.js can remember the choice), plus a plain-text link inside the preview banner
+    zh_href, en_href = out_name(name, "zh"), out_name(name, "en")
+    langbar = (f'<div class="langbar" role="group" aria-label="Language / 语言">'
+               f'<a class="{"on" if zh else ""}" data-lang-switch="zh" href="{zh_href}" hreflang="zh">中文</a>'
+               f'<a class="{"" if zh else "on"}" data-lang-switch="en" href="{en_href}" hreflang="en">English</a></div>')
+    banner_lang = (f'<span class="banner-lang"><a href="{en_href}" data-lang-switch="en">This page in English →</a></span>' if zh else
+                   f'<span class="banner-lang"><a href="{zh_href}" data-lang-switch="zh">本页中文版 →</a></span>')
     persona = ("<span>我是：</span><button data-persona-btn=\"breeder\" aria-pressed=\"false\">育种的人</button><button data-persona-btn=\"ai\" aria-pressed=\"false\">做 AI 的人</button><button data-persona-btn=\"board\" aria-pressed=\"false\">董事会 / 投资人</button>" if zh else
                "<span>I am:</span><button data-persona-btn=\"breeder\" aria-pressed=\"false\">a breeder</button><button data-persona-btn=\"ai\" aria-pressed=\"false\">an AI person</button><button data-persona-btn=\"board\" aria-pressed=\"false\">board / investor</button>")
     preview = ("<b>内部预览 · 请勿外传。</b>本站的 Demo 1 与 Demo 3 用模拟数据和公开数据真实计算；Demo 2 与 Demo 4 是内部预测版，引擎跑在明示参数的模拟数据上，用来展示流水线、报告格式和目标。所有数字都不是对任何真实群体或客户的承诺。" if zh else
@@ -339,11 +345,12 @@ def shell(name: str, lang: str, body: str, ctx: dict) -> str:
 <body data-lang="{lang}">
 <header class="top"><div class="bar">
   <a class="brand" href="{out_name('index', lang)}">Laso AI<small>{brand_small}</small></a>
+  {langbar}
   <nav class="main">{nav}</nav>
-  <div class="persona">{persona}{switch}</div>
+  <div class="persona">{persona}</div>
 </div></header>
 <div class="wrap">
-<div class="preview">{preview}</div>
+<div class="preview">{preview} {banner_lang}</div>
 {body}
 <footer>{foot}</footer>
 </div>

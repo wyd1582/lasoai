@@ -12,7 +12,7 @@
 | `demo2/` | 本会话 | **Demo 2 内部预测版**：跨物种甲基化时钟的整条流水线（保守 CpG 筛选 → 弹性网 → 随机拆分 + 留物种 → 年龄加速度 vs 结局 → 探针清单含热力学参数），跑在明示参数的模拟数据上；报告、图、CLAIMS 中英各一套（`clock_report.html` / `clock_report.en.html`，`figures/` / `figures/en/`）；GEO 数据到位后只换输入矩阵 | PRD §3 Demo 2、P-D2v3 | 内部预测版（模拟引擎，约 1 分钟重建） |
 | `demo4/` | 本会话 | **Demo 4 内部预测版**：4a HLA 四位分辨率填充按频率分层 × 三种面板密度，加置信度 → 调用率曲线（"筛查 + 测序确认"要送多少去测序）；4b 患者 × 肽段排序的六臂审计（留患者、Bonferroni、负对照）与"冻结前独立验证报告"；报告与图中英各一套；跑在模拟数据上 | PRD §3 Demo 4、P-D4v3 | 内部预测版（模拟引擎，约 5 秒重建） |
 | `site/` | 本会话 | **展示站**（Vercel，中英双语，右上角切换并记住选择）：首页（一分钟版、愿景、四个 Demo、成果承诺、路线图、真 / 模拟对照表）、四个 Demo 页（按育种 / AI / 董事会三种读法导读）、技术路线页（E1–E6、24 个月路线、验证带宽、开源模型与许可）、术语表、数据解锁清单；数字全部从各 demo 的 RUN.json 读入，不手填 | Deck 与 PRD 的对应 | `make site` → `site/dist/`（`name.html` 中文、`name.en.html` 英文） |
-| `tools/cjkfont.py` | 本会话 | 跨平台中文字体选择：容器用文泉驿，Mac 用 Hiragino / PingFang / Heiti / Songti / Arial Unicode，Windows 用微软雅黑；四个 demo 的图共用 | — | — |
+| `tools/cjkfont.py`、`tools/fonts/` | 本会话 | 图里的中文字体：仓库自带 **Laso CJK**（Noto Sans SC 的子集，OFL 许可，0.9 MB，GB2312 一级字 + 仓库用到的全部汉字），任何机器上都一样；找不到时才退到系统字体。`python tools/cjkfont.py` 打印选中的字体与诊断 | — | — |
 | `refpop-agent/` | Task B 分支 | **参考群更新 Agent 管线**（LangGraph）：到货 → QC 门禁 → 合并 → 重训 GBLUP → 前向验证 → 选配 → 中文 HTML 报告；模拟数据含 62 个注入缺陷 | **Demo 3** 的流程引擎；"现金层"影子运行的执行骨架 | 可运行，32 项测试；其产物是 `demo3/` 的输入 |
 | `lowdensity-sku/` | Task C 分支 | **低密度 SKU 可行性**：密度–精度曲线、掩码填补（KNN vs 均值）、成本合成；wheat 数据 | 审查表第 3 行"低密度固相面板 + 填充"的证据 | 结果已落盘；猪数据上的 MAF 分层版本在 `demo1/imputation/` |
 | `genomic-selection-pig/` | Task A（已合并到 playground master） | **ML 能否打败 BLUP 实验阶梯**：pedBLUP / GBLUP / GBM / 加权岭 × 随机 CV / 留家系 / 前向三口径；**保存的数据**：Cleveland 猪与 BGLR wheat 原件 | 审查表第 6 行"深度学习很少赢"的实测证据；Task A 的口径结论是 ABL 前向切分的依据 | 已完成；数据被 `abl/` 与 `lowdensity-sku/` 复用 |

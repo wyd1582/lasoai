@@ -1,6 +1,6 @@
 {
  "demo": "demo2 · 跨物种时钟（内部预测版，模拟数据）/ cross-species clock (internal preview, simulated)",
- "generated_at": "2026-09-28T09:51:28.802883+00:00",
+ "generated_at": "2026-09-28T13:47:30.750720+00:00",
  "seed": 2,
  "config_hash": "e0f028db15c7",
  "assumptions": {
@@ -39,7 +39,7 @@
   "oligo_uM": 0.25
  },
  "data": "simulated (no GEO data in repo; see CLAIMS.md)",
- "font": "WenQuanYi Zen Hei",
+ "font": "Laso CJK",
  "n_samples": {
   "pig": 160,
   "dog": 160,
@@ -166,23 +166,23 @@
   }
  },
  "duration_seconds": {
-  "simulate": 3.3,
-  "fit_and_validate": 65.9,
-  "total": 75.7
+  "simulate": 2.5,
+  "fit_and_validate": 47.2,
+  "total": 54.7
  },
  "outputs_sha256": {
   "CLAIMS.md": "38d69b272008b70cd40e2d9e5ec8448bd41be0f1d8885b35bbdeb0bc3df73901",
   "CLAIMS.en.md": "59dc26e42f205bb9c1dca322a881d967e5df14ae2051d7558b93b7d1cfff470e",
   "probes_top5k.csv": "5e012431390d37b2bf12883dc3fc1b0e5af9c91d7261b94f696cefdb43897e7a",
   "probes_top20k.csv": "22af6a2b10c31c09a77567d15973494c0a04b3ef5790f07cab94924ba3b325f5",
-  "figures/fig1_scatter_by_species.png": "4903a4c0ee6f0deed05a55646bfe1621b106d4922d957ab3bbe958da6cca61c0",
-  "figures/fig2_r_by_species.png": "29d9ead6032c994f13f88d7086ff9212b6e0b4a0cfdf3a41ba8f9a12186753f6",
-  "figures/fig3_acceleration_vs_outcome.png": "4d1b62f1ae0c329cbe57d1bfd319d203b3a7066500bdd28ad8b5ff770ac19d65",
-  "figures/fig4_probes.png": "86835bfe50503eb537f1a0257bd3ba5b457ac1c73f5ffd5e019a4db992405098",
-  "figures/en/fig1_scatter_by_species.png": "740239bc29842264daf684565013d18e190b9bf0e4f8722316f9187abfb4ea61",
-  "figures/en/fig2_r_by_species.png": "b6eec796e5d76caedad6a4881863bd585da9d1712c0ca755cabc4868456a472f",
-  "figures/en/fig3_acceleration_vs_outcome.png": "0e5aec8a9a2bbf67c3295941832b9c73c979d90aec84326b7333dc37be26db6a",
-  "figures/en/fig4_probes.png": "b4562d36917c7d340bed37c329bc30d8c016fab7a9ce83cf6a909b116c805662"
+  "figures/fig1_scatter_by_species.png": "5bcd8614cd8751800281988db061a4c87cebd599a92545942e0e6756b5597ae3",
+  "figures/fig2_r_by_species.png": "ed68e939e6dff28003901bbcbd8d6c5238ffcc52ceaaebb65aeed21aa64772d9",
+  "figures/fig3_acceleration_vs_outcome.png": "2bf710900bc4148bdb8784f8de5e62623d08afea12f62c62fff87248edaab1d7",
+  "figures/fig4_probes.png": "37c456b25c24d8013916a5326e44689713433f8912f353beb5eb2e1982484558",
+  "figures/en/fig1_scatter_by_species.png": "c3900c8a4e14e42a848369ffbdec456288fdbd3a0e06c5b1474b9287f583f2de",
+  "figures/en/fig2_r_by_species.png": "44e4e4770f1c004bf5017c177cf8e09a691e14a0259e523466c371e6ce259dc1",
+  "figures/en/fig3_acceleration_vs_outcome.png": "9639e205272429132b17081c60286f5eef7a1c089431630a40cfd926c86d5552",
+  "figures/en/fig4_probes.png": "8e2ba2ed5c132826996a97cce7029aa6ecb8b7e3f2bb0613fecfa497f6848b1b"
  },
  "birds_out_of_scope": true
 }
