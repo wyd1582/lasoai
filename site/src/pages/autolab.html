@@ -1,0 +1,49 @@
+<h1>Demo 5 · 自驾育种 what-if<span class="badge sim">内部预测版 · 解析模型</span><span class="en">If the wet lab were automated too, how much faster would the loop run? Computed, not asserted.</span></h1>
+<p class="lede">问题：如果湿实验——基因分型实验室、表型采集、繁殖执行——也自动化，育种闭环能快多少？答案用育种者方程和验证带宽算出来，不用形容词。下面的滑块就是模型本身，你拖它，数字和曲线立刻变。</p>
+<p class="toc">解析模型，与 <code>demo5/build.py</code> 逐行一致（构建时用 node 对拍）· 全部参数是假设口径 · <a href="demo5/report.html">完整报告</a> · <a href="view.html?f=demo5/THEORY.md">依据与止损线</a></p>
+<div class="preview" style="margin-top:12px"><b>先说清楚"湿实验"在育种里指什么：</b>基因分型实验室（提取、杂交、扫描）、表型采集（称重、图像、采食传感器）、繁殖执行（授精排程、孵化、胚胎移植）。人类线对应甲基化芯片、HLA 分型与免疫原性实验。自动化改变的是<b>人的延迟和依从性</b>，改不了生物学的钟：妊娠期和生长期不会因为机器人变短。</div>
+
+<div class="howto breeder" data-for="breeder"><b>育种的人这样读：</b>你最熟悉的三个痛点都在模型里：建议发出去只有一部分被执行（依从性）；不是每只动物都有表型回来（覆盖）；结果要等一个世代还要人工整理（延迟）。自动化把这三个数往 100%、100%、生物学最短时间推；世代间隔只有出雏即分型或体外世代技术才能动。</div>
+<div class="howto ai" data-for="ai"><b>做 AI 的人这样读：</b>N(t) = N0 + S·覆盖·max(0, t − 延迟)；r = 0.9·√(N h² / (N h² + Me))；ΔG = i·[c·r + (1 − c)·r0]；带宽 = S·覆盖 / 延迟；假阳性 = P·10·α（无裁判）对比 ≤ α（有裁判）。注意准确度在几千头参考群后就饱和了：自动化的价值不在"更准"，在更快、更全、更听话——以及在提案放大十倍后仍然不放假阳性。</div>
+<div class="howto board" data-for="board"><b>董事会这样读：</b>三个数：白羽鸡从现状到全自动闭环，十年累计遗传进展相对手工从 {{d5.b_s0_pct}} 提到 {{d5.b_s2_pct}}；验证带宽从 {{d5.b_s0_bw}} 放大到 {{d5.b_s2_bw}}；奶牛加体外世代后 {{d5.c_s3_pct}}。第四个数最重要：每年 {{d5.p_s2}} 个想法若没有裁判，十年会误放 {{d5.fp_no_s2}} 个假阳性进育种方案。</div>
+
+<div class="stats">
+  <div class="stat"><b>{{d5.b_s0_pct}} → {{d5.b_s2_pct}}</b><span>白羽鸡：十年累计进展相对手工现状，S0 → S2</span><i>解析模型，假设口径</i></div>
+  <div class="stat"><b>{{d5.b_s0_bw}} → {{d5.b_s2_bw}}</b><span>白羽鸡：验证带宽（样本/年 ÷ 延迟年）</span><i>假设口径</i></div>
+  <div class="stat"><b>{{d5.c_s3_pct}}</b><span>奶牛 S3：体外世代把世代间隔从 {{d5.c_L}} 年降到 {{d5.c_s3_L}} 年</span><i>只对牛有依据</i></div>
+  <div class="stat"><b>{{d5.fp_no_s2}} → ≤ 0.05</b><span>S2 情景十年假阳性：无裁判 → 有裁判</span><i>α = {{d5.alpha}}</i></div>
+  <div class="stat"><b>{{d5.b_r_s0}}</b><span>白羽鸡末期准确度 r（S0 已接近饱和）</span></div>
+  <div class="stat"><b>4</b><span>自动化能动的量：依从性、覆盖、延迟、世代间隔</span></div>
+</div>
+
+<h2>自动化能动的四个量</h2>
+<div class="grid">
+  <div class="card"><h3>依从性</h3><p class="q">建议被执行的比例。</p><p>Demo 3 里模拟器只有 1%，现实里几十%；建议直接进入繁殖执行系统后接近 100%。模型里不依从的配对按手工指数（r0）选。</p></div>
+  <div class="card"><h3>表型覆盖</h3><p class="q">有表型回流的动物比例。</p><p>称重、图像、采食传感器让覆盖接近全体；覆盖决定每年进入参考群的样本数。</p></div>
+  <div class="card"><h3>标签回流延迟</h3><p class="q">从选种到表型可用的年数。</p><p>手工整理让延迟超过一个世代；自动采集把它压到生物学最短时间。延迟直接除进验证带宽。</p></div>
+  <div class="card"><h3>世代间隔</h3><p class="q">亲代出生到子代出生的年数。</p><p>只有出雏即分型（更早选种）或体外世代技术（牛：胚胎基因分型 + 体外受精）才动它；这是牛这条线最大的杠杆。</p></div>
+</div>
+
+<h2>自己拖一拖</h2>
+<section class="tool"><div class="tool-head"><span class="try">试一试</span><h3>自驾育种模型</h3><span class="how">先选物种，再点一个情景（S0 现状 → S2 全自动；S3 只对牛显示），六个滑块会跳到该情景的参数；再拖任何滑块就进入"自定义"。灰线是现状 S0，蓝线是你当前的设置，虚线是手工对照。算式在下方可展开。</span></div><div data-widget="autolab" data-src="model"></div></section>
+
+<h2>四个标准情景</h2>
+{{d5.scen_table}}
+{{d5.result_table}}
+<figure><img src="demo5/figures/fig1_gain_broiler.png" alt="白羽鸡四情景累计进展" loading="lazy"><figcaption>白羽鸡：四个情景的十年累计进展（阶梯 = 每个世代一步）。</figcaption></figure>
+<figure><img src="demo5/figures/fig1_gain_cattle.png" alt="奶牛四情景累计进展" loading="lazy"><figcaption>奶牛：S3 体外世代把 10 年里的世代数从 3 个变成 8 个以上，这是曲线陡起来的原因。</figcaption></figure>
+
+<h2>为什么自动化必须配裁判</h2>
+<p>想法越便宜，每年进裁判的候选越多。若每个候选只做一次 5% 显著性检验，白羽鸡 S2 情景十年会误放 {{d5.fp_no_s2}} 个假阳性进育种方案；裁判按试验数校正后，族错误率保持在 {{d5.alpha}} 以下——这正是 <a href="demo1.html">Demo 1</a> 里负对照零晋级、<a href="agents.html">Demo 0</a> 里每一次拒绝的机制。自动化放大的是验证带宽，裁判决定这带宽变成结论还是变成噪声。</p>
+<figure><img src="demo5/figures/fig2_bandwidth_false_promotions.png" alt="带宽与假阳性" loading="lazy"><figcaption>左：三个物种的验证带宽随自动化放大（对数轴）。右：无裁判与有裁判的十年预期假阳性数。</figcaption></figure>
+
+<h2>边界</h2>
+<div class="grid" data-for="board breeder">
+  <div class="card"><h3>生物学的钟不变</h3><p>妊娠、孵化、生长期是硬下限；模型里延迟的最小值就是它。任何"自动化让世代更快"的说法，若不是靠早选种或体外世代技术，都不成立。</p></div>
+  <div class="card"><h3>福利、监管、生物安全</h3><p>模型里没有这些项；它们可能是真正的瓶颈。自动化配种与早期分型的合规路径要单独论证。</p></div>
+  <div class="card"><h3>成本没有算</h3><p>没有设备与人力成本项，所以本页不是投资回报表；拿到湿实验自动化的报价与客户产能后才能算。</p></div>
+</div>
+
+<h2>可以说 / 不能说 / 需要什么数据</h2>
+{{d5.claims}}
+<p class="toc">技术路线页的 <a href="engine.html">E7 执行层</a> 写了依据什么、能测什么、止损线。一条命令重建：<code>make demo5</code>（约 2 秒）。</p>

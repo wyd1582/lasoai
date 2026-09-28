@@ -1,22 +1,33 @@
 <h1>Every generation better.<br>This one longer.<span class="en">每一代都更好，包括我们自己这一代的时间。</span></h1>
 <p class="lede">From pigs, chickens and cattle to dogs, cats and people: make every generation arrive sooner, with less disease and more healthy years. The method is to turn the largest biological experiment on Earth into a laboratory with a memory.</p>
-<p class="lede">This site breaks the company's plan into four demos you can open. Each answers three questions: which sentence of the deck it proves, which product line it lands on, and what theory it rests on and what result would falsify it.</p>
-<a class="cta" href="#demos">See the four demos ↓</a>
+<p class="lede">This site breaks the company's plan into six demos you can open: Demo 0 shows how the agents work, Demos 1–4 are the four things to prove, Demo 5 is the what-if of a fully automated loop. Each answers three questions: which sentence of the deck it proves, which product line it lands on, and what theory it rests on and what result would falsify it.</p>
+<a class="cta" href="#demos">See the six demos ↓</a>
 <a class="cta ghost" id="app-link" href="{{site.app_url}}">Open the judge's dashboard →</a>
 <p class="toc">Pick a persona in the top-right corner and the page highlights what matters to you: breeders see workflow and per-animal traceability; AI people see models, validation and negative controls; the board sees targets, timelines and revenue lines.</p>
+
+<h2>This site in three minutes</h2>
+<div class="path">
+  <a href="agents.en.html"><b>What the AI does</b><span>Replay one real closed loop: how four roles propose ideas and how they get stopped; then take the Critic's chair.</span></a>
+  <a href="demo1.en.html"><b>Why it can be trusted</b><span>The judge: zero promoted negative controls, every leak probe stopped, measured accuracy never above the theoretical bound.</span></a>
+  <a href="demo3.en.html"><b>What the customer gets</b><span>The ledger: a seven-step selection workflow traceable per animal, outcomes flowing back into the same book a generation later.</span></a>
+  <a href="demo2.en.html"><b>Where else it works</b><span>The same read-out and judge, unchanged, moved to the cross-species clock (Demo 2) and the algorithm audit (Demo 4).</span></a>
+  <a href="autolab.en.html"><b>What full automation would do</b><span>How much faster the loop runs once the wet lab is automated too: drag the sliders and compute it, boundaries alongside.</span></a>
+</div>
 
 <h2>In one minute</h2>
 <ul>
   <li><b>What we do:</b> turn breeding decisions into an experiment with a memory: one array panel reads out, one judge validates, one ledger remembers every recommendation and its outcome one generation later.</li>
+  <li><b>What the AI does inside it:</b> four agent roles propose hypotheses, write code, find holes and debrief, and can only recommend; every change to the plan passes six deterministic gates. <a href="agents.en.html">Replay one real loop →</a></li>
   <li><b>What is already proven:</b> the judge works (zero false promotions on negative controls, every leak probe intercepted, measured accuracy never above the theoretical bound); the ledger's three tables and per-animal reproducibility run end to end (Demo 1, Demo 3).</li>
   <li><b>What is being proven:</b> that the same read-out and judge work unchanged outside breeding: a cross-species clock (Demo 2) and algorithm audit plus the HLA wedge (Demo 4), currently as internal previews.</li>
   <li><b>What is missing:</b> data, not code. Which dataset unlocks which conclusion is on the <a href="data.en.html">data-unlock page</a>; unfamiliar words are in the <a href="glossary.en.html">glossary</a>.</li>
 </ul>
 
-<h2>Method: Read-out · Judge · Memory</h2>
-<p>Three layers share one set of assets; every new value pool costs one new panel and one new batch of customers.</p>
+<h2>Method: Read-out · Propose · Judge · Memory</h2>
+<p>Read-out, judge and memory share one set of assets; the agents only propose and change no state. every new value pool costs one new panel and one new batch of customers.</p>
 <div class="layers">
   <div class="layer read"><h3>Read-out</h3><p>Fixed panels: genotypes, methylation, HLA typing; the same measurements across pig, dog and human.</p></div>
+  <div class="layer propose"><h3>Propose</h3><p>Four agent roles propose hypotheses, write code, find holes and debrief; they can only recommend, and the gates decide. <a href="agents.en.html">Replay one →</a></p></div>
   <div class="layer judge"><h3>Judge</h3><p>One set of gates every prediction method must pass: forward validation, paired increments, negative controls, reproducibility.</p></div>
   <div class="layer memory"><h3>Memory</h3><p>An append-only ledger: every recommendation, every adoption, every outcome one generation later. Raw data belong to the customer; aggregates and models to the platform.</p></div>
 </div>
@@ -24,8 +35,16 @@
 <div class="howto ai" data-for="ai"><b>For AI people:</b> frozen ssGBLUP is always the champion; any large model, deep net or functional prior is a challenger. Promotion requires a paired win on the same candidates and the same cutoff date, plus negative controls and multiple-testing correction. Demo 1 and Demo 4 are one judge applied to two fields.</div>
 <div class="howto board" data-for="board"><b>For the board and investors:</b> the four demos map onto five revenue lines: Demo 1/3 are the breeding agent and data platform (lines A, B, C), Demo 2 is cross-species read-out (line D), Demo 4 is audit and licensing (line E). Each page ends with "Commercial meaning": the number it wants to prove, how far it is proven, and what is still missing.</div>
 
-<h2 id="demos">The four demos</h2>
+<h2 id="demos">The six demos</h2>
+<p>Demo 0 answers "what does the AI do", Demos 1–4 are the four things the PRD sets out to prove, Demo 5 is the what-if once the wet lab is automated too. The badge on each page says whether it is a real computation, a real replay or an internal preview.</p>
 <div class="grid two">
+  <a class="card demo" href="agents.en.html" style="text-decoration:none;color:inherit">
+    <h3>Demo 0 · Agents (the hypothesis factory)<span class="badge real">Real replay · offline model</span></h3>
+    <p class="q">What the AI does in this system: propose, implement, criticise, debrief — recommend only, never change state.</p>
+    <p>Replay one real closed-loop campaign step by step ({{d0.steps}} steps, {{d0.proposals}} proposals, {{d0.evaluated}} full evaluations), then take the Critic's chair and judge which hypotheses peeked at the future.</p>
+    <p>Critic stops / returns <b>{{d0.critic_rejects}} / {{d0.critic_returns}}</b> · promoted <b>{{d0.promoted}}</b> · leak probes intercepted <b>{{d1.leak}} / {{d1.leak}}</b></p>
+    <p class="foot">→ four roles · step-by-step replay · you be the Critic · why 0 promoted is good news</p>
+  </a>
   <a class="card demo" href="demo1.en.html" style="text-decoration:none;color:inherit">
     <h3>Demo 1 · The Judge (breeding)<span class="badge real">Delivered · real computation</span></h3>
     <p class="q">A judge every method has to pass — and it has already rejected good-looking false positives.</p>
@@ -54,6 +73,13 @@
     <p>False promotions on negative controls <b>{{d4.neg_false}}</b> · HLA accuracy reference / 65K / 20K panel <b>{{d4.hla_ref}} / {{d4.hla_65k}} / {{d4.hla_20k}}</b></p>
     <p class="foot">→ 4a and 4b results · sample audit report · commercial meaning of the audit line</p>
   </a>
+  <a class="card demo sim" href="autolab.en.html" style="text-decoration:none;color:inherit">
+    <h3>Demo 5 · Self-driving breeding what-if<span class="badge sim">Internal preview · analytic model</span></h3>
+    <p class="q">If the wet lab were automated too, how much faster would the loop run? Computed from the breeder's equation and validation bandwidth, not asserted.</p>
+    <p>The four quantities automation can move — compliance, phenotype coverage, label latency, generation interval — for three species and four scenarios; the sliders on the page are the model.</p>
+    <p>Broiler ten-year gain vs manual <b>{{d5.b_s0_pct}} → {{d5.b_s2_pct}}</b> · validation bandwidth <b>{{d5.b_s0_bw}} → {{d5.b_s2_bw}}</b> · false promotions without a judge <b>{{d5.fp_no_s2}}</b></p>
+    <p class="foot">→ four quantities · drag the sliders · four scenarios · why automation needs the judge</p>
+  </a>
 </div>
 <p class="toc">A common confusion: the A–G in Demo 1 are <b>seven experimental arms</b> — legs of one controlled experiment — not the four demos; the four demos are the four things the PRD sets out to prove. <a href="demo1.en.html#arms">The arms explained →</a></p>
 
@@ -81,7 +107,7 @@
 
 <h2 data-for="board ai">Roadmap: three steps, each a good outcome on its own</h2>
 <div class="grid" data-for="board ai">
-  <div class="card"><h3>Step 1 · 2027–2029</h3><p class="q">A closed-loop breeding-decision platform</p><p>Cross-customer data custody and decisions for pigs, chickens and cattle; gain-sharing contracts; validation bandwidth ≥ 3 million samples per year. Benchmark: Neogen genomics + Genus royalties.</p><p class="foot">On this site: Demo 1, Demo 3</p></div>
+  <div class="card"><h3>Step 1 · 2027–2029</h3><p class="q">A closed-loop breeding-decision platform</p><p>Cross-customer data custody and decisions for pigs, chickens and cattle; gain-sharing contracts; validation bandwidth ≥ 3 million samples per year. Benchmark: Neogen genomics + Genus royalties.</p><p class="foot">On this site: Demo 0, Demo 1, Demo 3</p></div>
   <div class="card"><h3>Step 2 · 2028–2031</h3><p class="q">The cross-species read-out layer</p><p>A domestic cross-species methylation array; companion-animal efficacy read-outs; HLA typing + algorithm audit; research-use products for the human line. Benchmark: Illumina EPIC + Tempus.</p><p class="foot">On this site: Demo 2, Demo 4 (internal previews)</p></div>
   <div class="card"><h3>Step 3 · 2031–2038</h3><p class="q">The default memory of life data</p><p>Human cohorts, data licensing, milestones on companion pipelines; read-out and audit adopted by regulators or industry standards. Benchmark: IQVIA, Veeva, Tempus.</p><p class="foot">On this site: the ledger and audit-report shapes already exist in Demo 3 / Demo 4</p></div>
 </div>
@@ -94,5 +120,7 @@
 <tr><td>Demo 2 Cross-species clock</td><td>Simulated methylation matrix (assumptions declared)</td><td>The real pipeline (elastic net, leave-species-out, thermodynamics) on simulated data</td><td>Shows the pipeline, the acceptance criterion and the report format; accuracy numbers do not transfer</td></tr>
 <tr><td>Demo 3 The Ledger</td><td>refpop-agent simulator (seed 15, 62 injected defects)</td><td>The real pipeline and ledger API</td><td>Workflow and ledger mechanics are real; the adoption rate is simulator behaviour</td></tr>
 <tr><td>Demo 4 Audit + HLA</td><td>Simulated population haplotypes; simulated patients × peptides</td><td>The real audit discipline (leave-patient-out, six arms, Bonferroni) on simulated data</td><td>Zero promoted negative controls and "a report without algorithm internals" are real conclusions; hit rates do not transfer</td></tr>
+<tr><td>Demo 0 Agents</td><td>One compact campaign on Demo 1's simulator (24 proposals, at most 4 full evaluations)</td><td>The real orchestrator, four roles and six gates; an offline deterministic model stands in for the LLM, run once per language</td><td>The workflow, the interceptions and the ledger records are real; the offline model's hypothesis bank is finite, a real model would propose more variety</td></tr>
+<tr><td>Demo 5 Self-driving</td><td>No data: assumed parameters for three species (h², Me, generation interval, selection intensity)</td><td>Analytic model: breeder's equation + Daetwyler accuracy + validation bandwidth</td><td>Answers only "how much faster if…"; relative percentages are more trustworthy than absolute numbers; cost, welfare and regulation not included</td></tr>
 </tbody></table></div>
 <p>Every demo directory carries <code>CLAIMS.md</code> (can say / cannot say / what data would settle it) and <code>RUN.json</code> (seed, data hashes, threshold hash, duration, validation bandwidth) and rebuilds with one command. Technical depth is on the <a href="engine.en.html">technology route</a> page; operating manuals are under <a href="abl/index.html">Manuals</a>.</p>

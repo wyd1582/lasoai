@@ -24,6 +24,7 @@
 <h2>准确度随参考群规模 vs 理论上界</h2>
 <p data-for="ai board">Daetwyler 上界 r = √(N·h² / (N·h² + Me))，由参考群规模 N、遗传力 h² 和有效染色体片段数 Me 决定，与模型复杂度关系不大。实测曲线若超过上界，唯一的解释是泄漏——这是一条硬规则：超过即停止。本次 h² = {{d1.h2}}，Me ≈ {{d1.me}}，最大超出 {{d1.curve_max_excess}}（负数即未超）。</p>
 <figure><img src="demo1/figures/fig1_accuracy_vs_N.png" alt="准确度随 N 的变化与理论上界" loading="lazy"><figcaption>实测 r（冠军 GBLUP，5 次抽样）与理论上界。参考群越大，准确度越高，但永远在上界之下。</figcaption></figure>
+<section class="tool"><div class="tool-head"><span class="try">试一试</span><h3>上界计算器</h3><span class="how">拖动参考群规模 N、遗传力 h² 与有效片段数 Me，看理论上界 r 怎么变；蓝点是本次实测的冠军曲线。任何声称"准确度超过这条线"的方法，唯一的解释是泄漏。</span></div><div data-widget="bound-calc" data-src="d1"></div></section>
 
 <h2>跨客户三档：跨客户学习能不能成立</h2>
 <p>Deck 上写"跨客户学习"。审查表说：同一品系内合并参考群体有效；跨品系、跨品种的增益小且可能为负。所以分三档测，只有第一档过增量门才算成立。</p>
@@ -36,10 +37,14 @@
 {{d1.gain_table}}
 <figure><img src="demo1/figures/fig3_gain_decomposition.png" alt="育种者方程分解" loading="lazy"><figcaption>哪一项被改变，ΔG / 年变多少（90% bootstrap 区间）。世代间隔缩短 15% 是设计假设，不是测量值。</figcaption></figure>
 <div class="howto board" data-for="board"><b>对承诺二的含义：</b>个体自身可测的性状（体重）只改 r 是 {{d1.bw42_r}}，r 与 L 一起才到 {{d1.bw42_rl}}；个体没有自身记录的胴体性状（胸肌率，基线是全同胞指数）只改 r 就有 {{d1.by_r}}，两项一起 {{d1.by_rl}}。建议措辞按性状分开，数字等客户数据的影子运行再定。</div>
+<section class="tool"><div class="tool-head"><span class="try">试一试</span><h3>承诺二计算器</h3><span class="how">选一个性状，拖动准确度 r 的提升与世代间隔 L 的缩短，看 ΔG/年相对基线变多少。本次模拟的实测点已标出；"+50%" 要靠哪两项一起才到，一拖就知道。</span></div><div data-widget="gain-calc" data-src="d1"></div></section>
 
 <h2 data-for="breeder ai">低密度面板 + 填补：准确度按 MAF 分层</h2>
 <p data-for="breeder ai">拉索的固相面板走"低密度 + 填补"的路线。公开猪数据上（5K / 20K 面板，KNN 填补）整体一致率约 0.70，MAF ≥ 0.2 的位点只有 0.58–0.67，且 5K 与 20K 几乎相同——KNN 不利用局部连锁，这是方法的下限，不是面板密度的结论。真实面板要用 Beagle / FImpute 类方法重测。</p>
 <figure data-for="breeder ai"><img src="demo1/figures/fig5_imputation_by_maf.png" alt="填补准确度按 MAF 分层" loading="lazy"><figcaption>填补准确度按 MAF 分层（公开猪数据）。</figcaption></figure>
+
+<h2>智能体在这条线上做什么</h2>
+<div class="howto ai" data-for="ai breeder board"><b>C 臂与 D 臂就是智能体：</b>遗传学家提假设、构建者写 DSL、评审者拦泄漏、分析师写总结；它们只能推荐，晋级只由六道门决定。想看一次完整的闭环怎么走、亲自当一回评审者，去 <a href="agents.html">Demo 0 · 智能体</a>；想看假设便宜之后验证带宽怎么变成瓶颈、湿实验自动化能补多少，去 <a href="autolab.html">Demo 5 · 自驾育种</a>。</div>
 
 <h2>商业含义</h2>
 <div class="grid" data-for="board">

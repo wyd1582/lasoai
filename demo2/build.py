@@ -586,6 +586,15 @@ def main() -> int:
         "birds_out_of_scope": True,
     }
     (HERE / "RUN.json").write_text(json.dumps(run, ensure_ascii=False, indent=1), encoding="utf-8")
+    # site_data.json：展示站"时钟探索"组件用的逐个体预测（模拟个体，无任何真实数据）
+    idx = ev["random_split"]["pred"]["idx"]; rs_pred = ev["random_split"]["pred"]["pred"]
+    site = {"generated_by": "demo2/build.py", "seed": SEED, "species": SPECIES, "max_lifespan": dict(zip(SPECIES, A.max_lifespan_years)),
+            "loso": [{"species": s, "age": [round(float(x), 2) for x in sim["age"][sim["species"] == s]], "pred": [round(float(x), 2) for x in ev["loso"]["pred"][s]],
+                      "r": round(ev["loso"][s]["r_log_age"], 3)} for s in SPECIES],
+            "random_split": [{"species": str(sim["species"][i]), "age": round(float(sim["age"][i]), 2), "pred": round(float(pr), 2)} for i, pr in zip(idx, rs_pred)],
+            "acceleration": {"species": acc["species"], "resid": [round(float(x), 4) for x in acc["resid"]], "outcome_resid": [round(float(x), 2) for x in acc["outcome_resid"]],
+                             "r_partial": round(acc["r_partial"], 3)}}
+    (HERE / "site_data.json").write_text(json.dumps(site, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     print(f"demo2 done in {time.perf_counter() - T0:.0f}s · loso r pig={ev['loso']['pig']['r_log_age']:.3f} dog={ev['loso']['dog']['r_log_age']:.3f} · accepted={accepted} · font={FONT}")
     return 0
 

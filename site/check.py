@@ -21,7 +21,7 @@ def main() -> int:
         text = page.read_text(encoding="utf-8")
         if "{{" in text and "}}" in text and re.search(r"\{\{\s*[A-Za-z0-9_.]+\s*\}\}", text):
             problems.append(f"{page.relative_to(DIST)}: unrendered placeholder")
-        for ref in re.findall(r'(?:src|href)="([^"#?]+)', text):
+        for ref in re.findall(r'(?<![-\w])(?:src|href)="([^"#?]+)', text):
             if ref.startswith(("http://", "https://", "//", "mailto:", "javascript:")):
                 if not ref.startswith(ALLOWED_EXTERNAL):
                     problems.append(f"{page.relative_to(DIST)}: external resource {ref}")
@@ -32,6 +32,17 @@ def main() -> int:
         for m in re.findall(r'view\.html\?f=([^"&]+)', text):
             if not (page.parent / m).resolve().exists():
                 problems.append(f"{page.relative_to(DIST)}: viewer target missing {m}")
+    import json as _json
+    for page in DIST.glob("*.html"):
+        text = page.read_text(encoding="utf-8")
+        for src in set(re.findall(r'data-src="([A-Za-z0-9_]+)"', text)):
+            m = re.search(r'<script type="application/json" id="data-' + src + r'">(.*?)</script>', text, re.S)
+            if not m:
+                problems.append(f"{page.name}: widget data {src} missing"); continue
+            try:
+                _json.loads(m.group(1).replace("<\\/", "</"))
+            except Exception as e:
+                problems.append(f"{page.name}: widget data {src} is not valid JSON ({e})")
     for f in DIST.rglob("*"):
         if f.name in FORBIDDEN:
             problems.append(f"forbidden file published: {f.relative_to(DIST)}")

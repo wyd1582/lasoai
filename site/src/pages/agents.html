@@ -1,0 +1,57 @@
+<h1>Demo 0 · 智能体（假设工厂）<span class="badge real">真实回放 · 离线模型</span><span class="en">The hypothesis factory: agents propose, review and iterate; only the judge decides.</span></h1>
+<p class="lede">这一页回答一个问题：<b>AI 在这个体系里到底做什么、怎么做、做到了什么。</b>不讲概念，直接回放一次真实的闭环——每一步都是台账里的原始记录——然后请你亲自当一回评审者。</p>
+<p class="toc">回放的 campaign：<code>{{d0.campaign}}</code> · {{d0.started}} · 离线确定性模型（<code>ABL_LLM=stub</code>），同一种子中英各跑一遍，事件序列完全一致 · <a href="{{site.app_url}}" id="app-link">打开监护面板（真实交互）</a> · <a href="abl/index.html">手册与设计文档</a></p>
+
+<div class="howto breeder" data-for="breeder"><b>育种的人这样读：</b>把 AI 想成四个各司其职的助手：一个提想法（遗传学家），一个把想法写成可执行的计算（构建者），一个专门挑刺、拦下偷看未来数据的想法（评审者），一个事后总结（分析师）。他们谁都不能直接改育种方案，方案的每一步变化都要过六道门。</div>
+<div class="howto ai" data-for="ai"><b>做 AI 的人这样读：</b>四个角色对应提示词 P1–P5，输出必须符合 JSON schema；只能调用确定性工具（GRM、BLUP、LD、注释），产出候选与假设，不产出数字。评审者的泄漏扫描在写代码前就拦截"用了 selection_date 之后信息"的假设；去重按 DSL 的语义哈希；预算按 token 与全量评估数双重封顶。下面的回放来自真实的 events.jsonl 与台账。</div>
+<div class="howto board" data-for="board"><b>董事会这样读：</b>假设生成已经很便宜，稀缺的是验证。这一页证明两件事：AI 提出的想法能被一道道门拦住（这次回放 {{d0.proposals}} 个提案、{{d0.evaluated}} 次全量评估、{{d0.promoted}} 个晋级），以及每一次拒绝都留下了可审计的理由——这就是"裁判是产品、数据是资产"。</div>
+
+<div class="stats">
+  <div class="stat"><b>{{d0.proposals}}</b><span>遗传学家提出的假设</span></div>
+  <div class="stat"><b>{{d0.critic_rejects}} / {{d0.critic_returns}}</b><span>评审者拦截 / 退回构建者</span></div>
+  <div class="stat"><b>{{d0.evaluated}} / {{d0.budget_evals}}</b><span>全量评估 / 预算上限</span></div>
+  <div class="stat"><b>{{d0.promoted}}</b><span>晋级（这次回放里没有方法赢过冠军）</span></div>
+  <div class="stat"><b>{{d1.leak}} / {{d1.leak}}</b><span>Demo 1 全程：泄漏探针被评审者拦截</span></div>
+  <div class="stat"><b>{{d0.tokens}}</b><span>本次回放消耗的 token（离线模型计费为 0）</span></div>
+</div>
+
+<h2>四个角色，一条铁律</h2>
+<div class="grid">
+  <div class="card"><h3>遗传学家 · 提出</h3><p class="q">读数据目录与台账摘要，提出一个机制明确、方向明确、可证伪的假设，并写成算子计划（DSL）。</p><p>能看：数据字段、可用先验、台账里试过什么。不能看：封存世代、任何表型的未来值。</p></div>
+  <div class="card"><h3>构建者 · 实现</h3><p class="q">把算子计划变成可执行的 DSL，附数据声明（每个字段何时可得）和四项自检（语法与单位、因果、重放确定性、边界情况）。</p><p>缺算子时返回"需要新算子"，不能自己发明数据。</p></div>
+  <div class="card"><h3>评审者 · 挑刺</h3><p class="q">在假设阶段和代码阶段各审一次：时间泄漏、亲缘泄漏、结构泄漏、论点与代码不符、离散度风险。</p><p>它是第一道门，也是"Agent 可靠性"指标的来源：故意设计的泄漏探针必须全部拦下。</p></div>
+  <div class="card"><h3>分析师 · 总结</h3><p class="q">评估之后写人话：哪道门卡住了、差多少、下一个最值得试的实验是什么。</p><p>它的总结进入每日摘要与 BreedingPackage，不改变任何状态。</p></div>
+</div>
+<div class="howto ai" data-for="ai breeder board"><b>铁律：</b>agents 只能推荐，候选的状态只能由六道确定性门改变（有效性、准确度、配对增量、方案层、稳健性、研究门）。回放里橙色的"门槛"步骤就是这些状态变化；它们不是 AI 说了算，而是数字说了算。</div>
+
+<h2>回放一次真实的闭环</h2>
+<section class="tool"><div class="tool-head"><span class="try">试一试</span><h3>逐步回放</h3><span class="how">按"播放"看整条链自动走；按"下一步"一步一步看；用"只看"筛选某个角色。左边是时间线，右边是当前这一步的原始内容（假设全文、评审证据、DSL、每道门的数值与阈值、分析师总结）。下方的漏斗随进度更新。</span></div><div data-widget="replay" data-src="replay"></div></section>
+<p>看的时候留意三件事：评审者退回构建者的理由（论点与代码不符、λ 缩放过激）；每次全量评估后"配对 ΔOOS 的 90% 下界"是不是大于 0——这次回放里没有一个候选做到；以及分析师建议的"下一个实验"总是台账里还没出现过的机制簇，这就是假设工厂不原地打转的机制。</p>
+
+<h2>你来当评审者</h2>
+<section class="tool"><div class="tool-head"><span class="try">试一试</span><h3>放行还是拦截？</h3><span class="how">六条假设里混着两条故意设计的泄漏探针。判完每一条会显示评审者的判定与理由。答错不要紧——这正是为什么这道门交给机器而不是靠人的直觉。</span></div><div data-widget="critic-quiz" data-src="bank"></div></section>
+
+<h2>为什么"0 晋级"是好消息</h2>
+<div class="grid" data-for="board ai">
+  <div class="card"><h3>裁判在工作</h3><p>这次回放里 {{d0.evaluated}} 个走完全部门槛的候选没有一个在冻结冠军之上做出可复现的增量；Demo 1 全程（模拟 + 猪数据）挑战者晋级 {{d1.promoted_total}} 个、负对照误晋级 {{d1.neg_sim}} / {{d1.neg_pig}} 次。审查表第 6 行早就写了：线性模型在大样本上难以被超越。</p></div>
+  <div class="card"><h3>每次拒绝都是资产</h3><p>被拒的想法、拒绝的门、差了多少，全部进台账。下一轮遗传学家读到台账摘要时，会避开试过的机制簇，转向没试过的——便宜的假设变成了不重复的搜索。</p></div>
+  <div class="card"><h3>带宽才是瓶颈</h3><p>假设一分钟能出十个，全量评估一次要跑一遍前向验证；一个世代之后才知道对不对。所以我们把力气花在验证带宽与裁判上，而不是花在"更会提想法的模型"上。这也是 <a href="autolab.html">自驾育种 what-if</a> 的出发点。</p></div>
+</div>
+
+<h2>智能体与四个 Demo 的关系</h2>
+<div class="tw"><table>
+<thead><tr><th>Demo</th><th>智能体在这条线上做什么</th><th>裁判审什么</th></tr></thead>
+<tbody>
+<tr><td><a href="demo1.html">Demo 1 裁判（育种）</a></td><td>C 臂：只提一次假设；D 臂：完整闭环（提出 → 评审 → 实现 → 评估 → 总结 → 再提出）</td><td>育种值排名能否在配对增量门上胜过冻结 ssGBLUP</td></tr>
+<tr><td><a href="demo2.html">Demo 2 跨物种时钟</a></td><td>未来：为探针清单排序提供先验（哪个 CpG 在调控元件里）；为 QC 规则提假设</td><td>留物种 r 与年龄加速度对结局的检验</td></tr>
+<tr><td><a href="demo3.html">Demo 3 台账</a></td><td>不直接参与：台账记录的是人的决策与结果；agents 只读它的摘要</td><td>逐头一致率；采纳与结局</td></tr>
+<tr><td><a href="demo4.html">Demo 4 审计</a></td><td>同一套角色换成"肽段特征组合"的假设；留患者验证</td><td>top-20 命中率的配对增量；负对照零晋级</td></tr>
+<tr><td><a href="autolab.html">Demo 5 自驾育种</a></td><td>假设工厂 + 自动化湿实验 = 闭环不需要人在中间传递；带宽决定一切</td><td>提案越多，多重检验校正越关键</td></tr>
+</tbody></table></div>
+
+<h2 data-for="ai">技术细节在哪</h2>
+<ul data-for="ai">
+  <li>提示词 P1–P5 与 JSON schema：<code>abl/agents/prompts/</code>、<code>abl/agents/schemas.py</code>；离线双语假设库：<code>abl/agents/stub_handlers.py</code>。</li>
+  <li>编排器（去重、预算、重试、探针注入）：<code>abl/agents/orchestrator.py</code>；六道门：<code>abl/gates/</code>；门槛文件哈希在 campaign 开始与结束各打印一次。</li>
+  <li>回放导出：<code>abl/scripts/export_replay.py</code>（只读台账，不含任何基因型 / 表型）；监护面板：<code>make watch</code>，<a href="abl/index.html">手册</a>第 5 节。</li>
+</ul>

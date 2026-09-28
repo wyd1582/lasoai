@@ -19,7 +19,7 @@
 <tr><td>输入</td><td>拉索芯片基因型 · 客户表型 / 系谱 / 环境 · 公共：FarmGTEx、Evo 2、AlphaGenome、QTLdb、文献</td><td><code>data/SOURCES.md</code> 登记每份数据的来源、哈希、能说什么</td></tr>
 <tr><td>读出层</td><td>固定面板：SNP、甲基化、HLA；平台中立：固相 / 液相 / 测序都能进</td><td>Demo 1（SNP）、Demo 2（甲基化）、Demo 4（HLA）</td></tr>
 <tr><td>记忆层</td><td>GenoFrame 契约（animal_id × selection_date，available_at，禁止前向填充）+ 只增不减台账</td><td><code>abl/dataio</code>、<code>abl/registry</code>；Demo 3</td></tr>
-<tr><td>引擎层</td><td>E1–E6，见下表</td><td><code>abl/engine</code>、<code>abl/sim</code>、<code>abl/agents</code>、<code>refpop-agent</code></td></tr>
+<tr><td>引擎层</td><td>E1–E7，见下表</td><td><code>abl/engine</code>、<code>abl/sim</code>、<code>abl/agents</code>、<code>refpop-agent</code></td></tr>
 <tr><td>裁判层</td><td>GenerationBench：模型冻结、预测加时间戳、一个世代后揭榜；LR 法、负对照、多重检验</td><td><code>abl/gates</code>（六道门）、<code>abl/campaigns</code>（七臂）</td></tr>
 </tbody></table></div>
 
@@ -33,7 +33,8 @@
 <tr><td><b>E3 世代模拟器</b>（世代级世界模型）</td><td>子代均值 = ½(GEBVₛ + GEBVₒ) + 显性 + G×E；子代方差由相位单倍型与重组图谱算出；配种受最优贡献选择约束（ΔF 上限）</td><td>子代分布、配种方案</td><td>Demo 1 的肉鸡式模拟器（多品系、场区、批次、真育种值）；Demo 3 的三代模拟</td><td><span class="tag">模拟器已实现 · 子代方差与 OCS 待做</span></td></tr>
 <tr><td><b>E4 G×E 引擎</b></td><td>反应规范 / 多环境模型：性状 = 遗传 + 环境 + 交互</td><td>按场区的育种值与选配建议</td><td>Demo 1 的稳健门按场区 / 批次 / 品种分层；DSL 的环境协变量算子</td><td><span class="tag">部分</span></td></tr>
 <tr><td><b>E5 GenerationBench</b>（裁判）</td><td>模型冻结 → 预测加时间戳 → 配种 → 一个世代后揭榜；LR 法 ρ / μ / b、留品系与留世代验证、负对照零晋级、多重检验校正</td><td>任何排序算法能否配得上下一代</td><td>Demo 1 全部；Demo 4 换成留患者</td><td><span class="tag">已实现</span></td></tr>
-<tr><td><b>E6 智能体层</b>（假设工厂）</td><td>通用模型做编排、检索、报告；只能调用确定性工具（GRM、BLUP、LD、注释）；产出候选与假设，不产出数字</td><td>假设生成变便宜后，验证带宽是否变成瓶颈的解</td><td>Demo 1 的 C / D 臂：遗传学家、构建者、评审者、分析师四个角色；泄漏探针拦截</td><td><span class="tag">已实现 · 离线 stub 与真实模型可切换</span></td></tr>
+<tr><td><b>E6 智能体层</b>（假设工厂）</td><td>通用模型做编排、检索、报告；只能调用确定性工具（GRM、BLUP、LD、注释）；产出候选与假设，不产出数字</td><td>假设生成变便宜后，验证带宽是否变成瓶颈的解</td><td><a href="agents.html">Demo 0 智能体</a>：回放一次真实闭环、你来当评审者；Demo 1 的 C / D 臂（遗传学家、构建者、评审者、分析师）；泄漏探针拦截</td><td><span class="tag">已实现 · 离线 stub 与真实模型可切换</span></td></tr>
+<tr><td><b>E7 执行层</b>（湿实验自动化）</td><td>建议直接进入基因分型实验室、表型采集与繁殖执行系统；自动化只动依从性、表型覆盖、标签回流延迟与（早选种或体外世代时）世代间隔，不动生物学的钟</td><td>依从性、覆盖、延迟、验证带宽；十年累计进展的 what-if；提案放大后裁判的假阳性是否仍 ≤ α</td><td><a href="autolab.html">Demo 5 自驾育种</a>（拖滑块）</td><td><span class="tag">解析模型 · 等自动化报价与客户产能</span></td></tr>
 </tbody></table></div>
 <p data-for="ai">依据：Meuwissen 2001；Legarra 2009；Daetwyler 2008；MacLeod 2016（BayesRC）；Edwards 2016（GFBLUP）；Lehermeier 2017 / Bonk 2016（子代方差）；Meuwissen 1997（OCS）；Legarra &amp; Reverter 2018（LR 法）；Mäntysaari 2010（Interbull 验证）。</p>
 
@@ -48,6 +49,7 @@
 <tr><td>Q4–Q6</td><td>G×E 模型 + 世代模拟器（子代分布 + OCS）</td><td>能否把基因组与环境分开；能否从预测走到配种决策</td><td>相位单倍型、重组图谱、场区环境协变量</td><td>子代方差预测无增量 → 只做均值</td><td>部分（E3 / E4）</td></tr>
 <tr><td>Q5–Q8</td><td>GenerationBench 第一轮：冻结 → 配种 → 一个世代后揭榜</td><td>裁判能否成为行业标准</td><td>客户群体、外部参赛模型</td><td>无外部参赛者 → 内部基准</td><td>机制就绪（封存世代、阈值哈希、只增台账）</td></tr>
 <tr><td>Q6–Q8</td><td>智能体假设工厂：候选位点 → 芯片内容建议</td><td>假设生成变便宜后，验证带宽是否变成瓶颈的解</td><td>通用模型编排 + 确定性工具</td><td>候选位点在裁判里零增量 → 缩减为检索助手</td><td>Demo 1 的 D 臂；Demo 2 的探针清单格式</td></tr>
+<tr><td>Q6–Q8</td><td>执行层试点：建议直接进入客户的繁殖执行与表型采集系统</td><td>自动化能否把依从性与标签延迟推到模型假设的位置</td><td>传感器称重、授精排程接口、台账的 available_at</td><td>依从性不升或延迟不降 → 只做数据回流接口</td><td>Demo 5 解析模型（what-if）；数据清单第 11、12 行</td></tr>
 <tr><td>Q8 之后</td><td>是否自训"遗传与性状的基础模型"</td><td>预训练表征 + 专有世代数据是否出现 scaling law</td><td>只有前六项出现一致证据才立项</td><td>否则永远不训</td><td>—</td></tr>
 </tbody></table></div>
 <div class="howto board" data-for="board"><b>证伪线：</b>若功能先验零增量、跨品系不迁移、子代方差不可预测，公司仍是一家有裁判和台账的育种数据平台，估值锚不变；若三者成立，才有"遗传与性状的基础模型"这一层。</div>
@@ -62,7 +64,7 @@
 <tr><td>Laso AI 2027（最佳情形）</td><td class="num">1,200,000</td><td>进入台账的样本，目标口径</td></tr>
 <tr><td>Laso AI 2031（目标）</td><td class="num">3,000,000</td><td>同上</td></tr>
 </tbody></table></div>
-<p>每个 Demo 的 RUN.json 都算同一个数：bandwidth = samples_per_year / label_latency_years。本站四个 Demo 的值（全部是模拟或假设口径）：Demo 1 {{d1.bandwidth}} · Demo 2 结局标签 {{d2.bandwidth_outcome}} · Demo 3 {{d3.bandwidth}} · Demo 4 {{d4.bandwidth}}。</p>
+<p>每个 Demo 的 RUN.json 都算同一个数：bandwidth = samples_per_year / label_latency_years。本站各 Demo 的值（全部是模拟或假设口径）：Demo 1 {{d1.bandwidth}} · Demo 2 结局标签 {{d2.bandwidth_outcome}} · Demo 3 {{d3.bandwidth}} · Demo 4 {{d4.bandwidth}} · Demo 5 白羽鸡从现状到全自动 {{d5.b_s0_bw}} → {{d5.b_s2_bw}}（解析模型）。</p>
 
 <h2 data-for="ai">开源模型与许可</h2>
 <div class="tw" data-for="ai"><table>

@@ -1,6 +1,6 @@
 {
  "demo": "demo2 · 跨物种时钟（内部预测版，模拟数据）/ cross-species clock (internal preview, simulated)",
- "generated_at": "2026-09-28T13:47:30.750720+00:00",
+ "generated_at": "2026-09-28T14:45:44.845238+00:00",
  "seed": 2,
  "config_hash": "e0f028db15c7",
  "assumptions": {
@@ -166,9 +166,9 @@
   }
  },
  "duration_seconds": {
-  "simulate": 2.5,
-  "fit_and_validate": 47.2,
-  "total": 54.7
+  "simulate": 2.4,
+  "fit_and_validate": 85.4,
+  "total": 93.6
  },
  "outputs_sha256": {
   "CLAIMS.md": "38d69b272008b70cd40e2d9e5ec8448bd41be0f1d8885b35bbdeb0bc3df73901",

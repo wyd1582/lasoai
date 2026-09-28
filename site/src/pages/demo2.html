@@ -45,6 +45,7 @@
 {{d2.loso_table}}
 <figure><img src="demo2/figures/fig1_scatter_by_species.png" alt="预测年龄 vs 实际年龄" loading="lazy"><figcaption>上排随机拆分，下排留物种。对数轴。留物种是更严格的口径，也是 PRD 的验收口径。</figcaption></figure>
 <figure><img src="demo2/figures/fig2_r_by_species.png" alt="各物种 r 与验收线" loading="lazy"><figcaption>每个物种的时钟准确度与验收线。模拟里达标只说明流水线和口径成立。</figcaption></figure>
+<section class="tool"><div class="tool-head"><span class="try">试一试</span><h3>时钟浏览器</h3><span class="how">点一个物种，看留物种口径下它的预测年龄 vs 实际年龄（对数轴）与 r；"随机抽一头"会标出一只动物的实际年龄、时钟预测与年龄加速度。数据与上图完全相同，只是可以逐物种放大。</span></div><div data-widget="clock-explorer" data-src="d2"></div></section>
 
 <h3>年龄加速度 vs 结局：只演示格式</h3>
 <p>时钟预测减去按实际年龄的期望 = 年龄加速度；扣除实际年龄后，与猪的模拟"使用年限"做偏相关：r = {{d2.accel_r}} {{d2.accel_ci}}。时钟估出的加速度与模拟真值的相关为 {{d2.accel_vs_truth}}。<b>这个关联是模拟里植入的。</b>真实数据上它可能为零——那时读出定位为"生物年龄"而非"寿命预测"，承诺四改措辞。报告因此把"测年龄"与"测结局"分成两种声明。</p>

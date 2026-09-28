@@ -1,22 +1,33 @@
 <h1>每一代都更好，<br>包括我们自己这一代的时间。<span class="en">Every generation better. This one longer.</span></h1>
 <p class="lede">从猪、鸡、牛到犬猫再到人：让每个世代更快到来、更少疾病、更长健康的时间。方法是把地球上最大的生物实验变成一座有记忆的实验室。</p>
-<p class="lede">这个站把公司要做的事拆成四个可以点开的 Demo。每个 Demo 都回答三个问题：它证明 Deck 上哪一句话；它落在哪条产品线上；它依据什么理论、什么结果会证伪它。</p>
-<a class="cta" href="#demos">看四个 Demo ↓</a>
+<p class="lede">这个站把公司要做的事拆成六个可以点开的 Demo：Demo 0 看智能体怎么工作，Demo 1–4 是四件要证明的事，Demo 5 是全自动闭环的 what-if。每个 Demo 都回答三个问题：它证明 Deck 上哪一句话；它落在哪条产品线上；它依据什么理论、什么结果会证伪它。</p>
+<a class="cta" href="#demos">看六个 Demo ↓</a>
 <a class="cta ghost" id="app-link" href="{{site.app_url}}">打开裁判监护面板 →</a>
 <p class="toc">右上角选一个身份，页面会为你标出该看的部分：育种的人看流程与逐头可查；做 AI 的人看模型、验证与负对照；董事会看目标、时间表与收入线。</p>
+
+<h2>三分钟看懂这个站</h2>
+<div class="path">
+  <a href="agents.html"><b>AI 在做什么</b><span>回放一次真实闭环：四个角色怎么提想法、怎么被拦下；再亲自当一回评审者。</span></a>
+  <a href="demo1.html"><b>为什么可信</b><span>裁判：负对照零误晋级、泄漏探针全部拦截、实测准确度不超理论上界。</span></a>
+  <a href="demo3.html"><b>客户拿到什么</b><span>台账：七步选种流程逐头可查，一个世代后的结果回流到同一本账。</span></a>
+  <a href="demo2.html"><b>还能用在哪</b><span>同一套读出与裁判零改动换到跨物种时钟（Demo 2）与算法审计（Demo 4）。</span></a>
+  <a href="autolab.html"><b>全自动会怎样</b><span>湿实验也自动化后闭环能快多少：拖滑块自己算，边界写在旁边。</span></a>
+</div>
 
 <h2>一分钟版</h2>
 <ul>
   <li><b>我们做什么：</b>把育种决策变成有记忆的实验：同一套芯片面板读出，同一套裁判验证，同一本台账记住每一次建议与一个世代后的结果。</li>
+  <li><b>AI 在里面做什么：</b>四个智能体角色提假设、写代码、挑刺、总结，只能推荐；方案的每一步变化都要过六道确定性门。<a href="agents.html">回放一次真实闭环 →</a></li>
   <li><b>已经证明了什么：</b>裁判成立（负对照零误晋级、泄漏探针全部拦截、实测准确度不超理论上界）；台账三张表与逐头复现的机制跑通（Demo 1、Demo 3）。</li>
-  <li><b>正在证明什么：</b>同一套读出与裁判在育种之外零改动可用：跨物种时钟（Demo 2）与算法审计 + HLA 楔子（Demo 4），目前是内部预测版。</li>
+  <li><b>正在证明什么：</b>同一套读出与裁判在育种之外零改动可用：跨物种时钟（Demo 2）与算法审计 + HLA 楔子（Demo 4），目前是内部预测版；湿实验也自动化后闭环能快多少，用解析模型算了一版（Demo 5）。</li>
   <li><b>差什么：</b>不是代码，是数据。哪份数据解锁哪个结论，见 <a href="data.html">数据解锁清单</a>；看不懂的词见 <a href="glossary.html">术语表</a>。</li>
 </ul>
 
-<h2>方法：读出 · 裁判 · 记忆</h2>
-<p>三者共用一套资产；每进一个新价值池，边际成本是一套新面板和一批新客户。</p>
+<h2>方法：读出 · 提出 · 裁判 · 记忆</h2>
+<p>读出、裁判、记忆共用一套资产；智能体只提想法，改不了任何状态。每进一个新价值池，边际成本是一套新面板和一批新客户。</p>
 <div class="layers">
   <div class="layer read"><h3>读出</h3><p>固定面板：基因型、甲基化、HLA 分型；同一指标跨猪、犬、人。</p></div>
+  <div class="layer propose"><h3>提出</h3><p>四个智能体角色提假设、写代码、挑刺、总结；只能推荐，晋级由门决定。<a href="agents.html">看回放 →</a></p></div>
   <div class="layer judge"><h3>裁判</h3><p>任何预测方法都要过的同一套门：前向验证、配对增量、负对照、可复现。</p></div>
   <div class="layer memory"><h3>记忆</h3><p>只增不减的台账：每一次建议、采纳与一个世代后的结果。原始归客户，聚合与模型归平台。</p></div>
 </div>
@@ -24,8 +35,16 @@
 <div class="howto ai" data-for="ai"><b>做 AI 的人：</b>冻结的 ssGBLUP 永远是冠军，任何大模型、深度学习或功能先验都只是挑战者；晋级要在同一批候选、同一截止日上配对胜出，并过负对照与多重检验。Demo 1 和 Demo 4 是同一套裁判换两个领域。</div>
 <div class="howto board" data-for="board"><b>董事会 / 投资人：</b>四个 Demo 对应五条收入线：Demo 1/3 是育种智能体与数据平台（A、B、C 线），Demo 2 是跨物种读出（D 线），Demo 4 是审计与授权（E 线）。每页末尾的"商业含义"写明它想证明的数字、现在证明到哪一步、还缺什么。</div>
 
-<h2 id="demos">四个 Demo</h2>
+<h2 id="demos">六个 Demo</h2>
+<p>Demo 0 回答"AI 在做什么"，Demo 1–4 是 PRD 里四件要证明的事，Demo 5 是把湿实验也自动化之后的 what-if。徽章写明每一页是真实计算、真实回放还是内部预测版。</p>
 <div class="grid two">
+  <a class="card demo" href="agents.html" style="text-decoration:none;color:inherit">
+    <h3>Demo 0 · 智能体（假设工厂）<span class="badge real">真实回放 · 离线模型</span></h3>
+    <p class="q">AI 在这个体系里做什么：提出、实现、挑刺、总结——只能推荐，不能改状态。</p>
+    <p>逐步回放一次真实的闭环 campaign（{{d0.steps}} 步、{{d0.proposals}} 个提案、{{d0.evaluated}} 次全量评估），再亲自当一回评审者，判断哪条假设偷看了未来。</p>
+    <p>评审者拦截 / 退回 <b>{{d0.critic_rejects}} / {{d0.critic_returns}}</b> · 晋级 <b>{{d0.promoted}}</b> · 泄漏探针拦截 <b>{{d1.leak}} / {{d1.leak}}</b></p>
+    <p class="foot">→ 四个角色 · 逐步回放 · 你来当评审者 · 为什么 0 晋级是好消息</p>
+  </a>
   <a class="card demo" href="demo1.html" style="text-decoration:none;color:inherit">
     <h3>Demo 1 · 裁判（育种）<span class="badge real">已交付 · 真实计算</span></h3>
     <p class="q">一个任何方法都要过的裁判，它已经拒绝了看起来很好的假阳性。</p>
@@ -54,6 +73,13 @@
     <p>负对照误晋级 <b>{{d4.neg_false}}</b> · HLA 正确率 参考 / 65K / 20K 面板 <b>{{d4.hla_ref}} / {{d4.hla_65k}} / {{d4.hla_20k}}</b></p>
     <p class="foot">→ 4a 与 4b 结果 · 审计报告样例 · 审计与授权线的商业含义</p>
   </a>
+  <a class="card demo sim" href="autolab.html" style="text-decoration:none;color:inherit">
+    <h3>Demo 5 · 自驾育种 what-if<span class="badge sim">内部预测版 · 解析模型</span></h3>
+    <p class="q">如果湿实验也自动化，闭环能快多少？用育种者方程和验证带宽算出来，不用形容词。</p>
+    <p>自动化能动的四个量——依从性、表型覆盖、标签延迟、世代间隔——三个物种、四个情景；页面上的滑块就是模型本身。</p>
+    <p>白羽鸡十年累计进展相对手工 <b>{{d5.b_s0_pct}} → {{d5.b_s2_pct}}</b> · 验证带宽 <b>{{d5.b_s0_bw}} → {{d5.b_s2_bw}}</b> · 无裁判十年假阳性 <b>{{d5.fp_no_s2}}</b></p>
+    <p class="foot">→ 四个量 · 拖滑块 · 四个情景 · 为什么自动化必须配裁判</p>
+  </a>
 </div>
 <p class="toc">常见的困惑：Demo 1 里的 A–G 是<b>七个实验臂</b>，是同一次对照实验里的七条腿，不是四个 Demo；四个 Demo 是 PRD 里四件要证明的事。<a href="demo1.html#arms">实验臂说明 →</a></p>
 
@@ -81,9 +107,9 @@
 
 <h2 data-for="board ai">路线图：三级台阶，每一级都是好结局</h2>
 <div class="grid" data-for="board ai">
-  <div class="card"><h3>第一级 · 2027–2029</h3><p class="q">育种决策闭环平台</p><p>猪、鸡、牛跨客户数据托管与决策；分成合同；验证带宽 ≥ 300 万样本/年。对标 Neogen 基因组 + Genus royalty。</p><p class="foot">本站：Demo 1、Demo 3</p></div>
+  <div class="card"><h3>第一级 · 2027–2029</h3><p class="q">育种决策闭环平台</p><p>猪、鸡、牛跨客户数据托管与决策；分成合同；验证带宽 ≥ 300 万样本/年。对标 Neogen 基因组 + Genus royalty。</p><p class="foot">本站：Demo 0、Demo 1、Demo 3</p></div>
   <div class="card"><h3>第二级 · 2028–2031</h3><p class="q">跨物种读出层</p><p>国产跨物种甲基化芯片；犬猫药效读出；HLA 分型 + 算法审计；人类科研用途产品。对标 Illumina EPIC + Tempus。</p><p class="foot">本站：Demo 2、Demo 4（内部预测版）</p></div>
-  <div class="card"><h3>第三级 · 2031–2038</h3><p class="q">生命数据的默认记忆</p><p>人类队列、数据授权、伴随管线里程碑；读出与审计被主管部门或行业标准采纳。对标 IQVIA、Veeva、Tempus。</p><p class="foot">本站：台账与审计报告的形态已在 Demo 3 / Demo 4 里</p></div>
+  <div class="card"><h3>第三级 · 2031–2038</h3><p class="q">生命数据的默认记忆</p><p>人类队列、数据授权、伴随管线里程碑；读出与审计被主管部门或行业标准采纳。对标 IQVIA、Veeva、Tempus。</p><p class="foot">本站：台账与审计报告的形态已在 Demo 3 / Demo 4 里；全自动闭环的 what-if 在 Demo 5</p></div>
 </div>
 
 <h2>这个站里什么是真的、什么是模拟的</h2>
@@ -94,5 +120,7 @@
 <tr><td>Demo 2 跨物种时钟</td><td>模拟甲基化矩阵（假设明示）</td><td>真实的流水线（弹性网、留物种、热力学）跑在模拟数据上</td><td>展示流水线、验收口径与报告格式；准确度数字不能外推</td></tr>
 <tr><td>Demo 3 台账界面</td><td>refpop-agent 模拟器（种子 15，注入 62 个缺陷）</td><td>真实的管线与台账 API</td><td>流程与台账机制是真实的；采纳率是模拟器行为</td></tr>
 <tr><td>Demo 4 新抗原审计 + HLA</td><td>模拟人群单倍型；模拟患者 × 肽段</td><td>真实的审计纪律（留患者、六臂、Bonferroni）跑在模拟数据上</td><td>负对照零晋级与"不看算法内部也能出报告"是真实结论；命中率不能外推</td></tr>
+<tr><td>Demo 0 智能体</td><td>Demo 1 同一模拟器上的一次紧凑 campaign（24 个提案、最多 4 次全量评估）</td><td>真实的编排器、四个角色与六道门；离线确定性模型代替大模型，中英各跑一遍</td><td>流程、拦截与台账记录是真实的；离线模型的假设库有限，真实模型的提案会更多样</td></tr>
+<tr><td>Demo 5 自驾育种</td><td>无数据：三个物种的假设参数（h²、Me、世代间隔、选择强度）</td><td>解析模型：育种者方程 + Daetwyler 准确度 + 验证带宽</td><td>只回答"如果……会快多少"；相对百分比比绝对数可信；成本、福利、监管未计</td></tr>
 </tbody></table></div>
 <p>每个 Demo 目录都有 <code>CLAIMS.md</code>（可以说 / 不能说 / 需要什么数据才能说）与 <code>RUN.json</code>（种子、数据哈希、阈值哈希、时长、验证带宽），一条命令可以重建。技术细节见 <a href="engine.html">技术路线与引擎</a>，操作手册见 <a href="abl/index.html">手册与引擎</a>。</p>

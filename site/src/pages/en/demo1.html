@@ -24,6 +24,7 @@
 <h2>Accuracy versus reference size against the theoretical bound</h2>
 <p data-for="ai board">The Daetwyler bound r = √(N·h² / (N·h² + Me)) depends on reference size N, heritability h² and the number of effective chromosome segments Me — hardly on model complexity. A measured curve above it has one explanation: leakage. It is a hard rule: exceed it and the run stops. Here h² = {{d1.h2}}, Me ≈ {{d1.me}}, largest excess {{d1.curve_max_excess}} (negative = never exceeded).</p>
 <figure><img src="demo1/figures/fig1_accuracy_vs_N.png" alt="accuracy versus N with the theoretical bound" loading="lazy"><figcaption>Measured r (champion GBLUP, five draws) against the theoretical bound. A larger reference means higher accuracy, always below the bound.</figcaption></figure>
+<section class="tool"><div class="tool-head"><span class="try">Try it</span><h3>Bound calculator</h3><span class="how">Drag reference size N, heritability h² and effective segments Me to see how the theoretical bound r moves; the blue dots are this run's measured champion curve. For any method claiming accuracy above this line the only explanation is leakage.</span></div><div data-widget="bound-calc" data-src="d1"></div></section>
 
 <h2>Cross-customer tiers: does cross-customer learning hold?</h2>
 <p>The deck says "cross-customer learning". The review table says: pooling reference populations within a line works; across lines and breeds the gain is small and may be negative. So it is tested in three tiers, and only tier 1 passing counts as support.</p>
@@ -36,10 +37,14 @@
 {{d1.gain_table}}
 <figure><img src="demo1/figures/fig3_gain_decomposition.png" alt="breeder's-equation decomposition" loading="lazy"><figcaption>Which term moves and by how much ΔG per year changes (90 % bootstrap intervals). The 15 % shorter interval is a design assumption, not a measurement.</figcaption></figure>
 <div class="howto board" data-for="board"><b>What it means for promise two:</b> a trait recorded on the animal itself (body weight) gives {{d1.bw42_r}} from r alone and {{d1.bw42_rl}} only with r and L together; a carcass trait with no own record (breast yield, baseline = full-sib index) gives {{d1.by_r}} from r alone and {{d1.by_rl}} with both. Word it per trait; fix the number after the customer's shadow run.</div>
+<section class="tool"><div class="tool-head"><span class="try">Try it</span><h3>Promise-two calculator</h3><span class="how">Pick a trait, drag the gain in accuracy r and the cut in generation interval L, and see how ΔG per year moves relative to baseline. This run's measured points are marked; one drag shows which two terms it takes to reach "+50 %".</span></div><div data-widget="gain-calc" data-src="d1"></div></section>
 
 <h2 data-for="breeder ai">Low-density panel + imputation: accuracy by MAF</h2>
 <p data-for="breeder ai">The solid-phase array strategy is "low density + imputation". On public pig data (5K / 20K panels, KNN imputation) overall concordance is about 0.70, only 0.58–0.67 for loci with MAF ≥ 0.2, and 5K ≈ 20K — KNN ignores local linkage, so this is a floor for the method, not a verdict on panel density. Real panels must be re-measured with Beagle / FImpute-type methods.</p>
 <figure data-for="breeder ai"><img src="demo1/figures/fig5_imputation_by_maf.png" alt="imputation accuracy by MAF" loading="lazy"><figcaption>Imputation accuracy by MAF (public pig data).</figcaption></figure>
+
+<h2>What the agents do on this line</h2>
+<div class="howto ai" data-for="ai breeder board"><b>Arms C and D are the agents:</b> the Geneticist proposes, the Builder writes DSL, the Critic stops leaks, the Analyst debriefs; they can only recommend, and promotion is decided by the six gates alone. To watch one full loop and take the Critic's chair, go to <a href="agents.en.html">Demo 0 · Agents</a>; to see how validation bandwidth becomes the bottleneck once hypotheses are cheap and how much wet-lab automation can add, go to <a href="autolab.en.html">Demo 5 · Self-driving</a>.</div>
 
 <h2>Commercial meaning</h2>
 <div class="grid" data-for="board">

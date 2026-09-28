@@ -1,7 +1,7 @@
 name: ci
 on:
   push:
-    branches: [main]
+    branches: [main, dev]
   pull_request:
 jobs:
   abl:
@@ -46,7 +46,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: python3 site/build.py
-      - run: test -f site/dist/index.html && test -f site/dist/demo2/clock_report.html && test -f site/dist/abl/docs/USER_MANUAL.zh.md
+      - run: test -f site/dist/index.html && test -f site/dist/agents.en.html && test -f site/dist/autolab.html && test -f site/dist/demo2/clock_report.html && test -f site/dist/demo5/report.html && test -f site/dist/abl/docs/USER_MANUAL.zh.md
+      - run: node --check site/src/widgets.js && node -e "require('./site/src/widgets.js')"
       - run: python3 site/check.py
   demo2-demo4:
     runs-on: ubuntu-latest
@@ -70,3 +71,13 @@ jobs:
       - run: pip install -r abl/requirements.txt matplotlib duckdb
       - run: cd demo3 && make report PYTHON=python
       - run: test -f demo3/report.html && test -f demo3/RUN.json
+  demo5:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install numpy matplotlib
+      - run: cd demo5 && make verify PYTHON=python

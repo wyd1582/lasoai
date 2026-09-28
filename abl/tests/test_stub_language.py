@@ -48,3 +48,15 @@ def test_analyst_summary_follows_language(monkeypatch):
     monkeypatch.setenv("ABL_LANG", "en")
     out = sh.analyst("", json.dumps(payload), None, 0)
     assert out["limiting_gate"] == "incremental" and not _has_cjk(out["disposition_summary"]) and "FAIL" in out["evaluation_section"]
+
+
+@pytest.mark.parametrize("lang", ["zh", "en"])
+def test_no_bank_entry_trips_the_leak_scan(lang, monkeypatch):
+    """The leak scan is a keyword scan; a bank hypothesis must not contain a leak keyword in either
+    language, otherwise the zh and en runs of the same seed diverge (and a good idea is thrown away)."""
+    monkeypatch.setenv("ABL_LANG", lang)
+    for e in sh.BANK:
+        hyp = {"mechanism": e["mechanism_zh"] if lang == "zh" else e["mechanism"], "direction": e["direction_zh"] if lang == "zh" else e["direction"],
+               "operator_plan": e["plan"].replace("{prior}", "p"), "mechanism_cluster": e["cluster"]}
+        review = sh.critic("", json.dumps({"hypothesis": hyp, "stage": "hypothesis"}), None, 0)
+        assert review["verdict"] == "PASS", (lang, e["cluster"], review["rationale"])

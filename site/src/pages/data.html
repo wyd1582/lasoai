@@ -1,7 +1,7 @@
 <h1>数据解锁清单<span class="en">What data unlocks what — the shortest path from "internal preview" to "real result".</span></h1>
 <p class="lede">代码这边能推进的都推进了。下面每一行是一份数据：它从哪来、放到哪、拿到以后哪个 Demo 会从"模拟"变成"真实"、哪一句 Deck 上的话会因此站住或改写。董事会看最右两列就够了。</p>
 
-<div class="howto board" data-for="board"><b>董事会这样读：</b>本站四个 Demo 里，Demo 1 和 Demo 3 已是真实计算；Demo 2 和 Demo 4 差的不是代码，是三份公开数据和一份需要决策的参考面板。拿到第一行的客户数据，"现金层"的两个数字（逐头一致率、交付时长）就能从机制变成承诺。</div>
+<div class="howto board" data-for="board"><b>董事会这样读：</b>本站里 Demo 0、1、3 已是真实计算或真实回放；Demo 2 和 Demo 4 差的不是代码，是三份公开数据和一份需要决策的参考面板。拿到第一行的客户数据，"现金层"的两个数字（逐头一致率、交付时长）就能从机制变成承诺。Demo 5 的四个假设量差的是两份客户侧记录（第 11、12 行）。</div>
 
 <h2>按优先级</h2>
 <div class="tw"><table>
@@ -17,6 +17,8 @@
 <tr><td>8</td><td><b>一轮随机化对照配种</b></td><td>客户同意执行（台账字段已预留）</td><td>客户台账</td><td>Demo 3 从观察数据升级为实验：采纳建议是否<b>导致</b>子代更好</td><td>承诺二的因果证据；"台账 → 实验"</td><td>一个世代（鸡 1 年）</td></tr>
 <tr><td>9</td><td><b>真实多品系 / 多场数据</b></td><td>第 2、3 家客户</td><td>客户环境</td><td>跨客户三档的真实结论：Deck 上"跨客户学习"能否保留，还是收窄为"同品系跨场"</td><td>Q3–Q4 止损线</td><td>2 周</td></tr>
 <tr><td>10</td><td><b>Evo 2 / AlphaGenome 嵌入</b></td><td>开源模型（需要 GPU）；AlphaGenome 商用需授权</td><td><code>data/priors/</code></td><td>G 臂的第二种先验：DNA 基础模型的"语法理解"能否迁移到复杂性状</td><td>技术路线 3/3：只有证据出现才考虑自训模型</td><td>2 周（含部署）</td></tr>
+<tr><td>11</td><td><b>传感器表型数据（自动称重、图像、采食）</b></td><td>客户场区的传感器供应商；客户同意</td><td>客户环境；台账的 phenotype_observations 按 available_at 记录</td><td>Demo 5 的"表型覆盖"与"标签回流延迟"从假设变成实测：自动化到底把延迟压到多少</td><td>技术路线 E7 执行层；Demo 5 的带宽数字</td><td>接口 1 周；一个批次的回流周期后可算</td></tr>
+<tr><td>12</td><td><b>繁殖执行记录（授精排程、孵化、胚胎移植的系统日志）</b></td><td>客户的繁殖管理系统</td><td>客户环境；台账的 recommendations.adopted 与 decided_at 自动填充</td><td>Demo 5 的"依从性"从假设变成实测；Demo 3 的采纳率从模拟器行为变成真实行为</td><td>承诺二因果证据的前置；E7 执行层的止损线</td><td>接口 1–2 周</td></tr>
 </tbody></table></div>
 
 <h2>拿到之后会发生什么</h2>

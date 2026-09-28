@@ -27,22 +27,24 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "site" / "src"
 DIST = ROOT / "site" / "dist"
-PAGES = ["index", "demo1", "demo2", "demo3", "demo4", "engine", "glossary", "data"]
+PAGES = ["index", "agents", "demo1", "demo2", "demo3", "demo4", "autolab", "engine", "glossary", "data"]
 LANGS = ("zh", "en")
-NAV = {"zh": [("index", "首页"), ("demo1", "Demo 1 裁判"), ("demo2", "Demo 2 时钟"), ("demo3", "Demo 3 台账"), ("demo4", "Demo 4 审计"),
-              ("engine", "技术路线"), ("data", "数据解锁"), ("glossary", "术语表"), ("abl/index.html", "手册")],
-       "en": [("index", "Home"), ("demo1", "Demo 1 Judge"), ("demo2", "Demo 2 Clock"), ("demo3", "Demo 3 Ledger"), ("demo4", "Demo 4 Audit"),
-              ("engine", "Technology"), ("data", "Data unlocks"), ("glossary", "Glossary"), ("abl/index.html", "Manuals")]}
-TITLES = {"zh": {"index": "Laso AI · 内部预览", "demo1": "Demo 1 · 裁判（育种）", "demo2": "Demo 2 · 跨物种时钟", "demo3": "Demo 3 · 台账界面",
+NAV = {"zh": [("index", "首页"), ("agents", "智能体"), ("demo1", "Demo 1 裁判"), ("demo2", "Demo 2 时钟"), ("demo3", "Demo 3 台账"), ("demo4", "Demo 4 审计"),
+              ("autolab", "自驾育种"), ("engine", "技术路线"), ("data", "数据解锁"), ("glossary", "术语表"), ("abl/index.html", "手册")],
+       "en": [("index", "Home"), ("agents", "Agents"), ("demo1", "Demo 1 Judge"), ("demo2", "Demo 2 Clock"), ("demo3", "Demo 3 Ledger"), ("demo4", "Demo 4 Audit"),
+              ("autolab", "Self-driving"), ("engine", "Technology"), ("data", "Data unlocks"), ("glossary", "Glossary"), ("abl/index.html", "Manuals")]}
+TITLES = {"zh": {"index": "Laso AI · 内部预览", "agents": "Demo 0 · 智能体（假设工厂）", "autolab": "Demo 5 · 自驾育种 what-if", "demo1": "Demo 1 · 裁判（育种）", "demo2": "Demo 2 · 跨物种时钟", "demo3": "Demo 3 · 台账界面",
                  "demo4": "Demo 4 · 新抗原审计 + HLA 填充", "engine": "技术路线与引擎", "glossary": "术语表", "data": "数据解锁清单"},
-          "en": {"index": "Laso AI · Internal preview", "demo1": "Demo 1 · The Judge (breeding)", "demo2": "Demo 2 · Cross-species clock", "demo3": "Demo 3 · The Ledger",
+          "en": {"index": "Laso AI · Internal preview", "agents": "Demo 0 · Agents (the hypothesis factory)", "autolab": "Demo 5 · Self-driving breeding what-if", "demo1": "Demo 1 · The Judge (breeding)", "demo2": "Demo 2 · Cross-species clock", "demo3": "Demo 3 · The Ledger",
                  "demo4": "Demo 4 · Neoantigen audit + HLA imputation", "engine": "Technology route and engines", "glossary": "Glossary", "data": "What data unlocks what"}}
 COPY = {
     "demo1": ["report.html", "rejected.md", "CLAIMS.md", "CLAIMS.en.md", "THEORY.md", "RUN.json", "summary.json"],
     "demo2": ["clock_report.html", "clock_report.en.html", "CLAIMS.md", "CLAIMS.en.md", "THEORY.md", "THEORY.en.md", "README.md", "RUN.json", "probes_top5k.csv"],
     "demo3": ["report.html", "CLAIMS.md", "CLAIMS.en.md", "THEORY.md", "README.md", "RUN.json"],
     "demo4": ["report.html", "report.en.html", "audit_report.md", "audit_report.en.md", "CLAIMS.md", "CLAIMS.en.md", "THEORY.md", "THEORY.en.md", "README.md", "RUN.json", "hla_accuracy.csv", "hla_callrate.csv"],
+    "demo5": ["report.html", "report.en.html", "CLAIMS.md", "CLAIMS.en.md", "THEORY.md", "THEORY.en.md", "README.md", "RUN.json", "model.json"],
 }
+_DATA_SRC = re.compile(r'data-src="([A-Za-z0-9_]+)"')
 _PLACEHOLDER = re.compile(r"\{\{\s*([A-Za-z0-9_.]+)\s*\}\}")
 
 
@@ -282,9 +284,77 @@ def ctx_demo4(c: dict, lang: str) -> None:
                                ["Arm", "Proposals", "Full evaluations", "Promoted", "Best candidate top-20 hit rate", "Paired gain [adjusted CI]"], arows, {1, 2, 3, 4})
 
 
+def widget_data() -> dict:
+    """id → JSON-serialisable object inlined into pages that reference data-src="id"."""
+    import csv
+    d1 = jload(ROOT / "demo1" / "summary.json")
+    d4run = jload(ROOT / "demo4" / "RUN.json")
+    callrate: dict = {}
+    with (ROOT / "demo4" / "hla_callrate.csv").open(encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            c = callrate.setdefault(row["panel"], {"rate": [], "acc": []})
+            c["rate"].append(round(float(row["call_rate"]), 4)); c["acc"].append(round(float(row["accuracy"]), 4))
+    out = {
+        "d1": {"curve": d1["curve"], "gain": d1["gain"]},
+        "d2": jload(ROOT / "demo2" / "site_data.json"),
+        "d3": jload(ROOT / "demo3" / "site_data.json"),
+        "d4": {"curve": d4run["neo"]["curve"], "base_rate": d4run["neo"]["base_rate"], "callrate": callrate, "target": d4run["hla"]["target_accuracy"]},
+        "model": jload(ROOT / "demo5" / "model.json"),
+    }
+    rp = ROOT / "abl" / "reports" / "replay"
+    if (rp / "sim_D_replay.json").exists():
+        out["replay"] = jload(rp / "sim_D_replay.json")
+    if (rp / "bank.json").exists():
+        out["bank"] = jload(rp / "bank.json")
+    return out
+
+
+def inline_data(body: str, data: dict, where: str) -> str:
+    """Append <script type="application/json"> blocks for every data-src the page uses."""
+    ids = sorted(set(_DATA_SRC.findall(body)))
+    blocks = []
+    for i in ids:
+        if i not in data:
+            raise KeyError(f"{where}: no widget data for data-src={i!r}")
+        payload = json.dumps(data[i], ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
+        blocks.append(f'<script type="application/json" id="data-{i}">{payload}</script>')
+    return body + "\n" + "\n".join(blocks)
+
+
+def ctx_demo0(c: dict, lang: str) -> None:
+    rp = ROOT / "abl" / "reports" / "replay" / "sim_D_replay.json"
+    r = jload(rp); k = r["counts"]
+    c.update({"d0.campaign": r["campaign_id"], "d0.events": intc(k["events"]), "d0.steps": intc(len(r["steps"])), "d0.proposals": str(k["proposals"]), "d0.candidates": str(k["candidates"]),
+              "d0.built": str(k["built"]), "d0.evaluated": str(k["evaluated"]), "d0.promoted": str(k["promoted"]), "d0.critic_rejects": str(k["critic_rejects"]),
+              "d0.critic_returns": str(k["critic_returns"]), "d0.tokens": intc(k["tokens"]), "d0.budget_evals": str(r["budget_full_evals"]), "d0.clusters": str(len(r["clusters"])),
+              "d0.started": (r["started_at"] or "")[:10]})
+
+
+def ctx_demo5(c: dict, lang: str) -> None:
+    zh = lang == "zh"
+    m = jload(ROOT / "demo5" / "model.json"); r = m["results"]
+    c.update({"d5.horizon": f"{m['horizon']:.0f}", "d5.alpha": f"{m['alpha'] * 100:.0f}%", "d5.realism": str(m["realism"]),
+              "d5.b_s0_pct": f"{r['broiler']['S0']['pct_vs_manual']:+.0f}%", "d5.b_s1_pct": f"{r['broiler']['S1']['pct_vs_manual']:+.0f}%", "d5.b_s2_pct": f"{r['broiler']['S2']['pct_vs_manual']:+.0f}%",
+              "d5.c_s3_pct": f"{r['cattle']['S3']['pct_vs_manual']:+.0f}%", "d5.c_s0_pct": f"{r['cattle']['S0']['pct_vs_manual']:+.0f}%", "d5.c_L": f"{m['species']['cattle']['L']:.0f}", "d5.c_s3_L": f"{r['cattle']['S3']['L']:.1f}",
+              "d5.b_s0_bw": intc(r["broiler"]["S0"]["bandwidth"]), "d5.b_s2_bw": intc(r["broiler"]["S2"]["bandwidth"]), "d5.fp_no_s2": f"{r['broiler']['S2']['false_promotions_no_judge']:.0f}",
+              "d5.p_s2": str([x for x in m["scenarios"] if x["key"] == "S2"][0]["proposals"]), "d5.b_r_s0": f2(r["broiler"]["S0"]["final_r"]),
+              "d5.claims": claims_cards(claims_file("demo5", lang), lang)})
+    rows = []
+    for sc in m["scenarios"]:
+        rows.append([f"{sc['key']} {sc['name'][0 if zh else 1]}", pct0(sc["compliance"]), pct0(sc["coverage"]), f"{sc['latency_mult']:.2f}×", f"{sc['L_mult']:.2f}×", f"{sc['S_mult']:.0f}×", str(sc["proposals"]), sc["desc"][0 if zh else 1]])
+    c["d5.scen_table"] = table(["情景", "依从性", "表型覆盖", "标签延迟 ÷ 世代", "世代间隔 × 现状", "样本量 × 现状", "想法/年", "是什么"] if zh else
+                               ["Scenario", "Compliance", "Coverage", "Latency ÷ interval", "Interval × today", "Samples × today", "Ideas / yr", "What it is"], rows, {1, 2, 3, 4, 5, 6})
+    rrows = []
+    for spk, sp in m["species"].items():
+        for k, v in r[spk].items():
+            rrows.append([sp["name"][0 if zh else 1], k, str(v["generations"]), f2(v["final_r"]), f"{v['cum_gain']:.1f}", f"{v['pct_vs_manual']:+.0f}%", intc(v["bandwidth"]), f"{v['false_promotions_no_judge']:.0f} / {v['false_promotions_judge']}"])
+    c["d5.result_table"] = table(["物种", "情景", "十年世代数", "末期 r", "十年累计进展（σA）", "相对现状", "验证带宽", "十年假阳性：无裁判 / 有裁判"] if zh else
+                                 ["Species", "Scenario", "Generations / 10 yr", "Final r", "10-yr gain (σA)", "vs today", "Bandwidth", "False promotions: no judge / judge"], rrows, {2, 3, 4, 5, 6, 7})
+
+
 def build_ctx(lang: str) -> dict:
     c: dict = {}
-    ctx_demo1(c, lang); ctx_demo2(c, lang); ctx_demo3(c, lang); ctx_demo4(c, lang)
+    ctx_demo0(c, lang); ctx_demo1(c, lang); ctx_demo2(c, lang); ctx_demo3(c, lang); ctx_demo4(c, lang); ctx_demo5(c, lang)
     app_url = os.environ.get("ABL_APP_URL", "").strip()
     try:
         commit = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=ROOT, capture_output=True, text=True, timeout=10).stdout.strip() or "—"
@@ -355,6 +425,7 @@ def shell(name: str, lang: str, body: str, ctx: dict) -> str:
 <footer>{foot}</footer>
 </div>
 <script src="app.js"></script>
+<script src="widgets.js"></script>
 </body>
 </html>"""
 
@@ -370,7 +441,7 @@ def main() -> int:
     if DIST.exists():
         shutil.rmtree(DIST)
     DIST.mkdir(parents=True)
-    for f in ("style.css", "app.js", "view.html"):
+    for f in ("style.css", "app.js", "widgets.js", "view.html"):
         shutil.copy(SRC / f, DIST / f)
     for demo, files in COPY.items():
         (DIST / demo).mkdir()
@@ -382,11 +453,13 @@ def main() -> int:
         if figs.exists():
             shutil.copytree(figs, DIST / demo / "figures")
     build_abl_subsite()
+    wdata = widget_data()
     for lang in LANGS:
         ctx = build_ctx(lang)
         for name in PAGES:
             frag = SRC / "pages" / (f"{name}.html" if lang == "zh" else f"en/{name}.html")
             body = render(frag.read_text(encoding="utf-8"), ctx, f"{name}.{lang}")
+            body = inline_data(body, wdata, f"{name}.{lang}")
             (DIST / out_name(name, lang)).write_text(shell(name, lang, body, ctx), encoding="utf-8")
     n = sum(1 for _ in DIST.rglob("*") if _.is_file())
     print(f"site built → {DIST} ({n} files; app url: {os.environ.get('ABL_APP_URL', '') or 'not set'})")

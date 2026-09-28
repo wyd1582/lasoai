@@ -1,0 +1,49 @@
+<h1>Demo 5 · Self-driving breeding what-if<span class="badge sim">Internal preview · analytic model</span><span class="en">自驾育种：如果湿实验也自动化，闭环能快多少？算出来，不是喊出来。</span></h1>
+<p class="lede">The question: if the wet lab — genotyping, phenotyping, reproduction — were automated too, how much faster would the breeding loop run? The answer is computed from the breeder's equation and validation bandwidth, not asserted. The sliders below <i>are</i> the model: drag them and the numbers and curve change at once.</p>
+<p class="toc">Analytic model, identical line for line to <code>demo5/build.py</code> (checked with node at build time) · every parameter is an assumption · <a href="demo5/report.en.html">full report</a> · <a href="view.html?f=demo5/THEORY.en.md">basis and stop rules</a></p>
+<div class="preview" style="margin-top:12px"><b>What "wet lab" means in breeding:</b> the genotyping laboratory (extraction, hybridisation, scanning), phenotype capture (weighing, imaging, feed-intake sensors) and reproduction execution (insemination scheduling, hatching, embryo transfer). On the human line: methylation arrays, HLA typing and immunogenicity assays. Automation changes <b>human latency and compliance</b>, not biology's clock: gestation and growth do not shorten because a robot is involved.</div>
+
+<div class="howto breeder" data-for="breeder"><b>For breeders:</b> your three familiar pains are all in the model: only part of the advice gets executed (compliance); not every animal returns a phenotype (coverage); results wait a generation plus manual collation (latency). Automation pushes those three towards 100 %, 100 % and the biological minimum; the generation interval moves only with genotyping at hatch or in-vitro generations.</div>
+<div class="howto ai" data-for="ai"><b>For AI people:</b> N(t) = N0 + S·coverage·max(0, t − latency); r = 0.9·√(N h² / (N h² + Me)); ΔG = i·[c·r + (1 − c)·r0]; bandwidth = S·coverage / latency; false promotions = P·10·α without the judge versus ≤ α with it. Note that accuracy saturates after a few thousand reference animals: automation's value is not "more accurate" but faster, more complete, more compliant — and still no false positives when proposals scale tenfold.</div>
+<div class="howto board" data-for="board"><b>For the board:</b> three numbers: broilers from today to a fully automated loop raise ten-year cumulative gain relative to manual from {{d5.b_s0_pct}} to {{d5.b_s2_pct}}; validation bandwidth grows from {{d5.b_s0_bw}} to {{d5.b_s2_bw}}; dairy cattle with in-vitro generations reach {{d5.c_s3_pct}}. The fourth number matters most: {{d5.p_s2}} ideas a year without a judge would admit {{d5.fp_no_s2}} false positives into breeding plans over ten years.</div>
+
+<div class="stats">
+  <div class="stat"><b>{{d5.b_s0_pct}} → {{d5.b_s2_pct}}</b><span>broilers: ten-year cumulative gain vs manual today, S0 → S2</span><i>analytic model, assumptions</i></div>
+  <div class="stat"><b>{{d5.b_s0_bw}} → {{d5.b_s2_bw}}</b><span>broilers: validation bandwidth (samples / yr ÷ latency yr)</span><i>assumptions</i></div>
+  <div class="stat"><b>{{d5.c_s3_pct}}</b><span>dairy S3: in-vitro generations cut the interval from {{d5.c_L}} to {{d5.c_s3_L}} years</span><i>grounded for cattle only</i></div>
+  <div class="stat"><b>{{d5.fp_no_s2}} → ≤ 0.05</b><span>S2 false promotions in ten years: no judge → with judge</span><i>α = {{d5.alpha}}</i></div>
+  <div class="stat"><b>{{d5.b_r_s0}}</b><span>broiler final accuracy r (already near saturation in S0)</span></div>
+  <div class="stat"><b>4</b><span>quantities automation moves: compliance, coverage, latency, generation interval</span></div>
+</div>
+
+<h2>The four quantities automation can move</h2>
+<div class="grid">
+  <div class="card"><h3>Compliance</h3><p class="q">The share of advice that gets executed.</p><p>1 % in Demo 3's simulator, tens of percent in practice; close to 100 % once advice flows straight into the reproduction system. Non-compliant matings follow the manual index (r0) in the model.</p></div>
+  <div class="card"><h3>Phenotype coverage</h3><p class="q">The share of animals that return a phenotype.</p><p>Weighing, imaging and feed-intake sensors bring coverage near everyone; coverage sets how many samples enter the reference each year.</p></div>
+  <div class="card"><h3>Label latency</h3><p class="q">Years from selection to a usable phenotype.</p><p>Manual collation pushes latency beyond a generation; automatic capture brings it down to the biological minimum. Latency divides straight into validation bandwidth.</p></div>
+  <div class="card"><h3>Generation interval</h3><p class="q">Years from a parent's birth to its offspring's birth.</p><p>Only genotyping at hatch (earlier selection) or in-vitro generations (cattle: embryo genotyping + IVF) move it; the largest lever on the cattle line.</p></div>
+</div>
+
+<h2>Drag it yourself</h2>
+<section class="tool"><div class="tool-head"><span class="try">Try it</span><h3>The self-driving breeding model</h3><span class="how">Choose a species, then click a scenario (S0 today → S2 fully automated; S3 appears for cattle only) and the six sliders jump to its parameters; drag any slider to enter "custom". The grey line is today (S0), the blue line is your current setting, the dashed line is the manual reference. Formulas expand below.</span></div><div data-widget="autolab" data-src="model"></div></section>
+
+<h2>Four standard scenarios</h2>
+{{d5.scen_table}}
+{{d5.result_table}}
+<figure><img src="demo5/figures/en/fig1_gain_broiler.png" alt="broiler cumulative gain" loading="lazy"><figcaption>Broilers: ten-year cumulative gain under the four scenarios (each step is one generation).</figcaption></figure>
+<figure><img src="demo5/figures/en/fig1_gain_cattle.png" alt="cattle cumulative gain" loading="lazy"><figcaption>Dairy cattle: S3's in-vitro generations turn three generations in ten years into more than eight, which is why the curve steepens.</figcaption></figure>
+
+<h2>Why automation needs the judge</h2>
+<p>The cheaper ideas get, the more candidates enter the judge each year. With one 5 % significance test per candidate, the broiler S2 scenario would admit {{d5.fp_no_s2}} false positives into breeding plans over ten years; with the judge's correction for the number of attempts the family-wise error stays below {{d5.alpha}} — the mechanism behind <a href="demo1.en.html">Demo 1</a>'s zero promoted negative controls and every rejection in <a href="agents.en.html">Demo 0</a>. Automation multiplies validation bandwidth; the judge decides whether that bandwidth becomes conclusions or noise.</p>
+<figure><img src="demo5/figures/en/fig2_bandwidth_false_promotions.png" alt="bandwidth and false promotions" loading="lazy"><figcaption>Left: validation bandwidth for three species as automation increases (log scale). Right: expected false promotions in ten years without and with the judge.</figcaption></figure>
+
+<h2>Boundaries</h2>
+<div class="grid" data-for="board breeder">
+  <div class="card"><h3>Biology's clock stays</h3><p>Gestation, incubation and growth are hard floors; the model's minimum latency is exactly that. Any claim that "automation makes generations faster" is false unless it rests on earlier selection or in-vitro generations.</p></div>
+  <div class="card"><h3>Welfare, regulation, biosecurity</h3><p>Absent from the model and possibly the real bottleneck. The compliance path for automated mating and early genotyping needs its own case.</p></div>
+  <div class="card"><h3>No cost term</h3><p>Without equipment and labour costs this page is not a return-on-investment table; that waits for automation quotes and customer capacity data.</p></div>
+</div>
+
+<h2>Can say / cannot say / what data would settle it</h2>
+{{d5.claims}}
+<p class="toc">The <a href="engine.en.html">E7 execution layer</a> on the technology page states the basis, what it measures and the stop rule. Rebuild with one command: <code>make demo5</code> (about 2 s).</p>

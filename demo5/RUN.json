@@ -1,0 +1,298 @@
+{
+ "demo": "demo5 · 自驾育种 what-if（内部预测版，解析模型）/ self-driving breeding what-if (internal preview, analytic model)",
+ "generated_at": "2026-09-28T15:11:07.658569+00:00",
+ "config_hash": "4872594e6605",
+ "font": "Laso CJK",
+ "assumptions": {
+  "horizon": 10.0,
+  "alpha": 0.05,
+  "realism": 0.9,
+  "species": {
+   "broiler": {
+    "name": [
+     "白羽鸡",
+     "Broiler"
+    ],
+    "L": 1.0,
+    "h2": 0.35,
+    "Me": 172,
+    "i": 1.858,
+    "p": 0.08,
+    "r0": 0.45,
+    "N0": 2000,
+    "S": 20000
+   },
+   "pig": {
+    "name": [
+     "猪",
+     "Pig"
+    ],
+    "L": 1.5,
+    "h2": 0.3,
+    "Me": 300,
+    "i": 1.755,
+    "p": 0.1,
+    "r0": 0.45,
+    "N0": 1500,
+    "S": 8000
+   },
+   "cattle": {
+    "name": [
+     "奶牛",
+     "Dairy cattle"
+    ],
+    "L": 3.0,
+    "h2": 0.3,
+    "Me": 640,
+    "i": 2.063,
+    "p": 0.05,
+    "r0": 0.35,
+    "N0": 3000,
+    "S": 10000
+   }
+  },
+  "scenarios": [
+   {
+    "key": "S0",
+    "name": [
+     "现状 · 手工",
+     "Today · manual"
+    ],
+    "compliance": 0.4,
+    "coverage": 0.6,
+    "latency_mult": 1.3,
+    "L_mult": 1.0,
+    "S_mult": 1.0,
+    "proposals": 20,
+    "desc": [
+     "建议靠邮件和表格传递，四成被执行；六成动物有表型回流；标签比一个世代还慢；每年二十个新想法靠人评估。",
+     "Advice travels by e-mail and spreadsheets and 40 % is executed; 60 % of animals return phenotypes; labels arrive slower than a generation; twenty new ideas a year are judged by people."
+    ]
+   },
+   {
+    "key": "S1",
+    "name": [
+     "半自动 · 传感器 + 排程助手",
+     "Semi-automated · sensors + scheduling assistant"
+    ],
+    "compliance": 0.8,
+    "coverage": 0.95,
+    "latency_mult": 1.05,
+    "L_mult": 1.0,
+    "S_mult": 3.0,
+    "proposals": 200,
+    "desc": [
+     "称重与采食自动采集，表型覆盖近全；配种排程由系统生成、人确认，八成执行；假设工厂每年两百个想法。",
+     "Automatic weighing and feed-intake capture cover nearly every animal; matings are scheduled by the system and confirmed by people, 80 % executed; the hypothesis factory yields two hundred ideas a year."
+    ]
+   },
+   {
+    "key": "S2",
+    "name": [
+     "全自动 · 自驾闭环",
+     "Fully automated · self-driving loop"
+    ],
+    "compliance": 1.0,
+    "coverage": 1.0,
+    "latency_mult": 1.0,
+    "L_mult": 0.85,
+    "S_mult": 10.0,
+    "proposals": 2000,
+    "desc": [
+     "建议直接进入繁殖执行系统；出雏即分型、更早选种，世代间隔缩短 15%；标签回流只剩生物学最短时间；每年两千个想法全部过裁判。",
+     "Advice flows straight into the reproduction system; genotyping at hatch brings selection forward and shortens the generation interval by 15 %; label latency is the biological minimum; two thousand ideas a year all pass through the judge."
+    ]
+   },
+   {
+    "key": "S3",
+    "name": [
+     "全自动 + 体外世代（牛）",
+     "Fully automated + in-vitro generations (cattle)"
+    ],
+    "compliance": 1.0,
+    "coverage": 1.0,
+    "latency_mult": 1.0,
+    "L_mult": 0.4,
+    "S_mult": 10.0,
+    "proposals": 2000,
+    "species_only": "cattle",
+    "desc": [
+     "在 S2 之上加体外受精与胚胎基因分型：奶牛世代间隔从 3 年降到 1.2 年。只对牛有依据；鸡猪没有成熟的体外世代技术。",
+     "S2 plus in-vitro fertilisation and embryo genotyping: the dairy generation interval falls from 3 to 1.2 years. Grounded for cattle only; chickens and pigs have no mature in-vitro generation technology."
+    ]
+   }
+  ]
+ },
+ "results": {
+  "broiler": {
+   "S0": {
+    "L": 1.0,
+    "latency": 1.3,
+    "S": 20000.0,
+    "generations": 10,
+    "final_r": 0.8977,
+    "cum_gain": 11.5267,
+    "cum_gain_manual": 8.361,
+    "pct_vs_manual": 37.9,
+    "bandwidth": 9231,
+    "false_promotions_no_judge": 10.0,
+    "false_promotions_judge": 0.05
+   },
+   "S1": {
+    "L": 1.0,
+    "latency": 1.05,
+    "S": 60000.0,
+    "generations": 10,
+    "final_r": 0.8995,
+    "cum_gain": 14.7557,
+    "cum_gain_manual": 8.361,
+    "pct_vs_manual": 76.5,
+    "bandwidth": 54286,
+    "false_promotions_no_judge": 100.0,
+    "false_promotions_judge": 0.05
+   },
+   "S2": {
+    "L": 0.85,
+    "latency": 0.85,
+    "S": 200000.0,
+    "generations": 12,
+    "final_r": 0.8999,
+    "cum_gain": 19.318,
+    "cum_gain_manual": 8.361,
+    "pct_vs_manual": 131.0,
+    "bandwidth": 235294,
+    "false_promotions_no_judge": 1000.0,
+    "false_promotions_judge": 0.05
+   }
+  },
+  "pig": {
+   "S0": {
+    "L": 1.5,
+    "latency": 1.9500000000000002,
+    "S": 8000.0,
+    "generations": 7,
+    "final_r": 0.8875,
+    "cum_gain": 6.9896,
+    "cum_gain_manual": 5.265,
+    "pct_vs_manual": 32.8,
+    "bandwidth": 2462,
+    "false_promotions_no_judge": 10.0,
+    "false_promotions_judge": 0.05
+   },
+   "S1": {
+    "L": 1.5,
+    "latency": 1.5750000000000002,
+    "S": 24000.0,
+    "generations": 7,
+    "final_r": 0.8974,
+    "cum_gain": 8.8668,
+    "cum_gain_manual": 5.265,
+    "pct_vs_manual": 68.4,
+    "bandwidth": 14476,
+    "false_promotions_no_judge": 100.0,
+    "false_promotions_judge": 0.05
+   },
+   "S2": {
+    "L": 1.275,
+    "latency": 1.275,
+    "S": 80000.0,
+    "generations": 8,
+    "final_r": 0.8993,
+    "cum_gain": 11.6577,
+    "cum_gain_manual": 5.265,
+    "pct_vs_manual": 121.4,
+    "bandwidth": 62745,
+    "false_promotions_no_judge": 1000.0,
+    "false_promotions_judge": 0.05
+   }
+  },
+  "cattle": {
+   "S0": {
+    "L": 3.0,
+    "latency": 3.9000000000000004,
+    "S": 10000.0,
+    "generations": 4,
+    "final_r": 0.8727,
+    "cum_gain": 3.5162,
+    "cum_gain_manual": 2.4068,
+    "pct_vs_manual": 46.1,
+    "bandwidth": 1538,
+    "false_promotions_no_judge": 10.0,
+    "false_promotions_judge": 0.05
+   },
+   "S1": {
+    "L": 3.0,
+    "latency": 3.1500000000000004,
+    "S": 30000.0,
+    "generations": 4,
+    "final_r": 0.8944,
+    "cum_gain": 4.7113,
+    "cum_gain_manual": 2.4068,
+    "pct_vs_manual": 95.7,
+    "bandwidth": 9048,
+    "false_promotions_no_judge": 100.0,
+    "false_promotions_judge": 0.05
+   },
+   "S2": {
+    "L": 2.55,
+    "latency": 2.55,
+    "S": 100000.0,
+    "generations": 4,
+    "final_r": 0.8981,
+    "cum_gain": 6.3954,
+    "cum_gain_manual": 2.4068,
+    "pct_vs_manual": 165.7,
+    "bandwidth": 39216,
+    "false_promotions_no_judge": 1000.0,
+    "false_promotions_judge": 0.05
+   },
+   "S3": {
+    "L": 1.2000000000000002,
+    "latency": 1.2000000000000002,
+    "S": 100000.0,
+    "generations": 9,
+    "final_r": 0.8989,
+    "cum_gain": 14.5576,
+    "cum_gain_manual": 2.4068,
+    "pct_vs_manual": 504.8,
+    "bandwidth": 83333,
+    "false_promotions_no_judge": 1000.0,
+    "false_promotions_judge": 0.05
+   }
+  }
+ },
+ "bandwidth": {
+  "broiler": {
+   "S0": 9231,
+   "S1": 54286,
+   "S2": 235294
+  },
+  "pig": {
+   "S0": 2462,
+   "S1": 14476,
+   "S2": 62745
+  },
+  "cattle": {
+   "S0": 1538,
+   "S1": 9048,
+   "S2": 39216,
+   "S3": 83333
+  }
+ },
+ "duration_seconds": {
+  "total": 2.0
+ },
+ "outputs_sha256": {
+  "model.json": "c11532ca525f3f7291452be21f73c440a05ab4fc11a3a01762f6699b41404444",
+  "CLAIMS.md": "73ff426580e545447071cbb905cec2196486a5e198256881850bf3e016be3f05",
+  "CLAIMS.en.md": "e743cd5cedabc95bfbb07e4ea749d6027fe95d8d6731bf78808c956a019ab78c",
+  "figures/fig1_gain_broiler.png": "7f441bee558838ecede217cf0f2abdf2e41aec33237ad1c95ecc21831410267a",
+  "figures/fig1_gain_cattle.png": "b3e65b7c71ab5e6011eabff61a789e98ec0d1b6d5a608bfc5cc90921ca00b051",
+  "figures/fig1_gain_pig.png": "b02e24bc2b403f47701d8e29d9ed2a2503efa3c584245d5f82bbbd4e86475c06",
+  "figures/fig2_bandwidth_false_promotions.png": "c8120786adeac9f7a2aec4956e26e438902d6cde7c543990b0048c5fa25bf4ab",
+  "figures/en/fig1_gain_broiler.png": "4996a39b2a54ffd4347a66f9546e4eb6219ab4582ea4947f771064a7432b3738",
+  "figures/en/fig1_gain_cattle.png": "f1015d177a82a586afbb5ec622a3a909c51e28dcdcff2aafd5427c8b0e39b9a3",
+  "figures/en/fig1_gain_pig.png": "d054b6a4d7c04beb4d0846ba9eb25a9cbae6a8f618263d25c4121507a71fe12d",
+  "figures/en/fig2_bandwidth_false_promotions.png": "eed1764a636e5e2f21d35156f3ff2debdc220085f37ef11ac6008430ca52f5b0"
+ }
+}

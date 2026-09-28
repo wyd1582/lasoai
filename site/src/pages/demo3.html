@@ -39,6 +39,7 @@
 </tbody></table></div>
 <p><code>randomized_control</code>：G1 的推荐里有 {{d3.rc_flagged}} 条打上了随机对照占位标记。审查表第 4 行说：场区、批次、年份混杂可以制造虚假准确度；产业观察数据要支持决策改进，最干净的办法是一轮随机化对照配种。字段先留好，客户同意时台账就升级成实验。</p>
 <figure><img src="demo3/figures/c_adoption_progeny.png" alt="采纳率与子代表现" loading="lazy"><figcaption>配对采纳率；被采纳配对的子代 42 日龄体重 vs 同批其余配对（描述性对比，非随机化）。</figcaption></figure>
+<section class="tool"><div class="tool-head"><span class="try">试一试</span><h3>台账浏览器</h3><span class="how">这就是客户会看到的东西：搜一头动物或一条建议编号，点任何一行，看它的排名、分数、建议动作、是否被采纳，以及一个世代后回流的子代数与 42 日龄均重——一条建议从发出到结果的追溯链。每一行都是台账的原始记录。</span></div><div data-widget="ledger-explorer" data-src="d3"></div></section>
 <div class="howto ai" data-for="ai breeder"><b>诚实的发现：</b>采纳率只有 {{d3.adopt_g0}} / {{d3.rec_g0}} 与 {{d3.adopt_g1}} / {{d3.rec_g1}}，因为模拟器选亲本时不读选配建议。这是模拟器的行为，不是对真实采纳率的估计。下一步是让选配节点真正驱动模拟器的亲本选择；再往后是接客户流程。</div>
 
 <h2>验证带宽</h2>

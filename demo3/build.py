@@ -841,6 +841,23 @@ CLAIMS_EN = f"""# CLAIMS · Demo 3 ledger interface
 # ========================================================================================
 # RUN.json
 # ========================================================================================
+# ========================================================================================
+# site_data.json：展示站"台账追溯"交互组件用的行（建议 ⨝ 决策 ⨝ 子代结局），不含任何基因型
+# ========================================================================================
+_recs = tables["recommendations"].merge(tables["decisions"][["rec_id", "adopted", "actual_action", "decided_at"]], on="rec_id", how="left")
+_outs = tables["outcomes"].groupby("rec_id").agg(n_progeny=("outcome_id", "count"), mean_bw42=("value", "mean")).reset_index()
+_recs = _recs.merge(_outs, on="rec_id", how="left")
+_site = {"generated_by": "demo3/build.py", "seed": SEED,
+         "recommendations": [{"rec_id": str(r.rec_id), "selection_date": str(r.selection_date), "animal_id": str(r.animal_id), "rank": int(r.rank),
+                              "score": round(float(r.score), 3), "action": str(r.recommended_action), "issued_at": str(r.issued_at),
+                              "adopted": (None if pd.isna(r.adopted) else int(r.adopted)), "decided_at": (None if pd.isna(r.decided_at) else str(r.decided_at)),
+                              "n_progeny": (0 if pd.isna(r.n_progeny) else int(r.n_progeny)), "mean_bw42": (None if pd.isna(r.mean_bw42) else round(float(r.mean_bw42), 1))}
+                             for r in _recs.itertuples()],
+         "outcomes": [{"rec_id": str(o.rec_id), "animal_id": str(o.animal_id), "type": str(o.outcome_type), "value": round(float(o.value), 1), "observed_at": str(o.observed_at)}
+                      for o in tables["outcomes"].itertuples()],
+         "stage5": {k: {kk: (float(vv) if isinstance(vv, (int, float)) and not isinstance(vv, bool) else vv) for kk, vv in v.items() if kk != "rows"} for k, v in stage5.items()}}
+(HERE / "site_data.json").write_text(json.dumps(_site, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+
 outputs = {str(p.relative_to(HERE)): sha256_file(p)
            for p in sorted([HERE / "report.html", HERE / "CLAIMS.md", *FIG.glob("*.png")])}
 RUN = {

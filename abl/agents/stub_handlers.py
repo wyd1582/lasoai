@@ -74,7 +74,7 @@ BANK: list[dict] = [
          falsifiers=["ΔOOS ≤ 0", "sex effect estimate ≈ 0"], falsifiers_zh=["ΔOOS ≤ 0", "性别效应估计约为 0"],
          gain=dict(delta_oos=0.005, dispersion_b=1.0), refs=["standard contemporary-group modelling"]),
     dict(cluster="shrinkage", plan="champion() + lambda_scale(factor=0.5)",
-         mechanism="REML on a purged forward split under-estimates h2 (Bulmer effect after selection); halving λ reduces over-shrinkage of young candidates.",
+         mechanism="REML on a purged forward split under-estimates h2 (the Bulmer effect of earlier selection rounds); halving λ reduces over-shrinkage of young candidates.",
          mechanism_zh="在净化过的前向切分上做 REML 会低估遗传力（选择后的 Bulmer 效应）；把 λ 减半可以减少对年轻候选个体的过度收缩。",
          direction="Young animals with strong genomic evidence move further from the mean.", direction_zh="基因组证据强的年轻个体离均值更远。",
          falsifiers=["dispersion b < 1 (over-dispersion)", "ΔOOS ≤ 0"], falsifiers_zh=["膨胀系数 b < 1（过度离散）", "ΔOOS ≤ 0"],

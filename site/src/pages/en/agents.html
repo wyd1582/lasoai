@@ -1,0 +1,57 @@
+<h1>Demo 0 · Agents (the hypothesis factory)<span class="badge real">Real replay · offline model</span><span class="en">智能体：提出、评审、迭代；晋级只由裁判决定。</span></h1>
+<p class="lede">This page answers one question: <b>what the AI actually does in this system, how it does it, and what it has achieved.</b> No concepts — a replay of one real closed loop, every step a raw ledger record — and then you take the Critic's chair yourself.</p>
+<p class="toc">Replayed campaign: <code>{{d0.campaign}}</code> · {{d0.started}} · offline deterministic model (<code>ABL_LLM=stub</code>), the same seed run once in Chinese and once in English with an identical event sequence · <a href="{{site.app_url}}" id="app-link">open the live dashboard</a> · <a href="abl/index.html">manuals and design documents</a></p>
+
+<div class="howto breeder" data-for="breeder"><b>For breeders:</b> think of the AI as four assistants with separate jobs: one proposes ideas (the Geneticist), one turns an idea into a runnable computation (the Builder), one looks for holes and stops ideas that peek at future data (the Critic), one writes the debrief (the Analyst). None of them can change the breeding plan; every change of state passes six gates.</div>
+<div class="howto ai" data-for="ai"><b>For AI people:</b> the four roles map to prompts P1–P5 with JSON-schema outputs; they may call only deterministic tools (GRM, BLUP, LD, annotation) and produce candidates and hypotheses, never numbers. The Critic's leak scan stops hypotheses that use information after selection_date before any code is written; deduplication is by semantic hash of the DSL; budgets cap both tokens and full evaluations. The replay below is the real events.jsonl and registry.</div>
+<div class="howto board" data-for="board"><b>For the board:</b> generating hypotheses is already cheap; validation is scarce. This page proves two things: the AI's ideas can be stopped gate by gate ({{d0.proposals}} proposals, {{d0.evaluated}} full evaluations, {{d0.promoted}} promotions in this replay), and every rejection leaves an auditable reason — that is "the judge is the product, the data are the asset".</div>
+
+<div class="stats">
+  <div class="stat"><b>{{d0.proposals}}</b><span>hypotheses proposed by the Geneticist</span></div>
+  <div class="stat"><b>{{d0.critic_rejects}} / {{d0.critic_returns}}</b><span>stopped by the Critic / returned to the Builder</span></div>
+  <div class="stat"><b>{{d0.evaluated}} / {{d0.budget_evals}}</b><span>full evaluations / budget cap</span></div>
+  <div class="stat"><b>{{d0.promoted}}</b><span>promoted (nothing beat the champion in this replay)</span></div>
+  <div class="stat"><b>{{d1.leak}} / {{d1.leak}}</b><span>Demo 1 overall: leak probes intercepted by the Critic</span></div>
+  <div class="stat"><b>{{d0.tokens}}</b><span>tokens used in this replay (offline model, cost 0)</span></div>
+</div>
+
+<h2>Four roles, one iron rule</h2>
+<div class="grid">
+  <div class="card"><h3>Geneticist · proposes</h3><p class="q">Reads the data catalogue and the ledger summary, proposes a hypothesis with a clear mechanism, direction and falsifiers, and writes it as an operator plan (DSL).</p><p>May see: data fields, available priors, what the ledger has tried. May not see: the sealed generation, any future phenotype.</p></div>
+  <div class="card"><h3>Builder · implements</h3><p class="q">Turns the plan into executable DSL with a data declaration (when each field becomes available) and four self-checks (grammar and units, causality, replay determinism, edge cases).</p><p>Returns "operator needed" when the language lacks one; never invents data.</p></div>
+  <div class="card"><h3>Critic · finds holes</h3><p class="q">Reviews once at the hypothesis stage and once at the code stage: temporal, relatedness and structural leaks, thesis–code mismatch, dispersion risk.</p><p>It is the first gate and the source of the "agent reliability" number: every deliberately planted leak probe must be stopped.</p></div>
+  <div class="card"><h3>Analyst · debriefs</h3><p class="q">After evaluation, writes in plain language which gate stopped the candidate, by how much, and which experiment is worth running next.</p><p>Its notes go into the daily digest and the BreedingPackage; it changes no state.</p></div>
+</div>
+<div class="howto ai" data-for="ai breeder board"><b>The iron rule:</b> agents only recommend; a candidate's state changes only through the six deterministic gates (validity, accuracy, paired increment, plan level, robustness, research). The orange "gate" steps in the replay are those state changes — decided by numbers, not by the AI.</div>
+
+<h2>Replay one real closed loop</h2>
+<section class="tool"><div class="tool-head"><span class="try">Try it</span><h3>Step-by-step replay</h3><span class="how">Press Play to watch the whole chain run; press Next to go one step at a time; use Show to filter by role. Left: the timeline. Right: the raw content of the current step (the full hypothesis, the Critic's evidence, the DSL, every gate's value and threshold, the Analyst's note). The funnel below updates as you go.</span></div><div data-widget="replay" data-src="replay"></div></section>
+<p>Three things to watch: why the Critic returns work to the Builder (thesis–code mismatch, aggressive λ scaling); whether the 90 % lower bound of paired ΔOOS ever exceeds 0 after a full evaluation — in this replay no candidate manages it; and how the Analyst's "next experiment" is always a mechanism cluster the ledger has not seen, which is what keeps the factory from circling.</p>
+
+<h2>You be the Critic</h2>
+<section class="tool"><div class="tool-head"><span class="try">Try it</span><h3>Let it through or stop it?</h3><span class="how">Two of the six hypotheses are deliberately planted leak probes. After each call you see the Critic's verdict and reasoning. Getting one wrong is fine — it is exactly why this gate is a machine rather than intuition.</span></div><div data-widget="critic-quiz" data-src="bank"></div></section>
+
+<h2>Why "0 promoted" is good news</h2>
+<div class="grid" data-for="board ai">
+  <div class="card"><h3>The judge is working</h3><p>Of the {{d0.evaluated}} candidates that went through every gate in this replay, none produced a reproducible increment over the frozen champion; across all of Demo 1 (simulation + pig data) challengers promoted {{d1.promoted_total}} and negative controls slipped through {{d1.neg_sim}} / {{d1.neg_pig}} times. Review-table row 6 said it already: linear models are hard to beat at scale.</p></div>
+  <div class="card"><h3>Every rejection is an asset</h3><p>The rejected idea, the gate and the margin all go into the ledger. When the Geneticist reads the ledger summary next round it avoids tried clusters and turns to untried ones — cheap hypotheses become a non-repeating search.</p></div>
+  <div class="card"><h3>Bandwidth is the bottleneck</h3><p>Ideas come ten a minute; one full evaluation runs a complete forward validation, and the truth arrives a generation later. So the effort goes into validation bandwidth and the judge, not into "a model that proposes better". That is the starting point of the <a href="autolab.en.html">self-driving what-if</a>.</p></div>
+</div>
+
+<h2>How the agents relate to the four demos</h2>
+<div class="tw"><table>
+<thead><tr><th>Demo</th><th>What the agents do on this line</th><th>What the judge tests</th></tr></thead>
+<tbody>
+<tr><td><a href="demo1.en.html">Demo 1 The Judge</a></td><td>Arm C: one hypothesis, no loop; arm D: the full loop (propose → review → build → evaluate → debrief → propose again)</td><td>Whether a ranking beats frozen ssGBLUP at the paired incremental gate</td></tr>
+<tr><td><a href="demo2.en.html">Demo 2 Clock</a></td><td>Later: priors for probe ranking (which CpG sits in a regulatory element); hypotheses for QC rules</td><td>Leave-species-out r; acceleration vs outcome</td></tr>
+<tr><td><a href="demo3.en.html">Demo 3 Ledger</a></td><td>Not directly: the ledger records human decisions and outcomes; agents only read its summary</td><td>Per-animal agreement; adoption and outcomes</td></tr>
+<tr><td><a href="demo4.en.html">Demo 4 Audit</a></td><td>The same roles with hypotheses about peptide-feature combinations; leave-patient-out validation</td><td>Paired increment in top-20 hit rate; zero promoted negative controls</td></tr>
+<tr><td><a href="autolab.en.html">Demo 5 Self-driving</a></td><td>Hypothesis factory + automated wet lab = no human relay in the loop; bandwidth decides everything</td><td>The more proposals, the more the multiple-testing correction matters</td></tr>
+</tbody></table></div>
+
+<h2 data-for="ai">Where the technical detail lives</h2>
+<ul data-for="ai">
+  <li>Prompts P1–P5 and JSON schemas: <code>abl/agents/prompts/</code>, <code>abl/agents/schemas.py</code>; the bilingual offline bank: <code>abl/agents/stub_handlers.py</code>.</li>
+  <li>Orchestrator (dedup, budget, retries, probe injection): <code>abl/agents/orchestrator.py</code>; the six gates: <code>abl/gates/</code>; the thresholds-file hash is printed at campaign start and end.</li>
+  <li>Replay export: <code>abl/scripts/export_replay.py</code> (read-only on the ledger; no genotypes or phenotypes); the dashboard: <code>make watch</code>, <a href="abl/index.html">manual</a> section 5.</li>
+</ul>
