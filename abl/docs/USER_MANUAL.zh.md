@@ -12,7 +12,8 @@ Agentic Breeding-value Loop：一个"agents 提假设、确定性门槛决定谁
 git clone https://github.com/wyd1582/lasoai.git
 cd lasoai/abl
 python3 -m venv .venv && . .venv/bin/activate
-pip install -r requirements.txt
+pip install -r requirements.lock   # 锁定版本，与 CI 一致；想装最新范围版用 requirements.txt
+make doctor      # 自检：Python、venv、版本、数据、端口
 make test            # 63 项测试，约 6–8 分钟（含一个小规模端到端 campaign）
 make seal-holdout    # 生成模拟数据，封存最后一代到 holdout/（只读）
 make campaign        # 跑 DESIGN.md P6 的六个 arm：模拟 + 公开猪数据，约 15–20 分钟

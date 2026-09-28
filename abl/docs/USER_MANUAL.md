@@ -14,7 +14,8 @@ change, and recover. Design rationale: `docs/DESIGN.md`; data model and dashboar
 git clone https://github.com/wyd1582/lasoai.git
 cd lasoai/abl
 python3 -m venv .venv && . .venv/bin/activate
-pip install -r requirements.txt
+pip install -r requirements.lock   # pinned versions, same as CI; requirements.txt gives the ranges
+make doctor      # self-check: Python, venv, versions, data, port
 make test            # 63 tests, ~6–8 min (includes a small end-to-end campaign)
 make seal-holdout    # simulate, seal the last generation under holdout/ (read-only)
 make campaign        # DESIGN.md P6: six arms on simulation + public pig data, ~15–20 min

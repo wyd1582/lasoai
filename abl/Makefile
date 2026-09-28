@@ -2,9 +2,10 @@
 PY ?= .venv/bin/python
 export PYTHONPATH := .
 
-.PHONY: help test views seal-holdout sim-controls pig-public campaign scorecard watch status digest clean-runtime demo site docker docker-run
+.PHONY: help doctor test views seal-holdout sim-controls pig-public campaign scorecard watch status digest clean-runtime demo site docker docker-run
 
 help:
+	@echo "make doctor        check Python, venv, pinned versions, data, ports before launching"
 	@echo "make test          run the full test suite (pytest -q)"
 	@echo "make views         (re)create registry views and print them (DuckDB)"
 	@echo "make sim-controls  simulated campaign with known true BVs: champion / random ops / shuffled labels"
@@ -17,6 +18,9 @@ help:
 	@echo "make demo          small self-contained demo ledger (what the deployed dashboard shows)"
 	@echo "make site          build the static landing site for Vercel into site/dist/"
 	@echo "make docker        build the deployment image locally; make docker-run to open it on :8501"
+
+doctor:
+	$(PY) scripts/doctor.py
 
 test:
 	$(PY) -m pytest -q
