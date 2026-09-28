@@ -10,3 +10,6 @@ data/priors/*
 !data/priors/README.md
 demo3/ledger.sqlite
 demo3/registry/
+
+demo2/probes_top20k.csv
+site/dist/

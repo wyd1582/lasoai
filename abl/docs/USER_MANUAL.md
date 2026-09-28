@@ -86,6 +86,11 @@ Every run appends new campaigns (time-stamped ids) to the ledger; nothing is ove
 
 ## 5. Reading the dashboard (`make watch`)
 
+Sidebar first:
+- The **campaign selector** shows human names such as "simulated · D Main · full ABL loop · seed 0 · 09-27 15:06"; the machine id (`sim_D_s0_r20260927T1506` = dataset _ arm _ seed _ run time) is the small line under it.
+- **Experimental arms** (expander): what each of the seven arms A–G asks and what counts as passing. They are legs of Demo 1's one controlled experiment, not the four demos.
+- **Beginner mode** (on by default): every panel title gets a "what / how to read / what is abnormal" line. Switch it off once familiar.
+
 Left, "Learning":
 - **Narrative feed**: one plain-language line per event. The toggle "only Critic returns, gate failures, promotions and policy flags" filters noise; expand a row for the raw JSON.
 - **Mechanism map**: agents repeatedly proposing the same cluster means the corpus or the priors are skewed; change the retrieval source (OPS.md D.4).
@@ -95,7 +100,7 @@ Left, "Learning":
 Right, "Guardian":
 - **Policy alarms** (any red one needs a look): `holdout_touch` (sealed data appeared in an agent input), `threshold_changed`, `retry_limit`, `budget_exceeded` (a genuine overrun, not a budget used up as planned), `cluster_concentration` (one cluster > 40 %), `suspicious_pass_rate` (> 3× baseline), `events_stalled` (no event for 15 min).
 - **Budget**: tokens and full evaluations used / cap, burn rate, projected exhaustion.
-- **PAUSE / RESUME**: create / delete `control/PAUSE`. No network, no signals; the dumbest and most robust switch.
+- **PAUSE / RESUME**: PAUSE creates `control/PAUSE` and a running campaign stops before its next step (an evaluation already started finishes); RESUME deletes the file. No network, no signals; the dumbest and most robust switch. The status box says whether a campaign is actually running: on a static ledger (for example the one `make demo` leaves behind) PAUSE only stops the next campaign before its first step, and nothing but the status box changes — by design. The demo deployment (`ABL_DEMO=1`) hides this panel.
 - **Agent reliability**: Critic rejection rate on leak probes (should be 100 %), false promotions (should be 0).
 
 Daily routine: `make status` in the morning; keep the dashboard open and look only when something is red; `make digest` in the evening (two minutes); `make scorecard` weekly into your technical note.

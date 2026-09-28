@@ -399,10 +399,60 @@ STRINGS: dict[str, dict[str, str]] = {
     "app_login_wrong": {"zh": "密码不正确。", "en": "Wrong password."},
     "app_paused": {"zh": "已暂停（PAUSED）— control/PAUSE 存在；编排器会在下一步之前停止。",
                    "en": "PAUSED — control/PAUSE exists; the Orchestrator stops before its next step."},
-    "app_running": {"zh": "运行中（RUNNING）— control/RUN 存在，无 PAUSE。", "en": "RUNNING — control/RUN present, no PAUSE."},
     "app_idle": {"zh": "空闲（IDLE）— control/RUN 缺失。", "en": "IDLE — control/RUN is missing."},
     "app_btn_pause": {"zh": "暂停 PAUSE", "en": "PAUSE"},
     "app_btn_resume": {"zh": "恢复 RESUME", "en": "RESUME"},
+    "app_running_n": {"zh": "运行中 — {n} 个实验正在跑（最近一次事件 {ts}）。",
+                      "en": "RUNNING — {n} campaign(s) active (last event {ts})."},
+    "app_ctl_no_active": {"zh": "开关处于 RUN，但台账里没有正在运行的实验（最近一次事件 {ts}）。此时按“暂停”只会让下一次启动的实验在第一步前停下。",
+                          "en": "The switch is RUN but no campaign is running (last event {ts}). Pressing PAUSE now only stops the next campaign before its first step."},
+    "app_ctl_pause_explain": {"zh": "暂停 = 创建 `{path}`；正在跑的实验在下一步之前停下，已开始的评估会跑完。恢复 = 删除该文件。面板不会碰 control/RUN。",
+                              "en": "PAUSE = create `{path}`; a running campaign stops before its next step (an evaluation already started finishes). RESUME = delete the file. The dashboard never touches control/RUN."},
+    "app_help_toggle": {"zh": "新手模式：显示每个面板的说明", "en": "Beginner mode: explain each panel"},
+    "app_arms_legend": {"zh": "实验臂说明（campaign 名字里的 A–G）", "en": "Experimental arms (the A–G in campaign ids)"},
+    "app_arms_legend_intro": {"zh": "campaign 名字 = 数据集 _ 实验臂 _ 种子 _ 运行时间。七个臂是同一次对照实验里的七条腿，不是四个 Demo。",
+                              "en": "campaign id = dataset _ arm _ seed _ run time. The seven arms are legs of one controlled experiment, not the four demos."},
+    "app_help_feed": {"zh": "**这是什么** agents 每一步的口语化记录：谁提出了什么假设、评审者为什么退回、哪道门没过、谁晋级了。"
+                            "**怎么读** 最新在最上面；打开“只看关键事件”过滤掉例行信息；点开一条可以看原始事件。"
+                            "**什么算异常** 长时间没有新事件（实验可能停了）；连续的“门未通过”集中在同一道门（门槛或数据有问题）。",
+                      "en": "**What** A plain-language log of every agent step: who proposed what, why the Critic sent it back, which gate failed, what was promoted. "
+                            "**How to read** Newest first; toggle the filter to hide routine lines; expand a line for the raw event. "
+                            "**Abnormal** No new events for a long time (the run may have stopped); repeated failures at the same gate."},
+    "app_help_mech": {"zh": "**这是什么** 提案按“机制簇”（同一类想法：先验加权、显性效应、固定效应……）的分布，以及每簇里晋级 / 拒绝 / 进行中的数量。"
+                            "**怎么读** 柱越高，agents 在这类想法上花的力气越多。"
+                            "**什么算异常** 某一簇占比过高——agents 在原地打转，报警里会出现机制塌缩。",
+                      "en": "**What** Proposals by mechanism cluster (families of ideas: prior weighting, dominance, fixed effects…) with promoted / rejected / in-progress counts. "
+                            "**How to read** Taller bar = more effort spent on that family. **Abnormal** One cluster dominating (the agents are circling; a mechanism-collapse alarm follows)."},
+    "app_help_funnel": {"zh": "**这是什么** 从提案到晋级的漏斗：提案 → 通过评审 → 构建成功 → 全量评估 → 晋级，今日与 campaign 累计各一列。"
+                              "**怎么读** 每一级的流失都有原因，用下面的“解释这个候选”看具体的门结果。"
+                              "**什么算异常** 负对照 campaign（E / F 臂）的晋级数不为 0；全量评估数逼近预算上限。",
+                        "en": "**What** The funnel from proposal to promotion: proposed → reviewed → built → fully evaluated → promoted, today and campaign-to-date. "
+                              "**How to read** Every drop has a reason; use “Explain this candidate” for the gate results. **Abnormal** A negative-control campaign (arm E / F) with promotions; full evaluations near the budget cap."},
+    "app_help_explain": {"zh": "**这是什么** 一个候选的完整档案：论点（机制、方向、证伪条件）、DSL、数据声明、测试、溯源、评估结果与每道门的判定。"
+                               "**怎么读** 先看“评估”里哪道门拒绝了它、离门槛差多少；再看“论点”判断这个想法本身合不合理。"
+                               "**什么算异常** 评估通过但状态没变——只有门能改变状态，说明它还在排队。",
+                         "en": "**What** One candidate's full record: thesis (mechanism, direction, falsifiers), DSL, data declaration, tests, provenance, evaluation and each gate's verdict. "
+                               "**How to read** Start with which gate rejected it and by how much; then judge the thesis itself. **Abnormal** Evaluation passed but state unchanged — only gates change state, so it is still queued."},
+    "app_help_alarms": {"zh": "**这是什么** 违反运行策略的自动报警：预算超支、门槛文件被改、机制塌缩、负对照晋级、长时间无事件等。"
+                              "**怎么读** 没有报警是正常状态；每条报警写明原因。"
+                              "**什么算异常** “门槛文件哈希变化”（有人改了门槛，结果不可比）或“负对照晋级”（裁判失效）——立即暂停。",
+                        "en": "**What** Automatic policy alarms: budget overrun, thresholds file changed, mechanism collapse, negative control promoted, no events for too long. "
+                              "**How to read** No alarms is the normal state; each alarm states its cause. **Abnormal** A thresholds-hash change (results no longer comparable) or a promoted negative control (the judge is broken) — pause immediately."},
+    "app_help_budget": {"zh": "**这是什么** 当前 campaign 的 token 与全量评估用量、上限、燃烧率与预计耗尽时间。"
+                              "**怎么读** 进度条到头之前编排器会自动停。"
+                              "**什么算异常** 燃烧率突然升高（agents 在重试循环）；评估数远快于提案数。",
+                        "en": "**What** Tokens and full evaluations used by the current campaign, the caps, burn rate and projected exhaustion. "
+                              "**How to read** The orchestrator stops by itself before a bar fills. **Abnormal** A sudden burn-rate jump (retry loop); evaluations outpacing proposals."},
+    "app_help_controls": {"zh": "**这是什么** 唯一的操作开关。暂停 = 在 control/ 目录放一个 PAUSE 文件，正在运行的实验会在下一步之前停下；恢复 = 删除该文件。"
+                                "**怎么读** 上方状态框显示开关状态与是否有实验在跑。"
+                                "**注意** 没有实验在跑时按“暂停”只会让下一次启动的实验在第一步前停下；演示部署里没有这个面板。",
+                          "en": "**What** The single operator switch. PAUSE = put a PAUSE file in control/, a running campaign stops before its next step; RESUME = delete it. "
+                                "**How to read** The status box shows the switch and whether a campaign is running. **Note** With no campaign running, PAUSE only stops the next one before its first step; the demo deployment hides this panel."},
+    "app_help_reliability": {"zh": "**这是什么** 评审者有没有做好它的工作：故意设计的泄漏探针（用了未来信息的假设）被拒绝了多少、负对照被误放行了多少。"
+                                   "**怎么读** 拒绝数应等于探针数；误晋级应为 0。"
+                                   "**什么算异常** 任何一个负对照晋级——裁判失效，先修裁判再继续。",
+                             "en": "**What** Whether the Critic does its job: how many deliberate leak probes (hypotheses using future information) were rejected and how many negative controls slipped through. "
+                                   "**How to read** Rejections should equal probes; false promotions should be 0. **Abnormal** Any promoted negative control — the judge is broken; fix it before continuing."},
     # reliability
     "app_reliability_title": {"zh": "Agent 可靠性", "en": "Agent reliability"},
     "app_nc_rejected": {"zh": "被评审者拒绝的负对照", "en": "Negative controls rejected by Critic"},

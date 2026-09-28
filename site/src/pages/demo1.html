@@ -1,0 +1,53 @@
+<h1>Demo 1 · 裁判（育种）<span class="badge real">已交付 · 真实计算</span><span class="en">A judge every method has to pass — and it has already rejected good-looking false positives.</span></h1>
+<p class="lede">它证明 Deck 上的一句话：<b>我们交付的是一个任何方法都要过的裁判，它已经拒绝了看起来很好的假阳性。</b>冻结的 ssGBLUP 是冠军，任何大模型、随机搜索或外部先验都是挑战者；晋级只能靠在同一批候选、同一截止日上的配对胜出。</p>
+<p class="toc">生成 {{d1.date}} · 种子 0 · 门槛文件哈希 <code>{{d1.thr_hash8}}…</code>（开始与结束一致） · 计算 {{d1.minutes}} 分钟 · <a href="demo1/report.html">完整报告</a> · <a href="view.html?f=demo1/rejected.md">裁判拒绝了什么</a> · <a href="view.html?f=demo1/THEORY.md">依据的理论</a></p>
+
+<div class="howto breeder" data-for="breeder"><b>育种的人这样读：</b>A 臂就是你现在用的方法（ssGBLUP）。其余六臂是各种"号称更好"的做法。裁判的工作是：只有真的在下一代上更准，并且不是靠运气或偷看未来数据，才放行。到目前为止一个都没放行——这不是失败，这是裁判在工作。</div>
+<div class="howto ai" data-for="ai"><b>做 AI 的人这样读：</b>六道确定性门（有效性、准确度对打乱标签的零分布、配对 ΔOOS、方案层 ΔF/增益、稳健性分层、研究门的 DSR 式期望最大值扣减），agents 只能推荐，状态变化只能由门触发。E/F 两臂是负对照，晋级必须为零；G 臂的随机先验是它自己的负对照。</div>
+<div class="howto board" data-for="board"><b>董事会这样读：</b>三件事。一，裁判成立（负对照零误晋级、泄漏探针全部拦截、实测准确度不超理论上界）。二，挑战者很少赢——这支持"裁判是产品、数据是资产"的定位，而不是"我们有更神的模型"。三，Demo 1b 把"十年进步五年发生"拆成 r 与 L 两项，告诉你承诺该怎么措辞。</div>
+
+<div class="stats">
+  <div class="stat"><b>{{d1.neg_sim}} / {{d1.neg_pig}}</b><span>负对照误晋级（模拟 / 猪数据），必须为 0</span></div>
+  <div class="stat"><b>{{d1.leak}} / {{d1.leak}}</b><span>故意设计的时间泄漏探针，全部被评审者拦下</span></div>
+  <div class="stat"><b>{{d1.champ_r}} → {{d1.holdout_r}}</b><span>冠军真准确度：下一代 → 封存世代</span></div>
+  <div class="stat"><b>{{d1.promoted_total}}</b><span>挑战者晋级数（B / C / D / G）</span></div>
+  <div class="stat"><b>{{d1.bound_ok}}</b><span>实测 r 全部低于 Daetwyler 上界（超过即视为泄漏并停止）</span></div>
+  <div class="stat"><b>{{d1.bandwidth}}</b><span>验证带宽（样本/年 ÷ 标签延迟年，模拟）</span></div>
+</div>
+
+<h2 id="arms">七个实验臂：它们不是四个 Demo</h2>
+<p>面板里的 <code>sim_D_s0_r20260927T1506</code> 这种名字是机器标识：<b>数据集 _ 实验臂 _ 种子 _ 运行时间</b>。七个臂是同一次对照实验里的七条腿，全部属于 Demo 1。每条腿回答一个问题：</p>
+{{d1.arms_table}}
+<p>模拟数据：{{d1.n_lines}} 个纯系 · {{d1.n_breeds}} 个品种 · 每年 {{d1.n_batches}} 个批次 · 开发集 {{d1.n_dev}} 只 · 封存世代 {{d1.n_holdout}} 只 · {{d1.n_markers}} 个标记 · 真育种值已知。预算：{{d1.n_proposals}} 个提案、最多 {{d1.evals_cap}} 次全量评估。</p>
+<figure><img src="demo1/figures/fig4_arms.png" alt="各臂的全量评估数与晋级数" loading="lazy"><figcaption>各臂的全量评估数与晋级数。负对照 E / F 必须为 0 晋级；其余臂的 0 晋级说明在这批数据上没有方法能在配对增量门上稳定胜过冻结冠军。</figcaption></figure>
+
+<h2>准确度随参考群规模 vs 理论上界</h2>
+<p data-for="ai board">Daetwyler 上界 r = √(N·h² / (N·h² + Me))，由参考群规模 N、遗传力 h² 和有效染色体片段数 Me 决定，与模型复杂度关系不大。实测曲线若超过上界，唯一的解释是泄漏——这是一条硬规则：超过即停止。本次 h² = {{d1.h2}}，Me ≈ {{d1.me}}，最大超出 {{d1.curve_max_excess}}（负数即未超）。</p>
+<figure><img src="demo1/figures/fig1_accuracy_vs_N.png" alt="准确度随 N 的变化与理论上界" loading="lazy"><figcaption>实测 r（冠军 GBLUP，5 次抽样）与理论上界。参考群越大，准确度越高，但永远在上界之下。</figcaption></figure>
+
+<h2>跨客户三档：跨客户学习能不能成立</h2>
+<p>Deck 上写"跨客户学习"。审查表说：同一品系内合并参考群体有效；跨品系、跨品种的增益小且可能为负。所以分三档测，只有第一档过增量门才算成立。</p>
+{{d1.tiers_table}}
+<figure><img src="demo1/figures/fig2_cross_customer_tiers.png" alt="跨客户三档" loading="lazy"><figcaption>相对"只用本客户数据"的配对 ΔOOS，90% bootstrap 区间。</figcaption></figure>
+<div class="howto board" data-for="board"><b>诚实的注脚：</b>三档都过门，但本模拟的品种分化偏弱，跨品种衰减不明显，所以只能说"在本模拟成立"。Deck 上"跨客户学习"能否保留，要等真实多品系数据；若只有第一档成立，叙事收窄为"同品系跨场学习"，估值锚不变。</div>
+
+<h2>育种者方程分解（Demo 1b）：+50% 从哪里来</h2>
+<p>ΔG = i·r·σA / L。基因组选择主要动两项：提高准确度 r，缩短世代间隔 L。把它们拆开测，就知道"十年进步五年发生"该怎么说：</p>
+{{d1.gain_table}}
+<figure><img src="demo1/figures/fig3_gain_decomposition.png" alt="育种者方程分解" loading="lazy"><figcaption>哪一项被改变，ΔG / 年变多少（90% bootstrap 区间）。世代间隔缩短 15% 是设计假设，不是测量值。</figcaption></figure>
+<div class="howto board" data-for="board"><b>对承诺二的含义：</b>个体自身可测的性状（体重）只改 r 是 {{d1.bw42_r}}，r 与 L 一起才到 {{d1.bw42_rl}}；个体没有自身记录的胴体性状（胸肌率，基线是全同胞指数）只改 r 就有 {{d1.by_r}}，两项一起 {{d1.by_rl}}。建议措辞按性状分开，数字等客户数据的影子运行再定。</div>
+
+<h2 data-for="breeder ai">低密度面板 + 填补：准确度按 MAF 分层</h2>
+<p data-for="breeder ai">拉索的固相面板走"低密度 + 填补"的路线。公开猪数据上（5K / 20K 面板，KNN 填补）整体一致率约 0.70，MAF ≥ 0.2 的位点只有 0.58–0.67，且 5K 与 20K 几乎相同——KNN 不利用局部连锁，这是方法的下限，不是面板密度的结论。真实面板要用 Beagle / FImpute 类方法重测。</p>
+<figure data-for="breeder ai"><img src="demo1/figures/fig5_imputation_by_maf.png" alt="填补准确度按 MAF 分层" loading="lazy"><figcaption>填补准确度按 MAF 分层（公开猪数据）。</figcaption></figure>
+
+<h2>商业含义</h2>
+<div class="grid" data-for="board">
+  <div class="card"><h3>裁判是产品</h3><p>客户买的不是"更神的模型"，而是一个供应商也骗不了的验证：任何方法（包括客户自己的、包括我们的）都过同一套门。挑战者很少赢，反而支持这个定位。</p></div>
+  <div class="card"><h3>数据是资产</h3><p>每一个提案、拒绝、成本都进永久台账；裁判拒绝的假阳性也是知识。台账越长，下一轮的先验越准，这是复利的第一环。</p></div>
+  <div class="card"><h3>承诺二怎么说</h3><p>分解表决定措辞：按性状分开、给区间、注明 L 项是设计假设。真实客户数据影子运行后，"+50%" 或 "+25%" 才有资格出现在对外材料里。</p></div>
+</div>
+
+<h2>可以说 / 不能说 / 需要什么数据</h2>
+{{d1.claims}}
+<p class="toc">对应 PRD 审查表第 1、2、3、5、6、7 行。数据来源与哈希：<a href="demo1/RUN.json">RUN.json</a>。</p>

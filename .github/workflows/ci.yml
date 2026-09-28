@@ -45,8 +45,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: cd abl && python3 scripts/build_site.py
-      - run: test -f abl/site/dist/index.html && test -f abl/site/dist/docs/USER_MANUAL.zh.md
+      - run: python3 site/build.py
+      - run: test -f site/dist/index.html && test -f site/dist/demo2/clock_report.html && test -f site/dist/abl/docs/USER_MANUAL.zh.md
+      - run: python3 site/check.py
+  demo2-demo4:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install numpy pandas scikit-learn matplotlib
+      - run: cd demo4 && make verify PYTHON=python
+      - run: cd demo2 && make verify PYTHON=python
   demo3:
     runs-on: ubuntu-latest
     timeout-minutes: 15

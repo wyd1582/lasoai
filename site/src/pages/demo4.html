@@ -1,0 +1,57 @@
+<h1>Demo 4 · 新抗原审计 + HLA 填充<span class="badge sim">内部预测版 · 模拟引擎</span><span class="en">Pre-freeze independent validation for ranking algorithms; HLA typing as the wedge into the human line.</span></h1>
+<p class="lede">它要证明 Deck 上的一句话：<b>裁判不只审育种。任何要冻结 5–7 年的排序算法，都可以在冻结前接受同一套独立验证；HLA 分型是进入人类线的楔子。</b></p>
+<p class="toc">生成 {{d4.date}} · 种子 4 · 配置哈希 <code>{{d4.config_hash}}</code> · {{d4.seconds}} 秒 · <a href="demo4/report.html">完整报告</a> · <a href="view.html?f=demo4/audit_report.md">审计报告样例</a> · <a href="view.html?f=demo4/THEORY.md">依据的理论</a></p>
+<div class="preview" style="margin-top:12px"><b>为什么是"内部预测版"：</b>PRD 要求的 1000 Genomes、中国人群 HLA 参考面板（决定 3）和 TESLA 数据还没有拿到。本页的审计纪律是真的（留患者验证、六臂、负对照、多重检验校正），数据是模拟的。4b 里"表达量、克隆性带信号"是模拟植入的，所以主实验臂找到增量<b>不说明</b>真实数据上找得到；本页真正的证据是负对照零晋级，以及审计报告在不含算法内部的情况下写成。</div>
+
+<div class="howto ai" data-for="ai"><b>做 AI 的人这样读：</b>与 Demo 1 同一套裁判：冻结基线（亲和力 %rank 排名，NetMHCpan 类）、配对增益、bootstrap 区间、α 按尝试数 Bonferroni 校正、E/F 负对照。留患者 = 把 Demo 1 的"留世代"换成"留患者"。HLA 填充用属性装袋 KNN（HIBAG 的思路，简化实现），按频率三档报告，面板降到 25% / 8% 位点后重报。</div>
+<div class="howto board" data-for="board"><b>董事会这样读：</b>E 线（审计与授权）的产品形态。Deck 的"为什么是现在"页：个性化疗法算法进入临床后 5–7 年不可更改，冻结前必须有可审计验证；全球前 20 药企 61% 的后期管线来自外部，买的是被验证过的资产。本页的 <a href="view.html?f=demo4/audit_report.md">审计报告样例</a> 就是交付物：它只含协议、数据哈希、门槛与结果，不含任何算法内部。</div>
+<div class="howto breeder" data-for="breeder"><b>育种的人这样读：</b>这一页与育种无直接关系，但你会认出它的骨架：冻结的基线、挑战者、负对照、只看增量。同一套裁判在猪、鸡的育种值上用，也在人的肽段排序上用——这就是"读出、裁判、记忆"三者共用一套资产的意思。</div>
+
+<div class="stats">
+  <div class="stat"><b>{{d4.neg_false}}</b><span>负对照误晋级（E 打乱标签 + F 打乱特征），必须为 0</span></div>
+  <div class="stat"><b>{{d4.base_hit}} → {{d4.bestD_hit}}</b><span>前 20 候选命中率：冻结基线 → 主实验臂最好候选</span><i>模拟，信号为植入</i></div>
+  <div class="stat"><b>{{d4.D_promoted}} / {{d4.D_evals}}</b><span>主实验臂晋级 / 全量评估</span><i>模拟</i></div>
+  <div class="stat"><b>{{d4.hla_ref}} / {{d4.hla_65k}} / {{d4.hla_20k}}</b><span>HLA 四位分辨率正确率：参考面板 / 65K / 20K（三基因座均值）</span><i>模拟人群</i></div>
+  <div class="stat"><b>{{d4.base_rate}}</b><span>模拟免疫原性基率（随机挑选的命中率）</span></div>
+  <div class="stat"><b>{{d4.bandwidth}}</b><span>验证带宽（{{d4.samples_per_year}} 患者/年 ÷ {{d4.latency}} 年）</span><i>假设口径</i></div>
+</div>
+
+<h2>4a · HLA 填充：按频率分层 × 面板密度</h2>
+<p>模拟 {{d4.n_individuals}} 人（训练 {{d4.n_train}}，测试 {{d4.n_test}}），三个 I 类基因座，每个等位基因一条特征单倍型，错配率从基因中心向窗口边缘上升以模拟连锁衰减。填充用属性装袋 KNN；正确率按<b>真值等位基因的频率</b>分三档，并在保留 100% / 25% / 8% MHC 位点的三种面板上重报。</p>
+{{d4.hla_table}}
+<figure><img src="demo4/figures/fig1_hla_accuracy.png" alt="HLA 填充准确度" loading="lazy"><figcaption>稀有等位基因的正确率随面板变稀下降最快——审查表第 9 行预期的形状。若真实数据上稀有档不足，产品定位为"筛查 + 测序确认"，仍是楔子。</figcaption></figure>
+<div class="howto board" data-for="board breeder"><b>楔子的意思：</b>HLA 分型是人类线第一个能卖的读出：固相 SNP 面板 + 填充，成本远低于测序。它的可行性取决于中国人群参考面板从哪来（PRD 决定 3，需要许总或合作院所的输入）。没有它，4a 只能在欧洲人群面板上做，结论对产品没有意义。</div>
+
+<h2>4b · 六臂审计：留患者验证</h2>
+<p>模拟 {{d4.n_patients}} 名患者 × 每人 200 条候选肽段（共 {{d4.n_peptides}} 条，免疫原性阳性 {{d4.n_immunogenic}} 条）。评估指标：每位患者前 20 个候选里的免疫原性数。增量门：与冻结基线的配对命中率差，bootstrap {{d4.n_boot}} 次区间下界 &gt; 0 且平均增益 ≥ {{d4.min_effect}} 个百分点；α = {{d4.alpha}} / 尝试数。</p>
+{{d4.arms_table}}
+<figure><img src="demo4/figures/fig2_audit_arms.png" alt="六臂审计" loading="lazy"><figcaption>各臂最好候选的前 20 命中率与晋级 / 全量评估数。负对照 E / F 必须 0 晋级。</figcaption></figure>
+<figure><img src="demo4/figures/fig3_topk_curve.png" alt="命中率随 k" loading="lazy"><figcaption>命中率随 k 的变化：冻结基线 vs 主实验臂最好的候选（{{d4.bestD_name}}，配对增益 {{d4.bestD_gain}}）。审计口径固定 k = 20，与 TESLA 的报告方式一致。</figcaption></figure>
+<div class="howto ai" data-for="ai"><b>怎么读 C 臂：</b>一次性规则（亲和力 + 表达量）也过了门——因为模拟里植入的表达量信号很强。真实数据上这正是审计要回答的问题：一个看起来合理的规则，到底有没有可复现的增量。裁判的价值在于"没有过"也能说清楚。</div>
+
+<h2>审计报告：不看算法源码也能写成</h2>
+<p>PRD 的验收之一是"报告可在不看算法源码下完成"。<a href="view.html?f=demo4/audit_report.md">audit_report.md</a> 按"冻结前独立验证报告"的格式生成：委托与范围 → 数据与切分（患者数、肽段数、留患者、哈希）→ 冻结的基线与验收门 → 结果表 → 负对照 → 结论（可以说 / 不能说）→ 复现命令。候选算法只以名称出现，权重与特征组合方式不在报告里。真实审计时，受审方提供冻结的预测文件（患者 × 肽段 × 分数），审计方持有标签。</p>
+
+<h2>引擎与假设</h2>
+<div class="tw"><table>
+<thead><tr><th>模块</th><th>本版本（模拟引擎）</th><th>正式版本</th><th>状态</th></tr></thead>
+<tbody>
+<tr><td>4a 人群与基因型</td><td>模拟人群，三个 I 类基因座，Zipf 型频谱（形状假设，不是任何人群的真实频谱）</td><td>1000 Genomes + 中国人群 HLA 参考面板（决定 3）</td><td><span class="tag">模拟</span></td></tr>
+<tr><td>4a 填充模型</td><td>属性装袋 KNN（12 袋 × 40% 位点，k = 15）</td><td>HIBAG（Zheng 2014）/ SNP2HLA（Jia 2013）</td><td><span class="tag">思路同，实现为简化版</span></td></tr>
+<tr><td>4a 面板密度</td><td>保留 MHC 区位点的 100% / 25% / 8% 模拟参考面板 / 65K / 20K</td><td>从公开面板抽样到拉索固相面板的实际位点</td><td><span class="tag">算法同</span></td></tr>
+<tr><td>4b 患者 × 肽段</td><td>模拟特征：结合亲和力、表达量、克隆性、agretopicity、疏水性（植入为无信号）、异己性；患者随机效应</td><td>TESLA 联盟公开部分（Wells 2020）</td><td><span class="tag">模拟</span></td></tr>
+<tr><td>4b 冻结基线</td><td>结合亲和力 %rank 排名</td><td>NetMHCpan-4.1 输出（学术许可）</td><td><span class="tag">格式同</span></td></tr>
+<tr><td>4b 六臂与门</td><td>留患者 5 折；配对 top-20 命中率增益；Bonferroni；负对照 E/F</td><td>同（复用 Demo 1 的裁判纪律）</td><td><span class="tag">已实现</span></td></tr>
+<tr><td>4b 审计报告</td><td>audit_report.md，不含算法内部</td><td>同</td><td><span class="tag">已实现</span></td></tr>
+</tbody></table></div>
+
+<h2>商业含义</h2>
+<div class="grid" data-for="board">
+  <div class="card"><h3>E 线 · 审计与授权</h3><p>审计费 + 管线里程碑与分成，毛利假设最高的一条线。客户是个性化疗法公司、种企、药企：他们买的是"冻结前有可审计验证"这件事本身。</p></div>
+  <div class="card"><h3>卖点不是"更准"</h3><p>绝对精度低是新抗原领域现状（TESLA）。审计产品的卖点是可复现、无泄漏、可比：同一份标签、同一套门、同一份报告格式，对任何算法一视同仁。</p></div>
+  <div class="card"><h3>人类线的顺序</h3><p>先 HLA 分型（读出，楔子），再算法审计（裁判），最后是人类队列与数据授权（记忆）——与路线图第二、三级一致。</p></div>
+</div>
+
+<h2>可以说 / 不能说 / 需要什么数据</h2>
+{{d4.claims}}
+<p class="toc">对应 PRD 审查表第 5、9、10 行。一条命令重建：<code>make demo4</code>（约 5 秒）。</p>

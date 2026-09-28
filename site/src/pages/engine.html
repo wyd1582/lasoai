@@ -1,0 +1,78 @@
+<h1>技术路线与引擎<span class="en">The layer after AlphaGenome: genome + environment + decision → next-generation traits.</span></h1>
+<p class="lede">AlphaFold 解开了蛋白质的结构，AlphaGenome 开始解读基因组的调控语言；下一块未被计算化的土地，是基因组如何在真实生命、真实环境里变成性状并传给下一代。我们从育种开始，把每一个世代变成一次可计算、可验证、可学习的实验。</p>
+
+<h2>AlphaGenome 之后的那一层</h2>
+<div class="tw"><table>
+<thead><tr><th>层</th><th>成熟度</th><th>代表</th></tr></thead>
+<tbody>
+<tr><td>蛋白序列 → 结构</td><td>成熟</td><td>AlphaFold / ESMFold / RFdiffusion；PDB + CASP</td></tr>
+<tr><td>DNA 变异 → 分子调控</td><td>正在爆发；人类为主</td><td>AlphaGenome（2026-09 Atlas：90 亿 SNV，人类基因组）；Evo 2（9.3 万亿核苷酸，1 Mb 上下文，Apache 2.0）</td></tr>
+<tr><td>基因组 → 组织表达</td><td>建设中；养殖动物</td><td>FarmGTEx（Nature Genetics 2025）：16 个养殖物种</td></tr>
+<tr><td><b>基因组 + 环境 + 决策 → 下一代性状</b></td><td><b>早期；Laso AI 的位置</b></td><td>GWAS / GBLUP / ssGBLUP + 前瞻验证；没有通用平台</td></tr>
+</tbody></table></div>
+<p><b>我们不训练通用 DNA 模型。</b>Evo 2、AlphaGenome、FarmGTEx 是我们的输入，不是对手。我们拥有的是它们都没有的标签：基因组 → 决策 → 真实生命 → 下一代结果。</p>
+
+<h2>平台的五层</h2>
+<div class="tw"><table>
+<thead><tr><th>层</th><th>是什么</th><th>在本仓库里</th></tr></thead>
+<tbody>
+<tr><td>输入</td><td>拉索芯片基因型 · 客户表型 / 系谱 / 环境 · 公共：FarmGTEx、Evo 2、AlphaGenome、QTLdb、文献</td><td><code>data/SOURCES.md</code> 登记每份数据的来源、哈希、能说什么</td></tr>
+<tr><td>读出层</td><td>固定面板：SNP、甲基化、HLA；平台中立：固相 / 液相 / 测序都能进</td><td>Demo 1（SNP）、Demo 2（甲基化）、Demo 4（HLA）</td></tr>
+<tr><td>记忆层</td><td>GenoFrame 契约（animal_id × selection_date，available_at，禁止前向填充）+ 只增不减台账</td><td><code>abl/dataio</code>、<code>abl/registry</code>；Demo 3</td></tr>
+<tr><td>引擎层</td><td>E1–E6，见下表</td><td><code>abl/engine</code>、<code>abl/sim</code>、<code>abl/agents</code>、<code>refpop-agent</code></td></tr>
+<tr><td>裁判层</td><td>GenerationBench：模型冻结、预测加时间戳、一个世代后揭榜；LR 法、负对照、多重检验</td><td><code>abl/gates</code>（六道门）、<code>abl/campaigns</code>（七臂）</td></tr>
+</tbody></table></div>
+
+<h2>核心引擎：每个引擎写清它依据什么、能测什么、在哪里能看到</h2>
+<p>冻结基准永远是 ssGBLUP；任何新东西只能作为挑战者进入裁判。</p>
+<div class="tw"><table>
+<thead><tr><th>引擎</th><th>依据什么</th><th>能测什么</th><th>本站哪里能看到</th><th>状态</th></tr></thead>
+<tbody>
+<tr><td><b>E1 遗传引擎</b>（冻结基准）</td><td>ssGBLUP：y = Xb + Zu + e，u ~ N(0, Hσ²ₐ)；准确度上界 r² ≈ Nh² / (Nh² + Mₑ)（Daetwyler 2008）</td><td>GEBV、可靠性；对照 BayesR</td><td>Demo 1 的 A 臂与 r–N 曲线；Demo 3 的重训与逐头一致</td><td><span class="tag">已实现</span></td></tr>
+<tr><td><b>E2 功能先验引擎</b>（挑战者）</td><td>每个 SNP 的先验方差来自 Evo 2 嵌入、FarmGTEx eQTL / sQTL、保守性；进入 BayesRC / GFBLUP 类模型</td><td>预期同群体 +1–5% 准确度；跨品系与小样本增益更大；不进主叙事</td><td>Demo 1 的 G 臂（现为模拟先验）</td><td><span class="tag">已实现 · 等真实先验文件</span></td></tr>
+<tr><td><b>E3 世代模拟器</b>（世代级世界模型）</td><td>子代均值 = ½(GEBVₛ + GEBVₒ) + 显性 + G×E；子代方差由相位单倍型与重组图谱算出；配种受最优贡献选择约束（ΔF 上限）</td><td>子代分布、配种方案</td><td>Demo 1 的肉鸡式模拟器（多品系、场区、批次、真育种值）；Demo 3 的三代模拟</td><td><span class="tag">模拟器已实现 · 子代方差与 OCS 待做</span></td></tr>
+<tr><td><b>E4 G×E 引擎</b></td><td>反应规范 / 多环境模型：性状 = 遗传 + 环境 + 交互</td><td>按场区的育种值与选配建议</td><td>Demo 1 的稳健门按场区 / 批次 / 品种分层；DSL 的环境协变量算子</td><td><span class="tag">部分</span></td></tr>
+<tr><td><b>E5 GenerationBench</b>（裁判）</td><td>模型冻结 → 预测加时间戳 → 配种 → 一个世代后揭榜；LR 法 ρ / μ / b、留品系与留世代验证、负对照零晋级、多重检验校正</td><td>任何排序算法能否配得上下一代</td><td>Demo 1 全部；Demo 4 换成留患者</td><td><span class="tag">已实现</span></td></tr>
+<tr><td><b>E6 智能体层</b>（假设工厂）</td><td>通用模型做编排、检索、报告；只能调用确定性工具（GRM、BLUP、LD、注释）；产出候选与假设，不产出数字</td><td>假设生成变便宜后，验证带宽是否变成瓶颈的解</td><td>Demo 1 的 C / D 臂：遗传学家、构建者、评审者、分析师四个角色；泄漏探针拦截</td><td><span class="tag">已实现 · 离线 stub 与真实模型可切换</span></td></tr>
+</tbody></table></div>
+<p data-for="ai">依据：Meuwissen 2001；Legarra 2009；Daetwyler 2008；MacLeod 2016（BayesRC）；Edwards 2016（GFBLUP）；Lehermeier 2017 / Bonk 2016（子代方差）；Meuwissen 1997（OCS）；Legarra &amp; Reverter 2018（LR 法）；Mäntysaari 2010（Interbull 验证）。</p>
+
+<h2>24 个月科研路线：只有证据出现，才考虑自训模型</h2>
+<p>每个实验回答一个问题；开源模型只做挑战者；通用大模型只做编排。</p>
+<div class="tw"><table>
+<thead><tr><th>时间</th><th>实验</th><th>回答的问题</th><th>用什么</th><th>止损</th><th>本站进度</th></tr></thead>
+<tbody>
+<tr><td>Q1–Q2</td><td>ssGBLUP 冻结基准 + 六臂裁判（公开猪数据 + 白羽鸡式模拟）</td><td>传统遗传学到底有多强；裁判系统本身是否成立</td><td>BLUP 类求解器、模拟器</td><td>负对照晋级 → 方法作废</td><td><span class="ok">Demo 1 已做</span></td></tr>
+<tr><td>Q2–Q3</td><td>功能先验挑战者：Evo 2 嵌入、FarmGTEx eQTL、保守性 → BayesRC / GFBLUP</td><td>DNA 基础模型的"语法理解"能否迁移到真实复杂性状</td><td>Evo 2 7B / 40B、FarmGTEx、AlphaGenome（商用需许可）</td><td>增益 &lt; 1% 且跨品系无改善 → 只留作科研合作</td><td>G 臂就绪，等先验文件</td></tr>
+<tr><td>Q3–Q4</td><td>留世代与留品系验证；跨客户三档</td><td>信号能否跨世代、跨群体</td><td>客户台账</td><td>只有同品系成立 → 叙事收窄为"同品系跨场"</td><td>模拟版已做（Demo 1）；真实数据待接</td></tr>
+<tr><td>Q4–Q6</td><td>G×E 模型 + 世代模拟器（子代分布 + OCS）</td><td>能否把基因组与环境分开；能否从预测走到配种决策</td><td>相位单倍型、重组图谱、场区环境协变量</td><td>子代方差预测无增量 → 只做均值</td><td>部分（E3 / E4）</td></tr>
+<tr><td>Q5–Q8</td><td>GenerationBench 第一轮：冻结 → 配种 → 一个世代后揭榜</td><td>裁判能否成为行业标准</td><td>客户群体、外部参赛模型</td><td>无外部参赛者 → 内部基准</td><td>机制就绪（封存世代、阈值哈希、只增台账）</td></tr>
+<tr><td>Q6–Q8</td><td>智能体假设工厂：候选位点 → 芯片内容建议</td><td>假设生成变便宜后，验证带宽是否变成瓶颈的解</td><td>通用模型编排 + 确定性工具</td><td>候选位点在裁判里零增量 → 缩减为检索助手</td><td>Demo 1 的 D 臂；Demo 2 的探针清单格式</td></tr>
+<tr><td>Q8 之后</td><td>是否自训"遗传与性状的基础模型"</td><td>预训练表征 + 专有世代数据是否出现 scaling law</td><td>只有前六项出现一致证据才立项</td><td>否则永远不训</td><td>—</td></tr>
+</tbody></table></div>
+<div class="howto board" data-for="board"><b>证伪线：</b>若功能先验零增量、跨品系不迁移、子代方差不可预测，公司仍是一家有裁判和台账的育种数据平台，估值锚不变；若三者成立，才有"遗传与性状的基础模型"这一层。</div>
+
+<h2>验证带宽：产业以百万级计，实验室以千级计</h2>
+<p>每年样本量 × 结果回流延迟的倒数。我们不和自动化实验室比速度，比规模；他们以小时计，我们以世代计。所以我们的护城河是时间，他们的是算力。</p>
+<div class="tw"><table>
+<thead><tr><th>谁</th><th>每年实验或样本数</th><th>口径</th></tr></thead>
+<tbody>
+<tr><td>A-Lab（伯克利，2023）</td><td class="num">7,600</td><td>实验次数，年化（Nature 2023）</td></tr>
+<tr><td>Ginkgo × GPT-5 云实验室（2026）</td><td class="num">72,000</td><td>实验次数，年化</td></tr>
+<tr><td>Laso AI 2027（最佳情形）</td><td class="num">1,200,000</td><td>进入台账的样本，目标口径</td></tr>
+<tr><td>Laso AI 2031（目标）</td><td class="num">3,000,000</td><td>同上</td></tr>
+</tbody></table></div>
+<p>每个 Demo 的 RUN.json 都算同一个数：bandwidth = samples_per_year / label_latency_years。本站四个 Demo 的值（全部是模拟或假设口径）：Demo 1 {{d1.bandwidth}} · Demo 2 结局标签 {{d2.bandwidth_outcome}} · Demo 3 {{d3.bandwidth}} · Demo 4 {{d4.bandwidth}}。</p>
+
+<h2 data-for="ai">开源模型与许可</h2>
+<div class="tw" data-for="ai"><table>
+<thead><tr><th>模型 / 资源</th><th>能给我们什么</th><th>许可</th><th>怎么进裁判</th></tr></thead>
+<tbody>
+<tr><td>Evo 2（Arc Institute）</td><td>核苷酸级嵌入 → 每个 SNP 的功能先验（E2）</td><td>Apache 2.0（NVIDIA NIM 标注可商用）</td><td>G 臂：先验加权 GRM，随机先验作负对照</td></tr>
+<tr><td>AlphaGenome（DeepMind）</td><td>变异对调控的预测 → 保守 CpG 与候选位点的先验</td><td>API 与 Atlas 非商业免费，商业需授权</td><td>Demo 2 探针清单排序；G 臂</td></tr>
+<tr><td>FarmGTEx</td><td>养殖动物 eQTL / sQTL</td><td>公开</td><td>G 臂真实先验（<code>data/priors/</code>）</td></tr>
+<tr><td>Borzoi / Enformer</td><td>人类 / 小鼠调控预测</td><td>开源</td><td>Demo 4 的特征先验（待）</td></tr>
+<tr><td>BLUPF90 / AlphaSimR</td><td>求解器 / 育种方案模拟</td><td>科研免费、商用需许可 / 开源</td><td>E1 对照、E3 对照</td></tr>
+<tr><td>通用大模型（Claude / GPT；私有化 Qwen / DeepSeek）</td><td>编排、检索、报告、假设生成</td><td>API / 私有化</td><td>E6：只能调确定性工具，不产出数字</td></tr>
+</tbody></table></div>
+<p class="toc">工程细节、命令与部署见 <a href="abl/index.html">手册与引擎</a>（用户手册中英文、部署手册、设计文档）。</p>

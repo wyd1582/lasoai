@@ -1,0 +1,1207 @@
+{
+ "demo": "demo4 · 新抗原审计 + HLA 填充（内部预测版，模拟数据）",
+ "generated_at": "2026-09-28T08:00:10.569717+00:00",
+ "seed": 4,
+ "config_hash": "21fe7dd196eb",
+ "assumptions": {
+  "hla": {
+   "n_individuals": 3000,
+   "test_fraction": 0.2,
+   "loci": [
+    "HLA-A",
+    "HLA-B",
+    "HLA-C"
+   ],
+   "n_alleles": [
+    30,
+    50,
+    30
+   ],
+   "zipf_exponent": 1.0,
+   "snps_per_window": 600,
+   "flip_near": 0.02,
+   "flip_far": 0.35,
+   "panels": [
+    [
+     "参考面板（全部 MHC 位点）",
+     1.0
+    ],
+    [
+     "65K 固相面板",
+     0.25
+    ],
+    [
+     "20K 固相面板",
+     0.08
+    ]
+   ],
+   "bags": 12,
+   "bag_fraction": 0.4,
+   "k_neighbors": 15,
+   "homozygous_ratio": 1.6,
+   "freq_bins": [
+    [
+     "常见 ≥ 5%",
+     0.05,
+     1.01
+    ],
+    [
+     "中等 1–5%",
+     0.01,
+     0.05
+    ],
+    [
+     "稀有 < 1%",
+     0.0,
+     0.01
+    ]
+   ]
+  },
+  "neo": {
+   "n_patients": 40,
+   "peptides_per_patient": 200,
+   "top_k": 20,
+   "base_logit": -3.4,
+   "w_affinity": -1.2,
+   "w_expression": 0.6,
+   "w_clonality": 0.8,
+   "w_agretopicity": 0.5,
+   "w_hydrophobicity": 0.0,
+   "w_foreignness": 0.2,
+   "patient_sd": 0.5,
+   "n_random_proposals": 30,
+   "max_full_evals": 6,
+   "min_effect": 0.01,
+   "alpha": 0.1,
+   "n_boot": 4000,
+   "samples_per_year": 300,
+   "label_latency_years": 1.0
+  }
+ },
+ "data": "simulated (no 1000G / Chinese HLA panel / TESLA in repo; see CLAIMS.md)",
+ "hla": {
+  "n_train": 2400,
+  "n_test": 600,
+  "alleles_by_bin": {
+   "HLA-A": {
+    "常见 ≥ 5%": 5,
+    "中等 1–5%": 20,
+    "稀有 < 1%": 5
+   },
+   "HLA-B": {
+    "常见 ≥ 5%": 4,
+    "中等 1–5%": 18,
+    "稀有 < 1%": 28
+   },
+   "HLA-C": {
+    "常见 ≥ 5%": 5,
+    "中等 1–5%": 20,
+    "稀有 < 1%": 5
+   }
+  },
+  "accuracy": [
+   {
+    "panel": "参考面板（全部 MHC 位点）",
+    "panel_fraction": 1.0,
+    "n_snps": 600,
+    "locus": "HLA-A",
+    "freq_bin": "常见 ≥ 5%",
+    "n_calls": 682,
+    "accuracy": 1.0
+   },
+   {
+    "panel": "参考面板（全部 MHC 位点）",
+    "panel_fraction": 1.0,
+    "n_snps": 600,
+    "locus": "HLA-A",
+    "freq_bin": "中等 1–5%",
+    "n_calls": 472,
+    "accuracy": 0.7902542372881356
+   },
+   {
+    "panel": "参考面板（全部 MHC 位点）",
+    "panel_fraction": 1.0,
+    "n_snps": 600,
+    "locus": "HLA-A",
+    "freq_bin": "稀有 < 1%",
+    "n_calls": 46,
+    "accuracy": 0.30434782608695654
+   },
+   {
+    "panel": "参考面板（全部 MHC 位点）",
+    "panel_fraction": 1.0,
+    "n_snps": 600,
+    "locus": "HLA-A",
+    "freq_bin": "全部",
+    "n_calls": 1200,
+    "accuracy": 0.8908333333333334
+   },
+   {
+    "panel": "参考面板（全部 MHC 位点）",
+    "panel_fraction": 1.0,
+    "n_snps": 600,
+    "locus": "HLA-B",
+    "freq_bin": "常见 ≥ 5%",
+    "n_calls": 557,
+    "accuracy": 1.0
+   },
+   {
+    "panel": "参考面板（全部 MHC 位点）",
+    "panel_fraction": 1.0,
+    "n_snps": 600,
+    "locus": "HLA-B",
+    "freq_bin": "中等 1–5%",
+    "n_calls": 439,
+    "accuracy": 0.8473804100227791
+   },
+   {
+    "panel": "参考面板（全部 MHC 位点）",
+    "panel_fraction": 1.0,
+    "n_snps": 600,
+    "locus": "HLA-B",
+    "freq_bin": "稀有 < 1%",
+    "n_calls": 204,
+    "accuracy": 0.25980392156862747
+   },
+   {
+    "panel": "参考面板（全部 MHC 位点）",
+    "panel_fraction": 1.0,
+    "n_snps": 600,
+    "locus": "HLA-B",
+    "freq_bin": "全部",
+    "n_calls": 1200,
+    "accuracy": 0.8183333333333334
+   },
+   {
+    "panel": "参考面板（全部 MHC 位点）",
+    "panel_fraction": 1.0,
+    "n_snps": 600,
+    "locus": "HLA-C",
+    "freq_bin": "常见 ≥ 5%",
+    "n_calls": 667,
+    "accuracy": 1.0
+   },
+   {
+    "panel": "参考面板（全部 MHC 位点）",
+    "panel_fraction": 1.0,
+    "n_snps": 600,
+    "locus": "HLA-C",
+    "freq_bin": "中等 1–5%",
+    "n_calls": 477,
+    "accuracy": 0.8259958071278826
+   },
+   {
+    "panel": "参考面板（全部 MHC 位点）",
+    "panel_fraction": 1.0,
+    "n_snps": 600,
+    "locus": "HLA-C",
+    "freq_bin": "稀有 < 1%",
+    "n_calls": 56,
+    "accuracy": 0.3392857142857143
+   },
+   {
+    "panel": "参考面板（全部 MHC 位点）",
+    "panel_fraction": 1.0,
+    "n_snps": 600,
+    "locus": "HLA-C",
+    "freq_bin": "全部",
+    "n_calls": 1200,
+    "accuracy": 0.9
+   },
+   {
+    "panel": "65K 固相面板",
+    "panel_fraction": 0.25,
+    "n_snps": 150,
+    "locus": "HLA-A",
+    "freq_bin": "常见 ≥ 5%",
+    "n_calls": 682,
+    "accuracy": 0.9970674486803519
+   },
+   {
+    "panel": "65K 固相面板",
+    "panel_fraction": 0.25,
+    "n_snps": 150,
+    "locus": "HLA-A",
+    "freq_bin": "中等 1–5%",
+    "n_calls": 472,
+    "accuracy": 0.5783898305084746
+   },
+   {
+    "panel": "65K 固相面板",
+    "panel_fraction": 0.25,
+    "n_snps": 150,
+    "locus": "HLA-A",
+    "freq_bin": "稀有 < 1%",
+    "n_calls": 46,
+    "accuracy": 0.13043478260869565
+   },
+   {
+    "panel": "65K 固相面板",
+    "panel_fraction": 0.25,
+    "n_snps": 150,
+    "locus": "HLA-A",
+    "freq_bin": "全部",
+    "n_calls": 1200,
+    "accuracy": 0.7991666666666667
+   },
+   {
+    "panel": "65K 固相面板",
+    "panel_fraction": 0.25,
+    "n_snps": 150,
+    "locus": "HLA-B",
+    "freq_bin": "常见 ≥ 5%",
+    "n_calls": 557,
+    "accuracy": 0.9892280071813285
+   },
+   {
+    "panel": "65K 固相面板",
+    "panel_fraction": 0.25,
+    "n_snps": 150,
+    "locus": "HLA-B",
+    "freq_bin": "中等 1–5%",
+    "n_calls": 439,
+    "accuracy": 0.5876993166287016
+   },
+   {
+    "panel": "65K 固相面板",
+    "panel_fraction": 0.25,
+    "n_snps": 150,
+    "locus": "HLA-B",
+    "freq_bin": "稀有 < 1%",
+    "n_calls": 204,
+    "accuracy": 0.08823529411764706
+   },
+   {
+    "panel": "65K 固相面板",
+    "panel_fraction": 0.25,
+    "n_snps": 150,
+    "locus": "HLA-B",
+    "freq_bin": "全部",
+    "n_calls": 1200,
+    "accuracy": 0.6891666666666667
+   },
+   {
+    "panel": "65K 固相面板",
+    "panel_fraction": 0.25,
+    "n_snps": 150,
+    "locus": "HLA-C",
+    "freq_bin": "常见 ≥ 5%",
+    "n_calls": 667,
+    "accuracy": 0.9910044977511244
+   },
+   {
+    "panel": "65K 固相面板",
+    "panel_fraction": 0.25,
+    "n_snps": 150,
+    "locus": "HLA-C",
+    "freq_bin": "中等 1–5%",
+    "n_calls": 477,
+    "accuracy": 0.5345911949685535
+   },
+   {
+    "panel": "65K 固相面板",
+    "panel_fraction": 0.25,
+    "n_snps": 150,
+    "locus": "HLA-C",
+    "freq_bin": "稀有 < 1%",
+    "n_calls": 56,
+    "accuracy": 0.21428571428571427
+   },
+   {
+    "panel": "65K 固相面板",
+    "panel_fraction": 0.25,
+    "n_snps": 150,
+    "locus": "HLA-C",
+    "freq_bin": "全部",
+    "n_calls": 1200,
+    "accuracy": 0.7733333333333333
+   },
+   {
+    "panel": "20K 固相面板",
+    "panel_fraction": 0.08,
+    "n_snps": 48,
+    "locus": "HLA-A",
+    "freq_bin": "常见 ≥ 5%",
+    "n_calls": 682,
+    "accuracy": 0.8973607038123167
+   },
+   {
+    "panel": "20K 固相面板",
+    "panel_fraction": 0.08,
+    "n_snps": 48,
+    "locus": "HLA-A",
+    "freq_bin": "中等 1–5%",
+    "n_calls": 472,
+    "accuracy": 0.2457627118644068
+   },
+   {
+    "panel": "20K 固相面板",
+    "panel_fraction": 0.08,
+    "n_snps": 48,
+    "locus": "HLA-A",
+    "freq_bin": "稀有 < 1%",
+    "n_calls": 46,
+    "accuracy": 0.0
+   },
+   {
+    "panel": "20K 固相面板",
+    "panel_fraction": 0.08,
+    "n_snps": 48,
+    "locus": "HLA-A",
+    "freq_bin": "全部",
+    "n_calls": 1200,
+    "accuracy": 0.6066666666666667
+   },
+   {
+    "panel": "20K 固相面板",
+    "panel_fraction": 0.08,
+    "n_snps": 48,
+    "locus": "HLA-B",
+    "freq_bin": "常见 ≥ 5%",
+    "n_calls": 557,
+    "accuracy": 0.9102333931777379
+   },
+   {
+    "panel": "20K 固相面板",
+    "panel_fraction": 0.08,
+    "n_snps": 48,
+    "locus": "HLA-B",
+    "freq_bin": "中等 1–5%",
+    "n_calls": 439,
+    "accuracy": 0.3804100227790433
+   },
+   {
+    "panel": "20K 固相面板",
+    "panel_fraction": 0.08,
+    "n_snps": 48,
+    "locus": "HLA-B",
+    "freq_bin": "稀有 < 1%",
+    "n_calls": 204,
+    "accuracy": 0.03431372549019608
+   },
+   {
+    "panel": "20K 固相面板",
+    "panel_fraction": 0.08,
+    "n_snps": 48,
+    "locus": "HLA-B",
+    "freq_bin": "全部",
+    "n_calls": 1200,
+    "accuracy": 0.5675
+   },
+   {
+    "panel": "20K 固相面板",
+    "panel_fraction": 0.08,
+    "n_snps": 48,
+    "locus": "HLA-C",
+    "freq_bin": "常见 ≥ 5%",
+    "n_calls": 667,
+    "accuracy": 0.9280359820089955
+   },
+   {
+    "panel": "20K 固相面板",
+    "panel_fraction": 0.08,
+    "n_snps": 48,
+    "locus": "HLA-C",
+    "freq_bin": "中等 1–5%",
+    "n_calls": 477,
+    "accuracy": 0.24737945492662475
+   },
+   {
+    "panel": "20K 固相面板",
+    "panel_fraction": 0.08,
+    "n_snps": 48,
+    "locus": "HLA-C",
+    "freq_bin": "稀有 < 1%",
+    "n_calls": 56,
+    "accuracy": 0.05357142857142857
+   },
+   {
+    "panel": "20K 固相面板",
+    "panel_fraction": 0.08,
+    "n_snps": 48,
+    "locus": "HLA-C",
+    "freq_bin": "全部",
+    "n_calls": 1200,
+    "accuracy": 0.6166666666666667
+   }
+  ]
+ },
+ "neo": {
+  "n_patients": 40,
+  "n_peptides": 8000,
+  "n_immunogenic": 391,
+  "base_rate": 0.048875,
+  "data_sha256": "d89b57184fcd95d97cae860d8e08c53aa4652bfc84aa6acb95129b6886c65542",
+  "arms": {
+   "A": {
+    "arm": "A 基线 · 冻结（亲和力排名，NetMHCpan 类）",
+    "top20_hit_rate": 0.2225,
+    "ci": [
+     0.19124999999999998,
+     0.2525
+    ],
+    "full_evals": 0,
+    "promoted": 0
+   },
+   "B": {
+    "arm": "B 对照 · 随机搜索",
+    "proposals": 30,
+    "full_evals": 30,
+    "promoted": 0,
+    "best": {
+     "candidate": "随机权重 #04",
+     "top20_hit_rate": 0.21875,
+     "mean": -0.003749999999999999,
+     "ci": [
+      -0.03875000000000001,
+      0.032918750000000045
+     ],
+     "alpha_adjusted": 0.0033333333333333335,
+     "n_tried": 30,
+     "passes": false
+    },
+    "results": [
+     {
+      "candidate": "随机权重 #01",
+      "top20_hit_rate": 0.10874999999999999,
+      "mean": -0.11374999999999999,
+      "ci": [
+       -0.15291875,
+       -0.07
+      ],
+      "alpha_adjusted": 0.0033333333333333335,
+      "n_tried": 30,
+      "passes": false
+     },
+     {
+      "candidate": "随机权重 #02",
+      "top20_hit_rate": 0.11499999999999999,
+      "mean": -0.10750000000000001,
+      "ci": [
+       -0.16,
+       -0.06041249999999991
+      ],
+      "alpha_adjusted": 0.0033333333333333335,
+      "n_tried": 30,
+      "passes": false
+     },
+     {
+      "candidate": "随机权重 #03",
+      "top20_hit_rate": 0.175,
+      "mean": -0.0475,
+      "ci": [
+       -0.08625,
+       -0.01125
+      ],
+      "alpha_adjusted": 0.0033333333333333335,
+      "n_tried": 30,
+      "passes": false
+     },
+     {
+      "candidate": "随机权重 #04",
+      "top20_hit_rate": 0.21875,
+      "mean": -0.003749999999999999,
+      "ci": [
+       -0.03875000000000001,
+       0.032918750000000045
+      ],
+      "alpha_adjusted": 0.0033333333333333335,
+      "n_tried": 30,
+      "passes": false
+     },
+     {
+      "candidate": "随机权重 #05",
+      "top20_hit_rate": 0.0325,
+      "mean": -0.19,
+      "ci": [
+       -0.24124999999999996,
+       -0.1375
+      ],
+      "alpha_adjusted": 0.0033333333333333335,
+      "n_tried": 30,
+      "passes": false
+     },
+     {
+      "candidate": "随机权重 #06",
+      "top20_hit_rate": 0.11374999999999999,
+      "mean": -0.10875000000000001,
+      "ci": [
+       -0.15875,
+       -0.06500000000000002
+      ],
+      "alpha_adjusted": 0.0033333333333333335,
+      "n_tried": 30,
+      "passes": false
+     },
+     {
+      "candidate": "随机权重 #07",
+      "top20_hit_rate": 0.03,
+      "mean": -0.1925,
+      "ci": [
+       -0.24166875000000002,
+       -0.14083124999999996
+      ],
+      "alpha_adjusted": 0.0033333333333333335,
+      "n_tried": 30,
+      "passes": false
+     },
+     {
+      "candidate": "随机权重 #08",
+      "top20_hit_rate": 0.14375,
+      "mean": -0.07875000000000001,
+      "ci": [
+       -0.12166875,
+       -0.036250000000000004
+      ],
+      "alpha_adjusted": 0.0033333333333333335,
+      "n_tried": 30,
+      "passes": false
+     },
+     {
+      "candidate": "随机权重 #09",
+      "top20_hit_rate": 0.1775,
+      "mean": -0.045,
+      "ci": [
+       -0.09916875,
+       0.009168750000000045
+      ],
+      "alpha_adjusted": 0.0033333333333333335,
+      "n_tried": 30,
+      "passes": false
+     },
+     {
+      "candidate": "随机权重 #10",
+      "top20_hit_rate": 0.0225,
+      "mean": -0.2,
+      "ci": [
+       -0.25791875,
+       -0.14750000000000002
+      ],
+      "alpha_adjusted": 0.0033333333333333335,
+      "n_tried": 30,
+      "passes": false
+     },
+     {
+      "candidate": "随机权重 #11",
+      "top20_hit_rate": 0.20875,
+      "mean": -0.013750000000000002,
+      "ci": [
+       -0.057918750000000005,
+       0.027500000000000004
+      ],
+      "alpha_adjusted": 0.0033333333333333335,
+      "n_tried": 30,
+      "passes": false
+     },
+     {
+      "candidate": "随机权重 #12",
+      "top20_hit_rate": 0.0725,
+      "mean": -0.15,
+      "ci": [
+       -0.20124999999999998,
+       -0.10125
+      ],
+      "alpha_adjusted": 0.0033333333333333335,
+      "n_tried": 30,
+      "passes": false
+     },
+     {
+      "candidate": "随机权重 #13",
+      "top20_hit_rate": 0.057499999999999996,
+      "mean": -0.16499999999999998,
+      "ci": [
+       -0.2125,
+       -0.11625
+      ],
+      "alpha_adjusted": 0.0033333333333333335,
+      "n_tried": 30,
+      "passes": false
+     },
+     {
+      "candidate": "随机权重 #14",
+      "top20_hit_rate": 0.08249999999999999,
+      "mean": -0.13999999999999999,
+      "ci": [
+       -0.19124999999999998,
+       -0.09
+      ],
+      "alpha_adjusted": 0.0033333333333333335,
+      "n_tried": 30,
+      "passes": false
+     },
+     {
+      "candidate": "随机权重 #15",
+      "top20_hit_rate": 0.2,
+      "mean": -0.022500000000000003,
+      "ci": [
+       -0.07041875,
+       0.0225
+      ],
+      "alpha_adjusted": 0.0033333333333333335,
+      "n_tried": 30,
+      "passes": false
+     },
+     {
+      "candidate": "随机权重 #16",
+      "top20_hit_rate": 0.0875,
+      "mean": -0.135,
+      "ci": [
+       -0.18125000000000002,
+       -0.09083124999999996
+      ],
+      "alpha_adjusted": 0.0033333333333333335,
+      "n_tried": 30,
+      "passes": false
+     },
+     {
+      "candidate": "随机权重 #17",
+      "top20_hit_rate": 0.04875,
+      "mean": -0.17375000000000002,
+      "ci": [
+       -0.2195875,
+       -0.13125
+      ],
+      "alpha_adjusted": 0.0033333333333333335,
+      "n_tried": 30,
+      "passes": false
+     },
+     {
+      "candidate": "随机权重 #18",
+      "top20_hit_rate": 0.10625,
+      "mean": -0.11625,
+      "ci": [
+       -0.16375,
+       -0.06833124999999995
+      ],
+      "alpha_adjusted": 0.0033333333333333335,
+      "n_tried": 30,
+      "passes": false
+     },
+     {
+      "candidate": "随机权重 #19",
+      "top20_hit_rate": 0.08,
+      "mean": -0.14250000000000002,
+      "ci": [
+       -0.19541875,
+       -0.09333124999999995
+      ],
+      "alpha_adjusted": 0.0033333333333333335,
+      "n_tried": 30,
+      "passes": false
+     },
+     {
+      "candidate": "随机权重 #20",
+      "top20_hit_rate": 0.1575,
+      "mean": -0.06500000000000002,
+      "ci": [
+       -0.10375000000000001,
+       -0.027500000000000007
+      ],
+      "alpha_adjusted": 0.0033333333333333335,
+      "n_tried": 30,
+      "passes": false
+     },
+     {
+      "candidate": "随机权重 #21",
+      "top20_hit_rate": 0.0375,
+      "mean": -0.185,
+      "ci": [
+       -0.2425,
+       -0.13000000000000003
+      ],
+      "alpha_adjusted": 0.0033333333333333335,
+      "n_tried": 30,
+      "passes": false
+     },
+     {
+      "candidate": "随机权重 #22",
+      "top20_hit_rate": 0.06625,
+      "mean": -0.15625,
+      "ci": [
+       -0.205,
+       -0.10750000000000001
+      ],
+      "alpha_adjusted": 0.0033333333333333335,
+      "n_tried": 30,
+      "passes": false
+     },
+     {
+      "candidate": "随机权重 #23",
+      "top20_hit_rate": 0.14750000000000002,
+      "mean": -0.075,
+      "ci": [
+       -0.11500000000000002,
+       -0.03375
+      ],
+      "alpha_adjusted": 0.0033333333333333335,
+      "n_tried": 30,
+      "passes": false
+     },
+     {
+      "candidate": "随机权重 #24",
+      "top20_hit_rate": 0.125,
+      "mean": -0.0975,
+      "ci": [
+       -0.13874999999999998,
+       -0.05833124999999995
+      ],
+      "alpha_adjusted": 0.0033333333333333335,
+      "n_tried": 30,
+      "passes": false
+     },
+     {
+      "candidate": "随机权重 #25",
+      "top20_hit_rate": 0.13625,
+      "mean": -0.08625000000000001,
+      "ci": [
+       -0.1325,
+       -0.03833124999999995
+      ],
+      "alpha_adjusted": 0.0033333333333333335,
+      "n_tried": 30,
+      "passes": false
+     },
+     {
+      "candidate": "随机权重 #26",
+      "top20_hit_rate": 0.08125,
+      "mean": -0.14125000000000001,
+      "ci": [
+       -0.1875,
+       -0.09875
+      ],
+      "alpha_adjusted": 0.0033333333333333335,
+      "n_tried": 30,
+      "passes": false
+     },
+     {
+      "candidate": "随机权重 #27",
+      "top20_hit_rate": 0.1025,
+      "mean": -0.12000000000000002,
+      "ci": [
+       -0.16749999999999998,
+       -0.07375000000000001
+      ],
+      "alpha_adjusted": 0.0033333333333333335,
+      "n_tried": 30,
+      "passes": false
+     },
+     {
+      "candidate": "随机权重 #28",
+      "top20_hit_rate": 0.03,
+      "mean": -0.1925,
+      "ci": [
+       -0.2470875,
+       -0.14333124999999994
+      ],
+      "alpha_adjusted": 0.0033333333333333335,
+      "n_tried": 30,
+      "passes": false
+     },
+     {
+      "candidate": "随机权重 #29",
+      "top20_hit_rate": 0.065,
+      "mean": -0.15750000000000003,
+      "ci": [
+       -0.20291874999999998,
+       -0.11125
+      ],
+      "alpha_adjusted": 0.0033333333333333335,
+      "n_tried": 30,
+      "passes": false
+     },
+     {
+      "candidate": "随机权重 #30",
+      "top20_hit_rate": 0.02,
+      "mean": -0.20249999999999999,
+      "ci": [
+       -0.25625,
+       -0.155
+      ],
+      "alpha_adjusted": 0.0033333333333333335,
+      "n_tried": 30,
+      "passes": false
+     }
+    ]
+   },
+   "C": {
+    "arm": "C 对照 · 一次性规则",
+    "proposals": 1,
+    "full_evals": 1,
+    "promoted": 1,
+    "best": {
+     "candidate": "一次性规则：亲和力 + 表达量",
+     "top20_hit_rate": 0.27125,
+     "mean": 0.04875,
+     "ci": [
+      0.026250000000000002,
+      0.07250000000000001
+     ],
+     "alpha_adjusted": 0.1,
+     "n_tried": 1,
+     "passes": true
+    },
+    "results": [
+     {
+      "candidate": "一次性规则：亲和力 + 表达量",
+      "top20_hit_rate": 0.27125,
+      "mean": 0.04875,
+      "ci": [
+       0.026250000000000002,
+       0.07250000000000001
+      ],
+      "alpha_adjusted": 0.1,
+      "n_tried": 1,
+      "passes": true
+     }
+    ]
+   },
+   "D": {
+    "arm": "D 主实验 · 留患者搜索闭环",
+    "proposals": 90,
+    "inner_evals": 90,
+    "full_evals": 3,
+    "promoted": 3,
+    "best": {
+     "candidate": "亲和力 + 表达量 · 档10",
+     "top20_hit_rate": 0.27125,
+     "mean": 0.04875,
+     "ci": [
+      0.01875,
+      0.07875000000000001
+     ],
+     "alpha_adjusted": 0.03333333333333333,
+     "n_tried": 3,
+     "passes": true
+    },
+    "results": [
+     {
+      "candidate": "亲和力 + 表达量 · 档10",
+      "top20_hit_rate": 0.27125,
+      "mean": 0.04875,
+      "ci": [
+       0.01875,
+       0.07875000000000001
+      ],
+      "alpha_adjusted": 0.03333333333333333,
+      "n_tried": 3,
+      "passes": true
+     },
+     {
+      "candidate": "亲和力 + 表达量 · 档06",
+      "top20_hit_rate": 0.26875,
+      "mean": 0.04625,
+      "ci": [
+       0.022062500000000006,
+       0.07125000000000001
+      ],
+      "alpha_adjusted": 0.03333333333333333,
+      "n_tried": 3,
+      "passes": true
+     },
+     {
+      "candidate": "亲和力 + 表达量 + agretopicity（突变/野生型亲和力比）",
+      "top20_hit_rate": 0.27125,
+      "mean": 0.04875,
+      "ci": [
+       0.02125,
+       0.075
+      ],
+      "alpha_adjusted": 0.03333333333333333,
+      "n_tried": 3,
+      "passes": true
+     }
+    ]
+   },
+   "E": {
+    "arm": "E 负对照 · 打乱标签",
+    "proposals": 90,
+    "inner_evals": 90,
+    "full_evals": 3,
+    "promoted": 0,
+    "best": {
+     "candidate": "亲和力 + 疏水性 · 档06",
+     "top20_hit_rate": 0.06,
+     "mean": 0.002500000000000001,
+     "ci": [
+      -0.013750000000000002,
+      0.02
+     ],
+     "alpha_adjusted": 0.03333333333333333,
+     "n_tried": 3,
+     "passes": false
+    },
+    "results": [
+     {
+      "candidate": "亲和力 + 疏水性 · 档06",
+      "top20_hit_rate": 0.06,
+      "mean": 0.002500000000000001,
+      "ci": [
+       -0.013750000000000002,
+       0.02
+      ],
+      "alpha_adjusted": 0.03333333333333333,
+      "n_tried": 3,
+      "passes": false
+     },
+     {
+      "candidate": "亲和力 + 异己性 · 档03",
+      "top20_hit_rate": 0.058750000000000004,
+      "mean": 0.00125,
+      "ci": [
+       -0.006250000000000001,
+       0.00875
+      ],
+      "alpha_adjusted": 0.03333333333333333,
+      "n_tried": 3,
+      "passes": false
+     },
+     {
+      "candidate": "亲和力 + 异己性 · 档06",
+      "top20_hit_rate": 0.058750000000000004,
+      "mean": 0.0012500000000000005,
+      "ci": [
+       -0.0125,
+       0.015
+      ],
+      "alpha_adjusted": 0.03333333333333333,
+      "n_tried": 3,
+      "passes": false
+     }
+    ]
+   },
+   "F": {
+    "arm": "F 负对照 · 打乱特征",
+    "proposals": 90,
+    "inner_evals": 90,
+    "full_evals": 2,
+    "promoted": 0,
+    "best": {
+     "candidate": "亲和力 + 表达量 · 档03",
+     "top20_hit_rate": 0.21125,
+     "mean": -0.011249999999999998,
+     "ci": [
+      -0.03125,
+      0.0075000000000000015
+     ],
+     "alpha_adjusted": 0.05,
+     "n_tried": 2,
+     "passes": false
+    },
+    "results": [
+     {
+      "candidate": "亲和力 + 表达量 · 档03",
+      "top20_hit_rate": 0.21125,
+      "mean": -0.011249999999999998,
+      "ci": [
+       -0.03125,
+       0.0075000000000000015
+      ],
+      "alpha_adjusted": 0.05,
+      "n_tried": 2,
+      "passes": false
+     },
+     {
+      "candidate": "亲和力 + 疏水性 · 档03",
+      "top20_hit_rate": 0.21000000000000002,
+      "mean": -0.012500000000000002,
+      "ci": [
+       -0.03,
+       0.004999999999999999
+      ],
+      "alpha_adjusted": 0.05,
+      "n_tried": 2,
+      "passes": false
+     }
+    ]
+   }
+  },
+  "negative_control_false_promotions": 0,
+  "promoted_candidates": [
+   "一次性规则：亲和力 + 表达量",
+   "亲和力 + 表达量 · 档10",
+   "亲和力 + 表达量 · 档06",
+   "亲和力 + 表达量 + agretopicity（突变/野生型亲和力比）"
+  ],
+  "curve": {
+   "k": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50
+   ],
+   "baseline": [
+    0.425,
+    0.4125,
+    0.375,
+    0.34375,
+    0.33999999999999997,
+    0.30833333333333335,
+    0.2928571428571428,
+    0.278125,
+    0.27222222222222225,
+    0.2625,
+    0.2590909090909091,
+    0.25,
+    0.24423076923076922,
+    0.24642857142857144,
+    0.23666666666666666,
+    0.2296875,
+    0.22352941176470587,
+    0.22499999999999998,
+    0.22236842105263155,
+    0.2225,
+    0.21666666666666665,
+    0.21022727272727273,
+    0.20652173913043478,
+    0.20833333333333334,
+    0.20600000000000002,
+    0.2,
+    0.1962962962962963,
+    0.19375,
+    0.18879310344827585,
+    0.185,
+    0.17983870967741936,
+    0.17578125,
+    0.17121212121212123,
+    0.16911764705882354,
+    0.16785714285714284,
+    0.16458333333333333,
+    0.1635135135135135,
+    0.1625,
+    0.1596153846153846,
+    0.15812500000000002,
+    0.15609756097560976,
+    0.15297619047619046,
+    0.1511627906976744,
+    0.14772727272727273,
+    0.14500000000000002,
+    0.14293478260869566,
+    0.14361702127659576,
+    0.14114583333333333,
+    0.13877551020408163,
+    0.13849999999999998
+   ],
+   "best_D": [
+    0.625,
+    0.5375,
+    0.47500000000000003,
+    0.45625,
+    0.4,
+    0.37083333333333335,
+    0.35714285714285715,
+    0.353125,
+    0.3472222222222222,
+    0.33999999999999997,
+    0.325,
+    0.3229166666666667,
+    0.3153846153846154,
+    0.3071428571428571,
+    0.3016666666666667,
+    0.290625,
+    0.2882352941176471,
+    0.2777777777777778,
+    0.2789473684210526,
+    0.27125,
+    0.2607142857142857,
+    0.2534090909090909,
+    0.2456521739130435,
+    0.24166666666666667,
+    0.235,
+    0.2298076923076923,
+    0.22685185185185186,
+    0.22321428571428573,
+    0.21724137931034482,
+    0.21083333333333334,
+    0.2064516129032258,
+    0.20078125,
+    0.19924242424242425,
+    0.19779411764705881,
+    0.19285714285714287,
+    0.18888888888888888,
+    0.1858108108108108,
+    0.18157894736842106,
+    0.17884615384615385,
+    0.17625,
+    0.17439024390243904,
+    0.17083333333333334,
+    0.16802325581395347,
+    0.16477272727272727,
+    0.16333333333333333,
+    0.16195652173913044,
+    0.15904255319148936,
+    0.15625,
+    0.15306122448979592,
+    0.1505
+   ]
+  }
+ },
+ "acceptance": {
+  "negative_controls_promote_zero": true,
+  "report_producible_without_algorithm_internals": true
+ },
+ "bandwidth": {
+  "samples_per_year": 300,
+  "label_latency_years": 1.0,
+  "bandwidth": 300.0,
+  "note": "assumed patients per year and label latency"
+ },
+ "duration_seconds": {
+  "hla": 1.2,
+  "neo": 0.6,
+  "total": 2.5
+ },
+ "outputs_sha256": {
+  "audit_report.md": "a437dd0ea42c71ea459a48d9e8e271ac16fd57c0d2d4f2d75e2c29d878bb8180",
+  "CLAIMS.md": "005338ac5a6b60378e0e7434407e511493faa615f14ed3b17810d6e288edf835",
+  "hla_accuracy.csv": "778c46b01f4ca253c85f898fc0ecd130aaaabf515f0e97a4228cf41712641e4b",
+  "figures/fig1_hla_accuracy.png": "e38ba34c3e14b160f8696df1b058e517fa760ef93d28906f59979ff024cb2a0c",
+  "figures/fig2_audit_arms.png": "ec25108ffe7911b2107c4c977034c77da7b7f7dc1d2044430e57579dc74b1f36",
+  "figures/fig3_topk_curve.png": "47c8bd58fde3d26f7a3769fc2087047f5306f5027b602f958e3aff7e1eacf138"
+ }
+}

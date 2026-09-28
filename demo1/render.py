@@ -148,8 +148,30 @@ def arm_summary(res: dict) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
+def write_summary(d: dict) -> None:
+    """demo1/summary.json — the per-arm, tier, gain and curve numbers the showcase site needs
+    (out/ is not committed, RUN.json only carries headline results)."""
+    sc = d["scorecard"]; arms: dict = {"broiler": {}, "pig": {}}
+    for r in sc.itertuples():
+        ds = "broiler" if str(r.campaign_id).startswith("broiler") else "pig"
+        code = str(r.campaign_id).split("_s")[0].rsplit("_", 1)[-1]
+        arms[ds][code] = {k: (None if pd.isna(getattr(r, k)) else float(getattr(r, k))) for k in ("full_evaluations", "promoted", "best_delta_oos", "best_delta_oos_ci_low", "mean_delta_oos")}
+    for ds, res in (("broiler", d["broiler"]), ("pig", d["pig"])):
+        if res and "A_champion" in res.get("arms", {}):
+            arms[ds].setdefault("A", {})["true_accuracy"] = res["arms"]["A_champion"].get("true_accuracy")
+            arms[ds]["A"]["predictive_r"] = res["arms"]["A_champion"].get("predictive_r")
+    cur = d["curve"]; step = d["run"]["steps"]["accuracy_curve"]
+    summary = {"arms": arms,
+               "tiers": [{k: (None if pd.isna(v) else (bool(v) if k == "passes_incremental_gate" else (v if isinstance(v, str) else float(v)))) for k, v in row.items()} for row in d["tiers"].to_dict("records")],
+               "gain": [{k: (None if (not isinstance(v, str) and pd.isna(v)) else (v if isinstance(v, str) else float(v))) for k, v in row.items()} for row in d["gain"].to_dict("records")],
+               "curve": {"Me": float(step["Me"]), "h2": float(step["h2"]), "n_test": int(step["n_test"]), "bound_respected": bool(step["bound_respected"]),
+                         "max_excess": float((cur.r_mean - cur.bound).max()), "N": [int(x) for x in cur.N], "r_mean": [float(x) for x in cur.r_mean], "bound": [float(x) for x in cur.bound]}}
+    (HERE / "summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=1), encoding="utf-8")
+
+
 def main() -> int:
     d = load(); run = d["run"]; br = d["broiler"]; cur = d["curve"]; tiers = d["tiers"]; gain = d["gain"]; sc = d["scorecard"]
+    write_summary(d)
     fig_curve(cur, run["steps"]["accuracy_curve"]["Me"], run["steps"]["accuracy_curve"]["h2"], run["steps"]["accuracy_curve"]["n_test"])
     fig_tiers(tiers); fig_gain(gain); fig_controls(sc)
     imp_fig = HERE / "imputation" / "figures" / "imputation_by_maf.png"

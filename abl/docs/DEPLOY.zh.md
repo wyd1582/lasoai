@@ -76,9 +76,9 @@ make watch       # 浏览器打开 http://localhost:8501
 ## 第 6 步：Vercel 部署落地页和手册
 
 1. 打开 https://vercel.com/new ，用 GitHub 登录，**Import** 同一个 `lasoai` repo。
-2. Framework Preset 选 **Other**。其余构建设置不用改，仓库根目录的 `vercel.json` 已经写好（构建命令 `cd abl && python3 scripts/build_site.py`，输出目录 `abl/site/dist`）。
+2. Framework Preset 选 **Other**。其余构建设置不用改，仓库根目录的 `vercel.json` 已经写好（构建命令 `python3 site/build.py`，输出目录 `site/dist`）。构建出来的是**展示站**：首页（愿景、四个 Demo、成果承诺、路线图）、四个 Demo 页、技术路线页，外加 `abl/` 子目录下的落地页与手册。展示站默认带 `noindex`，不会被搜索引擎收录，但链接本身是公开的——发给谁请自行把握；需要密码保护的话用 Vercel 的 Deployment Protection（付费功能）。
 3. 展开 **Environment Variables**，加一条：`ABL_APP_URL` = 第 5 步拿到的 Render 地址（第 8 步会换成你的域名）。
-4. 点 **Deploy**，约 1 分钟。打开 Vercel 给的地址（形如 `https://abl-xxx.vercel.app`）：应看到中英切换的落地页、截图、手册和报告链接，"打开监护面板"按钮指向 Render。
+4. 点 **Deploy**，约 1 分钟。打开 Vercel 给的地址（形如 `https://lasoai-xxx.vercel.app`）：应看到展示站首页，右上角可以按身份（育种 / AI / 董事会）高亮内容，"打开裁判监护面板"按钮指向 Render；`/abl/` 下是原来的中英落地页与手册。本地预览：仓库根目录 `make site && python3 -m http.server -d site/dist 8000`。
 
 ## 第 7 步：绑定你买的域名
 

@@ -1,0 +1,339 @@
+{
+ "arms": {
+  "broiler": {
+   "A": {
+    "full_evaluations": 0.0,
+    "promoted": 0.0,
+    "best_delta_oos": null,
+    "best_delta_oos_ci_low": null,
+    "mean_delta_oos": null,
+    "true_accuracy": 0.41584826288562066,
+    "predictive_r": 0.20849413492438135
+   },
+   "B": {
+    "full_evaluations": 12.0,
+    "promoted": 0.0,
+    "best_delta_oos": 0.011,
+    "best_delta_oos_ci_low": -0.0001,
+    "mean_delta_oos": -0.0045
+   },
+   "C": {
+    "full_evaluations": 0.0,
+    "promoted": 0.0,
+    "best_delta_oos": null,
+    "best_delta_oos_ci_low": null,
+    "mean_delta_oos": null
+   },
+   "D": {
+    "full_evaluations": 9.0,
+    "promoted": 0.0,
+    "best_delta_oos": 0.0017,
+    "best_delta_oos_ci_low": -0.0034,
+    "mean_delta_oos": -0.012
+   },
+   "E": {
+    "full_evaluations": 4.0,
+    "promoted": 0.0,
+    "best_delta_oos": 0.0032,
+    "best_delta_oos_ci_low": -0.0009,
+    "mean_delta_oos": -0.0031
+   },
+   "F": {
+    "full_evaluations": 5.0,
+    "promoted": 0.0,
+    "best_delta_oos": -0.0313,
+    "best_delta_oos_ci_low": -0.0571,
+    "mean_delta_oos": -0.0434
+   },
+   "G": {
+    "full_evaluations": 5.0,
+    "promoted": 0.0,
+    "best_delta_oos": 0.0012,
+    "best_delta_oos_ci_low": -0.0037,
+    "mean_delta_oos": -0.0058
+   }
+  },
+  "pig": {
+   "A": {
+    "full_evaluations": 0.0,
+    "promoted": 0.0,
+    "best_delta_oos": null,
+    "best_delta_oos_ci_low": null,
+    "mean_delta_oos": null,
+    "true_accuracy": null,
+    "predictive_r": -0.0034643051992110548
+   },
+   "B": {
+    "full_evaluations": 12.0,
+    "promoted": 0.0,
+    "best_delta_oos": 0.01,
+    "best_delta_oos_ci_low": -0.0001,
+    "mean_delta_oos": 0.0019
+   },
+   "C": {
+    "full_evaluations": 1.0,
+    "promoted": 0.0,
+    "best_delta_oos": -0.0,
+    "best_delta_oos_ci_low": -0.0016,
+    "mean_delta_oos": -0.0
+   },
+   "D": {
+    "full_evaluations": 9.0,
+    "promoted": 0.0,
+    "best_delta_oos": 0.0095,
+    "best_delta_oos_ci_low": 0.0,
+    "mean_delta_oos": 0.002
+   },
+   "E": {
+    "full_evaluations": 4.0,
+    "promoted": 0.0,
+    "best_delta_oos": 0.0019,
+    "best_delta_oos_ci_low": 0.0002,
+    "mean_delta_oos": 0.0002
+   },
+   "F": {
+    "full_evaluations": 5.0,
+    "promoted": 0.0,
+    "best_delta_oos": 0.0141,
+    "best_delta_oos_ci_low": 0.0064,
+    "mean_delta_oos": -0.0011
+   }
+  }
+ },
+ "tiers": [
+  {
+   "tier": "own_customer",
+   "n_train": 131.0,
+   "n_test": 450.0,
+   "predictive_r": 0.0842306211388554,
+   "lr_rho": 0.332332832203547,
+   "dispersion_b": 0.6855783494106222,
+   "r_true": 0.1132014588432479,
+   "delta_oos": null,
+   "delta_ci_low": null,
+   "delta_ci_high": null,
+   "passes_incremental_gate": null,
+   "delta_true_acc": null,
+   "delta_true_acc_ci_low": null
+  },
+  {
+   "tier": "tier1_same_line_pooled",
+   "n_train": 386.0,
+   "n_test": 450.0,
+   "predictive_r": 0.2048928770103474,
+   "lr_rho": 0.6358737017211546,
+   "dispersion_b": 1.070300284454924,
+   "r_true": 0.3096329112187079,
+   "delta_oos": 0.120662255871492,
+   "delta_ci_low": 0.0396785194197762,
+   "delta_ci_high": 0.1996150011470899,
+   "passes_incremental_gate": true,
+   "delta_true_acc": 0.19643145237546,
+   "delta_true_acc_ci_low": 0.1223900223960487
+  },
+  {
+   "tier": "tier2_same_breed_other_lines",
+   "n_train": 770.0,
+   "n_test": 450.0,
+   "predictive_r": 0.248329812131785,
+   "lr_rho": 0.7463437346264131,
+   "dispersion_b": 1.0749459369907763,
+   "r_true": 0.4035060757227063,
+   "delta_oos": 0.1640991909929295,
+   "delta_ci_low": 0.0856004714138333,
+   "delta_ci_high": 0.2418436393211869,
+   "passes_incremental_gate": true,
+   "delta_true_acc": 0.2903046168794584,
+   "delta_true_acc_ci_low": 0.2184466900446909
+  },
+  {
+   "tier": "tier3_across_breeds",
+   "n_train": 1155.0,
+   "n_test": 450.0,
+   "predictive_r": 0.2161576993656171,
+   "lr_rho": 0.7143029240892236,
+   "dispersion_b": 1.0822961060585228,
+   "r_true": 0.365925045104931,
+   "delta_oos": 0.1319270782267616,
+   "delta_ci_low": 0.0512430751530382,
+   "delta_ci_high": 0.2089316694267855,
+   "passes_incremental_gate": true,
+   "delta_true_acc": 0.2527235862616831,
+   "delta_true_acc_ci_low": 0.1657247601026488
+  }
+ ],
+ "gain": [
+  {
+   "trait": "BW42",
+   "scheme": "phenotypic_mass_selection",
+   "i": 1.858327828270639,
+   "selected_fraction": 0.08,
+   "r_true": 0.4456460401093801,
+   "r_true_lo": 0.3869660716593496,
+   "r_true_hi": 0.4951367476602167,
+   "r_pred": 1.0,
+   "sigma_A": 0.465991965897188,
+   "L_years": 1.0,
+   "dG_per_year": 0.3859142465645791,
+   "note": "own adjusted BW42; select after recording; r_pred is trivially 1",
+   "r_pred_lo": 1.0,
+   "r_pred_hi": 1.0,
+   "sigma_A_lo": 0.4411838774780864,
+   "sigma_A_hi": 0.4875858159433696,
+   "dG_lo": 0.334397899252854,
+   "dG_hi": 0.439619158733051,
+   "vs_baseline_pct": 0.0,
+   "vs_baseline_lo": 0.0,
+   "vs_baseline_hi": 0.0
+  },
+  {
+   "trait": "BW42",
+   "scheme": "genomic_champion_same_L",
+   "i": 1.858327828270639,
+   "selected_fraction": 0.08,
+   "r_true": 0.5233498033435565,
+   "r_true_lo": 0.4777206779342606,
+   "r_true_hi": 0.5706272436232388,
+   "r_pred": 0.2414255225861266,
+   "sigma_A": 0.465991965897188,
+   "L_years": 1.0,
+   "dG_per_year": 0.4532030510076514,
+   "note": "GEBV at birth; L held at the phenotypic value: isolates the r term",
+   "r_pred_lo": 0.1844425235653508,
+   "r_pred_hi": 0.2992937118629785,
+   "sigma_A_lo": 0.4391344101473323,
+   "sigma_A_hi": 0.4894919285949591,
+   "dG_lo": 0.4032041747534063,
+   "dG_hi": 0.4985951991148899,
+   "vs_baseline_pct": 17.436206370218077,
+   "vs_baseline_lo": 2.006173445871113,
+   "vs_baseline_hi": 37.16948373608125
+  },
+  {
+   "trait": "BW42",
+   "scheme": "genomic_champion_shorter_L",
+   "i": 1.858327828270639,
+   "selected_fraction": 0.08,
+   "r_true": 0.5233498033435565,
+   "r_true_lo": 0.4746179058123264,
+   "r_true_hi": 0.560845757724209,
+   "r_pred": 0.2414255225861266,
+   "sigma_A": 0.465991965897188,
+   "L_years": 0.85,
+   "dG_per_year": 0.5331800600090016,
+   "note": "GEBV at birth; L = 0.85 yr (assumed 15% shorter): r and L terms together",
+   "r_pred_lo": 0.1694090699602173,
+   "r_pred_hi": 0.3002129159192766,
+   "sigma_A_lo": 0.4401768205496149,
+   "sigma_A_hi": 0.4886515852536541,
+   "dG_lo": 0.4760559308377413,
+   "dG_hi": 0.5937358459685403,
+   "vs_baseline_pct": 38.16024278849186,
+   "vs_baseline_lo": 19.92210244877332,
+   "vs_baseline_hi": 59.61503748205882
+  },
+  {
+   "trait": "BreastYield",
+   "scheme": "full_sib_index",
+   "i": 1.858327828270639,
+   "selected_fraction": 0.08,
+   "r_true": 0.4062469122560979,
+   "r_true_lo": 0.3296306625823755,
+   "r_true_hi": 0.4853898851458687,
+   "r_pred": 0.3425540389827892,
+   "sigma_A": 0.7027415612859103,
+   "L_years": 1.0,
+   "dG_per_year": 0.5305276736548769,
+   "note": "mean adjusted phenotype of measured full-sibs (candidate has no own carcass record)",
+   "r_pred_lo": 0.2569225843818383,
+   "r_pred_hi": 0.4261790383755908,
+   "sigma_A_lo": 0.659064688982151,
+   "sigma_A_hi": 0.7407199995147764,
+   "dG_lo": 0.4209065230557054,
+   "dG_hi": 0.6332237797086735,
+   "vs_baseline_pct": 0.0,
+   "vs_baseline_lo": 0.0,
+   "vs_baseline_hi": 0.0
+  },
+  {
+   "trait": "BreastYield",
+   "scheme": "genomic_champion_same_L",
+   "i": 1.858327828270639,
+   "selected_fraction": 0.08,
+   "r_true": 0.6398340268354367,
+   "r_true_lo": 0.5878680567298112,
+   "r_true_hi": 0.6845793538592339,
+   "r_pred": 0.4270549980184387,
+   "sigma_A": 0.7027415612859103,
+   "L_years": 1.0,
+   "dG_per_year": 0.8355747392567192,
+   "note": "GEBV at birth; L held: isolates the r term",
+   "r_pred_lo": 0.3585615482648562,
+   "r_pred_hi": 0.4875267260948797,
+   "sigma_A_lo": 0.6630540524993715,
+   "sigma_A_hi": 0.7429460116109714,
+   "dG_lo": 0.741795683663356,
+   "dG_hi": 0.9223081199454212,
+   "vs_baseline_pct": 57.498803691112265,
+   "vs_baseline_lo": 31.150023942754977,
+   "vs_baseline_hi": 94.16330444107967
+  },
+  {
+   "trait": "BreastYield",
+   "scheme": "genomic_champion_shorter_L",
+   "i": 1.858327828270639,
+   "selected_fraction": 0.08,
+   "r_true": 0.6398340268354367,
+   "r_true_lo": 0.5979673394609004,
+   "r_true_hi": 0.6820934747301639,
+   "r_pred": 0.4270549980184387,
+   "sigma_A": 0.7027415612859103,
+   "L_years": 0.85,
+   "dG_per_year": 0.983029105007905,
+   "note": "GEBV at birth; L = 0.85 yr: r and L together",
+   "r_pred_lo": 0.3596484241634851,
+   "r_pred_hi": 0.4868329176743625,
+   "sigma_A_lo": 0.6645771536018632,
+   "sigma_A_hi": 0.7392081693681288,
+   "dG_lo": 0.8712837225893186,
+   "dG_hi": 1.0723218558637992,
+   "vs_baseline_pct": 85.29271022483795,
+   "vs_baseline_lo": 56.887994303465504,
+   "vs_baseline_hi": 122.3893850018583
+  }
+ ],
+ "curve": {
+  "Me": 172.11719090711875,
+  "h2": 0.35,
+  "n_test": 600,
+  "bound_respected": true,
+  "max_excess": -0.217203287009547,
+  "N": [
+   100,
+   200,
+   400,
+   800,
+   1200,
+   1600,
+   2000
+  ],
+  "r_mean": [
+   0.1938763350484532,
+   0.254301544400959,
+   0.3131756921578218,
+   0.4158846567992995,
+   0.4366899365209782,
+   0.4898827809108033,
+   0.5127721707492829
+  ],
+  "bound": [
+   0.4110796220580002,
+   0.5376952584465148,
+   0.6697383580235783,
+   0.7869615348013368,
+   0.8422108075501743,
+   0.874588396636767,
+   0.895904249120203
+  ]
+ }
+}

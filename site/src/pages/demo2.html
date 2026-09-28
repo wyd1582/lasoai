@@ -1,0 +1,66 @@
+<h1>Demo 2 · 跨物种时钟<span class="badge sim">内部预测版 · 模拟引擎</span><span class="en">Cross-species epigenetic clock — the same read-out and judge, applied outside breeding.</span></h1>
+<p class="lede">它要证明 Deck 上的一句话：<b>生物年龄可以被跨物种一致地读出，同一套读出与裁判在育种之外的第二个领域零改动可用。</b>这是从育种走向宠物与人类健康的桥。</p>
+<p class="toc">生成 {{d2.date}} · 种子 2 · 模拟配置哈希 <code>{{d2.config_hash}}</code> · {{d2.seconds}} 秒 · <a href="demo2/clock_report.html">完整报告</a> · <a href="view.html?f=demo2/THEORY.md">依据的理论</a> · <a href="view.html?f=demo2/README.md">重建方法</a></p>
+<div class="preview" style="margin-top:12px"><b>为什么是"内部预测版"：</b>PRD 要求的 GEO 泛哺乳动物甲基化数据（猪、犬、牛、人）还没有拿到。本页的引擎是真的，数据是模拟的：每个假设都列在 <a href="demo2/RUN.json">RUN.json</a> 里。真实数据到位后只替换输入矩阵，页面上的每个数字会自动变成真实结果。</div>
+
+<div class="howto breeder" data-for="breeder"><b>育种的人这样读：</b>甲基化时钟读的是"这头动物的生物学年龄"，不是基因型。它对育种的直接用处是生产寿命——母猪使用年限、奶牛生产寿命——把"哪些个体老得慢"变成可选育、可验证的性状。<b>白羽鸡不在这个 demo 里</b>：鸟类的甲基化模式与哺乳动物不同，需要单独设计面板。</div>
+<div class="howto ai" data-for="ai"><b>做 AI 的人这样读：</b>目标变量是相对年龄（年龄 / 最大寿命）的对数（Lu et al. 2023 的思路），模型是弹性网（Zou &amp; Hastie 2005），验证有两种口径：随机拆分（松）与留物种（严）——被留出的物种完全不参与训练，只靠其余物种学到的保守位点预测。验收线是留物种 r ≥ 0.8（猪或犬），不为过线调参。</div>
+<div class="howto board" data-for="board"><b>董事会这样读：</b>这是 D 线（跨物种读出）的技术形态。承诺四（2035 犬猫多两个健康年）和承诺五（2040 生物年龄成常规读数）都靠它。本页展示流水线、验收口径和报告格式；真实的"能不能到 0.8"要等数据。</div>
+
+<div class="stats">
+  <div class="stat"><b>{{d2.n_total}}</b><span>模拟样本：猪 {{d2.n_pig}} · 犬 {{d2.n_dog}} · 牛 {{d2.n_cattle}} · 人 {{d2.n_human}}</span><i>模拟</i></div>
+  <div class="stat"><b>{{d2.n_conserved}} / {{d2.n_probes}}</b><span>通过保守筛选的探针（四物种最小序列一致性 ≥ {{d2.identity_min}}）</span><i>模拟</i></div>
+  <div class="stat"><b>{{d2.n_clock}}</b><span>弹性网选出的时钟位点</span><i>模拟</i></div>
+  <div class="stat"><b>{{d2.loso_pig}} / {{d2.loso_dog}}</b><span>留物种 r：猪 / 犬（验收线 0.8）</span><i>模拟数据上{{d2.accepted}}</i></div>
+  <div class="stat"><b>{{d2.accel_r}}</b><span>猪：年龄加速度 vs 使用年限的偏相关</span><i>关联为模拟植入</i></div>
+  <div class="stat"><b>{{d2.bandwidth_outcome}}</b><span>结局标签的验证带宽（{{d2.samples_per_year}} 样本/年 ÷ {{d2.latency}} 年）</span><i>假设口径</i></div>
+</div>
+
+<h2>流水线（真实数据版本与此完全相同）</h2>
+<div class="flow">
+  <span class="step">读出<small>甲基化阵列 · 血液</small></span><span class="arrow">→</span>
+  <span class="step">QC<small>检出率 · 批次</small></span><span class="arrow">→</span>
+  <span class="step">保守 CpG 筛选<small>各物种序列一致性</small></span><span class="arrow">→</span>
+  <span class="step">弹性网时钟<small>相对年龄的对数</small></span><span class="arrow">→</span>
+  <span class="step">验证<small>随机拆分 + 留物种</small></span><span class="arrow">→</span>
+  <span class="step">年龄加速度<small>vs 结局</small></span><span class="arrow">→</span>
+  <span class="step">探针清单<small>top5k / top20k</small></span>
+</div>
+
+<h2>引擎与假设：这一版用了什么，正式版会用什么</h2>
+<div class="tw"><table>
+<thead><tr><th>模块</th><th>本版本（模拟引擎）</th><th>正式版本</th><th>状态</th></tr></thead>
+<tbody>
+<tr><td>读出面板</td><td>模拟阵列 {{d2.n_probes}} 探针，血液单一组织，每物种两个批次</td><td>国产跨物种甲基化芯片（保守 CpG 面板）；GEO 泛哺乳动物阵列数据先行</td><td><span class="tag">模拟</span></td></tr>
+<tr><td>QC</td><td>检出率与批次记录（模拟数据无缺失）</td><td>检出 p 值、性别校验、批次校正（ComBat 类）、细胞组成估计</td><td><span class="tag">待真实数据</span></td></tr>
+<tr><td>保守 CpG 筛选</td><td>四物种最小序列一致性 ≥ {{d2.identity_min}}（模拟一致性）</td><td>探针序列对各物种基因组比对（minimap2 / BLAST），同阈值</td><td><span class="tag">算法同，数据待接</span></td></tr>
+<tr><td>时钟模型</td><td>弹性网，l1_ratio 0.5，5 折交叉验证选正则强度；目标 = 相对年龄的对数</td><td>同（Zou &amp; Hastie 2005；Lu et al. 2023 的相对年龄变换）；可选 Horvath 式的年龄变换对照</td><td><span class="tag">已实现</span></td></tr>
+<tr><td>验证</td><td>每物种 70/30 随机拆分 + 留物种，90% bootstrap 区间</td><td>同；验收线留物种 r ≥ 0.8（猪或犬），不为过线调参</td><td><span class="tag">已实现</span></td></tr>
+<tr><td>年龄加速度 → 结局</td><td>猪的模拟"使用年限"标签；关联为植入（斜率 {{d2.slope}} 月 / 单位加速度）</td><td>客户台账里的淘汰 / 生产寿命记录；犬猫干预试验的终点</td><td><span class="tag">只演示格式</span></td></tr>
+<tr><td>探针清单</td><td>top5k / top20k：时钟系数、各物种一致性、GC、SantaLucia 1998 最近邻 ΔH / ΔS / Tm</td><td>同；序列来自真实设计，热力学按拉索工艺条件重算</td><td><span class="tag">算法同，序列为随机</span></td></tr>
+</tbody></table></div>
+<p data-for="ai">可以作为输入的开源模型（不是对手）：DNA 基础模型（Evo 2，Apache 2.0）与调控模型（AlphaGenome，非商业免费、商业需授权）可以为保守 CpG 提供"这个位点是否在调控元件里"的先验，进入探针清单的排序；泛哺乳动物阵列（Arneson 2022）的探针集是保守筛选的起点。详见 <a href="engine.html">技术路线</a>。</p>
+
+<h2>结果（模拟数据）</h2>
+{{d2.loso_table}}
+<figure><img src="demo2/figures/fig1_scatter_by_species.png" alt="预测年龄 vs 实际年龄" loading="lazy"><figcaption>上排随机拆分，下排留物种。对数轴。留物种是更严格的口径，也是 PRD 的验收口径。</figcaption></figure>
+<figure><img src="demo2/figures/fig2_r_by_species.png" alt="各物种 r 与验收线" loading="lazy"><figcaption>每个物种的时钟准确度与验收线。模拟里达标只说明流水线和口径成立。</figcaption></figure>
+
+<h3>年龄加速度 vs 结局：只演示格式</h3>
+<p>时钟预测减去按实际年龄的期望 = 年龄加速度；扣除实际年龄后，与猪的模拟"使用年限"做偏相关：r = {{d2.accel_r}} {{d2.accel_ci}}。时钟估出的加速度与模拟真值的相关为 {{d2.accel_vs_truth}}。<b>这个关联是模拟里植入的。</b>真实数据上它可能为零——那时读出定位为"生物年龄"而非"寿命预测"，承诺四改措辞。报告因此把"测年龄"与"测结局"分成两种声明。</p>
+<figure><img src="demo2/figures/fig3_acceleration_vs_outcome.png" alt="年龄加速度 vs 结局" loading="lazy"><figcaption>猪：年龄加速度 vs 使用年限残差（模拟植入的关联）。</figcaption></figure>
+
+<h3 data-for="ai breeder">探针清单与热力学</h3>
+<p data-for="ai breeder">排序规则：弹性网系数绝对值 → 是否通过保守筛选 → 最小一致性。每条探针带各物种序列一致性、GC 含量与 SantaLucia 1998 最近邻热力学参数（ΔH / ΔS / Tm）。这是芯片内容团队能直接接手的格式：<a href="demo2/probes_top5k.csv">probes_top5k.csv</a>。序列在这一版是随机生成的，只演示格式与计算方法。</p>
+<figure data-for="ai breeder"><img src="demo2/figures/fig4_probes.png" alt="保守筛选与 Tm 分布" loading="lazy"><figcaption>左：保守筛选；右：探针 Tm 分布，时钟位点高亮。</figcaption></figure>
+
+<h2>商业含义</h2>
+<div class="grid" data-for="board breeder">
+  <div class="card"><h3>D 线 · 跨物种读出</h3><p>芯片耗材 + 读出服务。宠物与长寿药企要的是一个可复现、跨物种一致的药效终点（承诺四）；畜禽要的是生产寿命；人类科研队列要的是生物年龄常规读数（承诺五）。Deck 把这一池的可及市场记为最大的一池（自下而上假设）。</p></div>
+  <div class="card"><h3>为什么是我们</h3><p>跨物种一致的读出只有固定面板的芯片平台能给；裁判把"时钟准不准"变成可以审计的数字（留物种 r、区间、验收线），这是药企与监管愿意采纳为替代终点的前提。</p></div>
+  <div class="card"><h3>对圣农的边界</h3><p>鸟类需要单独面板。对白羽鸡客户，读出产品先做基因型与台账，不承诺甲基化（PRD 决定 1，建议采纳）。</p></div>
+</div>
+
+<h2>可以说 / 不能说 / 需要什么数据</h2>
+{{d2.claims}}
+<p class="toc">对应 PRD 审查表第 7、8、11 行。一条命令重建：<code>make demo2</code>（约 1 分钟）。</p>

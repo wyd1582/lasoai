@@ -1,0 +1,182 @@
+{
+ "demo": "demo2 · 跨物种时钟（内部预测版，模拟数据）",
+ "generated_at": "2026-09-28T08:01:56.277295+00:00",
+ "seed": 2,
+ "config_hash": "e0f028db15c7",
+ "assumptions": {
+  "n_per_species": [
+   160,
+   160,
+   140,
+   200
+  ],
+  "max_lifespan_years": [
+   27.0,
+   24.0,
+   20.0,
+   122.5
+  ],
+  "rel_age_beta": [
+   1.2,
+   2.5
+  ],
+  "n_probes": 20000,
+  "n_conserved": 2500,
+  "n_age_cpg": 300,
+  "identity_min": 0.85,
+  "species_offset_conserved": 0.3,
+  "species_offset_other": 0.8,
+  "batch_sd": 0.2,
+  "acceleration_sd": 0.2,
+  "noise_sd": 0.6,
+  "outcome_species": "pig",
+  "outcome_slope_per_delta": -18.0,
+  "outcome_sd": 6.0,
+  "samples_per_year": 20000,
+  "outcome_latency_years": 2.5,
+  "probe_len": 50,
+  "na_mM": 50.0,
+  "oligo_uM": 0.25
+ },
+ "data": "simulated (no GEO data in repo; see CLAIMS.md)",
+ "n_samples": {
+  "pig": 160,
+  "dog": 160,
+  "cattle": 140,
+  "human": 200
+ },
+ "n_probes_total": 20000,
+ "n_probes_conserved_pass": 2748,
+ "n_clock_sites": 148,
+ "acceptance": {
+  "rule": "leave-one-species-out r >= 0.8 for pig or dog",
+  "passed_on_simulation": true,
+  "loso_r": {
+   "pig": 0.9434749472268628,
+   "dog": 0.9284181854203146,
+   "cattle": 0.9387641472963579,
+   "human": 0.9348379383917576
+  }
+ },
+ "results": {
+  "random_split": {
+   "pig": {
+    "n_test": 48,
+    "r_log_age": 0.9213316478530333,
+    "r_ci": [
+     0.8838854489318486,
+     0.9509445489064268
+    ],
+    "mae_years": 1.289432505045251
+   },
+   "dog": {
+    "n_test": 48,
+    "r_log_age": 0.9184864552312457,
+    "r_ci": [
+     0.8838426406554174,
+     0.9511525681763126
+    ],
+    "mae_years": 0.8178298354395199
+   },
+   "cattle": {
+    "n_test": 42,
+    "r_log_age": 0.9487276954517568,
+    "r_ci": [
+     0.9158560938712085,
+     0.9724171246098897
+    ],
+    "mae_years": 0.6820156720126649
+   },
+   "human": {
+    "n_test": 60,
+    "r_log_age": 0.9388925179456825,
+    "r_ci": [
+     0.9095621211044178,
+     0.960164277980721
+    ],
+    "mae_years": 6.06663154847435
+   }
+  },
+  "loso": {
+   "pig": {
+    "n_test": 160,
+    "r_log_age": 0.9434749472268628,
+    "r_ci": [
+     0.9312402524915735,
+     0.9547237393765772
+    ],
+    "mae_years": 1.1625618370249011,
+    "coef_nonzero": 71
+   },
+   "dog": {
+    "n_test": 160,
+    "r_log_age": 0.9284181854203146,
+    "r_ci": [
+     0.9151980213437118,
+     0.9422791909851881
+    ],
+    "mae_years": 0.8888212392724217,
+    "coef_nonzero": 147
+   },
+   "cattle": {
+    "n_test": 140,
+    "r_log_age": 0.9387641472963579,
+    "r_ci": [
+     0.9232935186296517,
+     0.9523115458030141
+    ],
+    "mae_years": 0.7821038743391582,
+    "coef_nonzero": 115
+   },
+   "human": {
+    "n_test": 200,
+    "r_log_age": 0.9348379383917576,
+    "r_ci": [
+     0.9210924647962979,
+     0.9477100459854338
+    ],
+    "mae_years": 5.631574377728263,
+    "coef_nonzero": 155
+   }
+  },
+  "acceleration_vs_outcome": {
+   "species": "pig",
+   "n": 160,
+   "r_partial": -0.4139022455499689,
+   "r_ci": [
+    -0.514374950634402,
+    -0.3097864063691165
+   ],
+   "r_estimated_vs_true_delta": 0.8326738656471947
+  }
+ },
+ "bandwidth": {
+  "age_label": {
+   "samples_per_year": 20000,
+   "label_latency_years": 0.0,
+   "bandwidth": null,
+   "note": "age is known at sampling; latency ≈ 0 so the ratio is unbounded"
+  },
+  "outcome_label": {
+   "samples_per_year": 20000,
+   "label_latency_years": 2.5,
+   "bandwidth": 8000.0,
+   "note": "assumed productive-lifespan latency"
+  }
+ },
+ "duration_seconds": {
+  "simulate": 2.1,
+  "fit_and_validate": 45.7,
+  "total": 50.4
+ },
+ "outputs_sha256": {
+  "CLAIMS.md": "423d6811856e5968883432cd9587f92c47c55e646496efb70150d4ffc49e700c",
+  "probes_top5k.csv": "ae084755b9202e3cbcc1ad53bdf5e776d6cd59882d1820c806290c35833b7a2d",
+  "probes_top20k.csv": "4ffc152f0c85ea16ea62905718fa1d12d735fd179970a101c8aa14a8fed844b5",
+  "figures/fig1_scatter_by_species.png": "4903a4c0ee6f0deed05a55646bfe1621b106d4922d957ab3bbe958da6cca61c0",
+  "figures/fig2_r_by_species.png": "29d9ead6032c994f13f88d7086ff9212b6e0b4a0cfdf3a41ba8f9a12186753f6",
+  "figures/fig3_acceleration_vs_outcome.png": "9dd830381c3029999a7f640491eace09cd855eae8bf13b0962cd6e2c3bcd1c4a",
+  "figures/fig4_probes.png": "86835bfe50503eb537f1a0257bd3ba5b457ac1c73f5ffd5e019a4db992405098"
+ },
+ "birds_out_of_scope": true
+}

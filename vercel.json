@@ -1,7 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "cd abl && python3 scripts/build_site.py",
-  "outputDirectory": "abl/site/dist",
+  "buildCommand": "python3 site/build.py",
+  "outputDirectory": "site/dist",
   "installCommand": "true",
   "framework": null,
   "headers": [

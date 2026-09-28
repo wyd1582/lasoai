@@ -1,0 +1,57 @@
+<h1>Demo 3 · 台账界面<span class="badge real">已交付 · 模拟数据</span><span class="en">The ledger: every recommendation, adoption and next-generation outcome, per animal, append-only.</span></h1>
+<p class="lede">它证明 Deck 上的"现金"层：<b>客户的选种闭环可以被完整记录、逐头复现、可审计；台账让客户越用越离不开。</b>按白羽鸡客户的选种流程七步走完，每一步的产物都进入只增不减的台账。</p>
+<p class="toc">种子 {{d3.seed}} · 重建 {{d3.seconds}} 秒 · <a href="demo3/report.html">完整报告（含全部核对 SQL）</a> · <a href="view.html?f=demo3/THEORY.md">依据的理论</a> · <a href="view.html?f=demo3/README.md">重建方法</a></p>
+
+<div class="howto breeder" data-for="breeder"><b>育种的人这样读：</b>这就是你每一轮在做的事，只是被记下来了：芯片到货 → 基因型质检 → 参考群更新 → 育种值 → 留种与选配建议 → 你采纳了哪些 → 一个世代后子代表现回来。任何一头动物的育种值都能追溯到它来自哪一批数据、哪一次重训、哪条规则。</div>
+<div class="howto ai" data-for="ai"><b>做 AI 的人这样读：</b>台账是三张表——recommendations / decisions / outcomes——外加数据快照与视图；每条推荐带 issued_at、每条决策带 decided_at、每条结局带 available_at，不允许前向填充。<code>randomized_control</code> 字段为随机化对照配种预留：这是台账从观察数据升级为实验的路径。同一 GBLUP 公式独立重算与保存的育种值逐头一致，这是"影子运行逐头一致率"的机制。</div>
+<div class="howto board" data-for="board"><b>董事会这样读：</b>Deck 的客户案例页写"之前：手工分析、数周、不收费、结果在邮件和表格里；之后：本地部署、≤ 4 周、付费合同、逐头可查、跨轮次改进"。本页是"之后"的技术形态。台账是切换成本，也是复利三环的起点。</div>
+
+<div class="stats">
+  <div class="stat"><b>{{d3.defects_caught}} / {{d3.defects_injected}}</b><span>注入缺陷全部被质检门拦截（误拦 {{d3.false_rejects}}）</span></div>
+  <div class="stat"><b>{{d3.agree}} / {{d3.agree_n}}</b><span>育种值逐头一致（独立重算 vs 保存值，容差 {{d3.tol}} 克）</span></div>
+  <div class="stat"><b>{{d3.r_g0}} → {{d3.r_g1}} → {{d3.r_g2}}</b><span>三代验证 r（G0 交叉验证，G1 / G2 前向验证）</span></div>
+  <div class="stat"><b>{{d3.rows_rec}} / {{d3.rows_dec}} / {{d3.rows_out}}</b><span>台账行数：建议 / 决策 / 子代结局</span></div>
+  <div class="stat"><b>{{d3.adopt_g0}} / {{d3.rec_g0}} → {{d3.adopt_g1}} / {{d3.rec_g1}}</b><span>选配建议被采纳数（G0 → G1）</span><i>模拟器不读建议，见下</i></div>
+  <div class="stat"><b>{{d3.bandwidth}}</b><span>验证带宽（{{d3.samples_per_year}} 样本/年 ÷ {{d3.latency}} 年）</span></div>
+</div>
+
+<h2>七步流程</h2>
+<div class="flow">
+  <span class="step">① 芯片批次<small>到货 · 批次清单</small></span><span class="arrow">→</span>
+  <span class="step">② 基因型<small>质检门：拦截 / 放行</small></span><span class="arrow">→</span>
+  <span class="step">③ 参考群更新<small>合并 · 重训</small></span><span class="arrow">→</span>
+  <span class="step">④ 育种值<small>GEBV · 可靠性</small></span><span class="arrow">→</span>
+  <span class="step">⑤ 留种与选配<small>近交上限 · 携带者禁配</small></span><span class="arrow">→</span>
+  <span class="step">⑥ 采纳记录<small>下一批系谱判定</small></span><span class="arrow">→</span>
+  <span class="step">⑦ 子代结果回流<small>一个世代后</small></span>
+</div>
+{{d3.batch_table}}
+<figure><img src="demo3/figures/a_funnel.png" alt="每批到货 → 放行 → 合并后参考群规模" loading="lazy"><figcaption>每批到货、放行与合并后的参考群规模。</figcaption></figure>
+<figure><img src="demo3/figures/b_forward_r.png" alt="各代验证 r" loading="lazy"><figcaption>各代验证 r：G0 为 5 折交叉验证基线，G1 / G2 为前向验证（只用过去的数据预测新一批）。G2 的 LR 法离散度 b = {{d3.b_g2}}（应接近 1）。</figcaption></figure>
+
+<h2>台账：三张表与一个字段</h2>
+<div class="tw"><table>
+<thead><tr><th>表</th><th>记什么</th><th>关键字段</th><th>本 demo 里有多少行</th></tr></thead>
+<tbody>
+<tr><td>recommendations</td><td>每一条留种或选配建议：给谁、什么时候、依据哪次重训</td><td>issued_at · customer_id · model_version · <code>randomized_control</code></td><td class="num">{{d3.rows_rec}}</td></tr>
+<tr><td>decisions</td><td>客户采纳了没有：由下一批系谱判定，不靠自报</td><td>decided_at · adopted · decided_by</td><td class="num">{{d3.rows_dec}}</td></tr>
+<tr><td>outcomes</td><td>一个世代后子代的表现，只有通过质检的子代才写入</td><td>available_at · trait · value</td><td class="num">{{d3.rows_out}}</td></tr>
+</tbody></table></div>
+<p><code>randomized_control</code>：G1 的推荐里有 {{d3.rc_flagged}} 条打上了随机对照占位标记。审查表第 4 行说：场区、批次、年份混杂可以制造虚假准确度；产业观察数据要支持决策改进，最干净的办法是一轮随机化对照配种。字段先留好，客户同意时台账就升级成实验。</p>
+<figure><img src="demo3/figures/c_adoption_progeny.png" alt="采纳率与子代表现" loading="lazy"><figcaption>配对采纳率；被采纳配对的子代 42 日龄体重 vs 同批其余配对（描述性对比，非随机化）。</figcaption></figure>
+<div class="howto ai" data-for="ai breeder"><b>诚实的发现：</b>采纳率只有 {{d3.adopt_g0}} / {{d3.rec_g0}} 与 {{d3.adopt_g1}} / {{d3.rec_g1}}，因为模拟器选亲本时不读选配建议。这是模拟器的行为，不是对真实采纳率的估计。下一步是让选配节点真正驱动模拟器的亲本选择；再往后是接客户流程。</div>
+
+<h2>验证带宽</h2>
+<p>bandwidth = samples_per_year / label_latency_years = {{d3.samples_per_year}} / {{d3.latency}} = <b>{{d3.bandwidth}}</b>。假设一批 = 一个世代 ≈ 一年、标签延迟一个世代。若按模拟批次的实际到货间隔折算（约 98 天一批），样本/年约 {{d3.bandwidth_calendar}}。Deck 的口径：产业以百万级样本/年计，实验室以千级实验/年计；我们的护城河是时间，他们的是算力。</p>
+
+<h2>商业含义</h2>
+<div class="grid" data-for="board">
+  <div class="card"><h3>A 线 · 育种智能体</h3><p>本地部署的选种闭环，部署费 + 年费。本页就是交付物的骨架：七步流程、逐头可查、每步可复现。</p></div>
+  <div class="card"><h3>B 线 · 数据平台与台账</h3><p>平台费 + 按样本。台账每过一个世代多一层带标签的数据；后来者从第一天起就落后三个世代。留存假设 ≥ 90%，因为台账即切换成本。</p></div>
+  <div class="card"><h3>复利三环</h3><p>数据环（标签随世代累积）、内容环（台账告诉我们哪些位点反复贡献预测力 → 下一代面板）、信任环（可复现、可审计的记录被客户与主管部门采用）。三环的起点都是这三张表。</p></div>
+</div>
+<div class="howto board" data-for="board"><b>现金层的两个数字怎么来：</b>"逐头一致率 ≥ 99%"的机制是本页的独立重算（{{d3.agree}} / {{d3.agree_n}}，最大差 {{d3.max_diff}} 克）；"交付 ≤ 4 周"的机制是管线一条命令重建（本 demo {{d3.seconds}} 秒）。两个数字变成真实承诺，只差客户数据的影子运行。</div>
+
+<h2>可以说 / 不能说 / 需要什么数据</h2>
+{{d3.claims}}
+<p class="toc">对应 PRD 审查表第 4 行与现金层。一条命令重建：<code>make demo3</code>。</p>

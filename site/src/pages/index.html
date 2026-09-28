@@ -1,0 +1,90 @@
+<h1>每一代都更好，<br>包括我们自己这一代的时间。<span class="en">Every generation better. This one longer.</span></h1>
+<p class="lede">从猪、鸡、牛到犬猫再到人：让每个世代更快到来、更少疾病、更长健康的时间。方法是把地球上最大的生物实验变成一座有记忆的实验室。</p>
+<p class="lede">这个站把公司要做的事拆成四个可以点开的 Demo。每个 Demo 都回答三个问题：它证明 Deck 上哪一句话；它落在哪条产品线上；它依据什么理论、什么结果会证伪它。</p>
+<a class="cta" href="#demos">看四个 Demo ↓</a>
+<a class="cta ghost" id="app-link" href="{{site.app_url}}">打开裁判监护面板 →</a>
+<p class="toc">右上角选一个身份，页面会为你标出该看的部分：育种的人看流程与逐头可查；做 AI 的人看模型、验证与负对照；董事会看目标、时间表与收入线。</p>
+
+<h2>方法：读出 · 裁判 · 记忆</h2>
+<p>三者共用一套资产；每进一个新价值池，边际成本是一套新面板和一批新客户。</p>
+<div class="layers">
+  <div class="layer read"><h3>读出</h3><p>固定面板：基因型、甲基化、HLA 分型；同一指标跨猪、犬、人。</p></div>
+  <div class="layer judge"><h3>裁判</h3><p>任何预测方法都要过的同一套门：前向验证、配对增量、负对照、可复现。</p></div>
+  <div class="layer memory"><h3>记忆</h3><p>只增不减的台账：每一次建议、采纳与一个世代后的结果。原始归客户，聚合与模型归平台。</p></div>
+</div>
+<div class="howto breeder" data-for="breeder"><b>育种的人：</b>Demo 3 是你熟悉的选种流程——芯片批次、参考群更新、育种值、留种与选配建议、采纳、子代回流——只是每一步都被记下来、可以逐头追溯。Demo 1 回答"AI 到底有没有比 ssGBLUP 更准"，答案由裁判说了算，不由供应商说了算。</div>
+<div class="howto ai" data-for="ai"><b>做 AI 的人：</b>冻结的 ssGBLUP 永远是冠军，任何大模型、深度学习或功能先验都只是挑战者；晋级要在同一批候选、同一截止日上配对胜出，并过负对照与多重检验。Demo 1 和 Demo 4 是同一套裁判换两个领域。</div>
+<div class="howto board" data-for="board"><b>董事会 / 投资人：</b>四个 Demo 对应五条收入线：Demo 1/3 是育种智能体与数据平台（A、B、C 线），Demo 2 是跨物种读出（D 线），Demo 4 是审计与授权（E 线）。每页末尾的"商业含义"写明它想证明的数字、现在证明到哪一步、还缺什么。</div>
+
+<h2 id="demos">四个 Demo</h2>
+<div class="grid two">
+  <a class="card demo" href="demo1.html" style="text-decoration:none;color:inherit">
+    <h3>Demo 1 · 裁判（育种）<span class="badge real">已交付 · 真实计算</span></h3>
+    <p class="q">一个任何方法都要过的裁判，它已经拒绝了看起来很好的假阳性。</p>
+    <p>七个实验臂（冻结冠军、随机搜索、一次性 AI、智能闭环、两组负对照、外部先验）在肉鸡式模拟与公开猪数据上对照。</p>
+    <p>负对照误晋级 <b>{{d1.neg_sim}} / {{d1.neg_pig}}</b>（模拟 / 猪） · 泄漏探针拦截 <b>{{d1.leak}} / {{d1.leak}}</b> · 实测准确度全部低于理论上界：<b>{{d1.bound_ok}}</b></p>
+    <p class="foot">→ 实验臂说明 · r–N 曲线 · 跨客户三档 · 育种者方程分解</p>
+  </a>
+  <a class="card demo sim" href="demo2.html" style="text-decoration:none;color:inherit">
+    <h3>Demo 2 · 跨物种时钟<span class="badge sim">内部预测版 · 模拟引擎</span></h3>
+    <p class="q">生物年龄可以被跨物种一致地读出——同一套读出与裁判，在育种之外零改动可用。</p>
+    <p>猪、犬、牛、人的甲基化时钟：保守 CpG 筛选、弹性网、留物种验证、年龄加速度 vs 结局、探针清单。真实 GEO 数据到位前，引擎跑在明示参数的模拟数据上。</p>
+    <p>留物种 r：猪 <b>{{d2.loso_pig}}</b> · 犬 <b>{{d2.loso_dog}}</b>（验收线 0.8，模拟数据上{{d2.accepted}}）</p>
+    <p class="foot">→ 流水线 · 假设的模型 · 结果格式 · 犬猫与人类线的商业含义</p>
+  </a>
+  <a class="card demo" href="demo3.html" style="text-decoration:none;color:inherit">
+    <h3>Demo 3 · 台账界面<span class="badge real">已交付 · 模拟数据</span></h3>
+    <p class="q">现金层：影子运行逐头一致、交付可审计；台账让客户越用越离不开。</p>
+    <p>按客户的选种流程七步走完：芯片批次 → 基因型 → 参考群更新 → 育种值 → 留种与选配 → 采纳记录 → 子代结果回流，全部写进只增不减的台账。</p>
+    <p>缺陷拦截 <b>{{d3.defects_caught}} / {{d3.defects_injected}}</b> · 育种值逐头一致 <b>{{d3.agree}} / {{d3.agree_n}}</b> · 前向 r <b>{{d3.r_g1}} → {{d3.r_g2}}</b></p>
+    <p class="foot">→ 七步流程 · 三张台账表 · 验证带宽 · 复利三环</p>
+  </a>
+  <a class="card demo sim" href="demo4.html" style="text-decoration:none;color:inherit">
+    <h3>Demo 4 · 新抗原审计 + HLA 填充<span class="badge sim">内部预测版 · 模拟引擎</span></h3>
+    <p class="q">裁判不只审育种：要冻结 5–7 年的算法，冻结前需要独立验证；HLA 分型是进入人类线的楔子。</p>
+    <p>4a 四位分辨率 HLA 填充按频率分层 × 面板密度；4b 患者 × 肽段排序的六臂审计与"冻结前独立验证报告"。真实数据到位前跑在模拟数据上。</p>
+    <p>负对照误晋级 <b>{{d4.neg_false}}</b> · HLA 正确率 参考 / 65K / 20K 面板 <b>{{d4.hla_ref}} / {{d4.hla_65k}} / {{d4.hla_20k}}</b></p>
+    <p class="foot">→ 4a 与 4b 结果 · 审计报告样例 · 审计与授权线的商业含义</p>
+  </a>
+</div>
+<p class="toc">常见的困惑：Demo 1 里的 A–G 是<b>七个实验臂</b>，是同一次对照实验里的七条腿，不是四个 Demo；四个 Demo 是 PRD 里四件要证明的事。<a href="demo1.html#arms">实验臂说明 →</a></p>
+
+<h2>宏大愿景与可证明的事之间的三层对应</h2>
+<div class="tw"><table>
+<thead><tr><th>层</th><th>Deck 上的话</th><th>Demo 要证明的最小命题</th><th>依据的理论</th><th>现在证明到哪一步</th></tr></thead>
+<tbody>
+<tr><td>目的地</td><td>每一代都更好，包括我们自己这一代的时间</td><td>遗传进展可以被可审计地提高；生物年龄可以被跨物种一致地读出</td><td>育种者方程 ΔG = i·r·σA / L；表观时钟</td><td>Demo 1 的分解表（模拟）；Demo 2 的流水线（模拟引擎）</td></tr>
+<tr><td>方法</td><td>读出、裁判、记忆</td><td>同一套门槛在两个领域零改动可用；台账能回流并改进预测</td><td>前向验证、LR 法、置换检验；决策—结果配对数据</td><td>Demo 1 与 Demo 4 共用裁判；Demo 3 台账三张表已落地</td></tr>
+<tr><td>现金</td><td>客户的选种闭环</td><td>影子运行逐头一致率 ≥ 99%，交付 ≤ 4 周</td><td>ssGBLUP 的确定性复现</td><td>Demo 3：同一公式独立重算与保存的育种值 {{d3.agree}} / {{d3.agree_n}} 一致（模拟）；真实客户数据待接</td></tr>
+<tr><td>成果承诺</td><td>十年进步五年发生</td><td>把 +50%/年的遗传进展分解为 r 与 L 的可测变化</td><td>育种者方程的分解</td><td>Demo 1b：胴体性状只改 r 已 {{d1.by_r}}；个体可测性状需 r 与 L 一起 {{d1.bw42_rl}}（模拟）</td></tr>
+</tbody></table></div>
+
+<h2 data-for="board">五件可以看见的事</h2>
+<p data-for="board">每件有年份、数字、参照和对应的收入线。前两件我们自己兑现，后三件需要客户、合作方与监管。这是 Deck 的承诺页；右列写的是本站哪个 Demo 在为它铺路。</p>
+<div class="tw" data-for="board"><table>
+<thead><tr><th>年份</th><th>承诺</th><th>参照</th><th>收入线</th><th>本站对应</th></tr></thead>
+<tbody>
+<tr><td>2031</td><td>种源追平进口：接入平台的国产白羽鸡与种猪在核心经济性状上追平进口品系</td><td>国产白羽鸡占有率 30% →；种业振兴行动方案</td><td>A、B</td><td>Demo 1 裁判 + Demo 3 台账</td></tr>
+<tr><td>2031</td><td>十年进步五年发生：接入客户年遗传进展提高 50%+，每头动物的实现进展可审计</td><td>Genus 约三年遗传滞后</td><td>C</td><td>Demo 1b 分解表（措辞按性状分开，等影子运行定数字）</td></tr>
+<tr><td>2033</td><td>抗病可选育：通过选育抗病与耐受性状，抗生素使用降低三成</td><td>Genus 抗蓝耳病猪已在 8 个法域获批</td><td>B、C、D</td><td>Demo 1 的挑战者机制（G 臂先验）+ Demo 3 台账回流</td></tr>
+<tr><td>2035</td><td>犬猫多两个健康年：跨物种读出成为犬猫抗衰干预的默认药效终点</td><td>Loyal 的使命；Zoetis 67% 收入来自犬猫</td><td>D</td><td>Demo 2 跨物种时钟（内部预测版）</td></tr>
+<tr><td>2040</td><td>生物年龄成常规读数：生物年龄与免疫状态读出进入常规体检，并被至少一种干预评价采纳为替代终点</td><td>Moderna 三期用无复发生存期；衰老尚无公认终点</td><td>D、E</td><td>Demo 2 + Demo 4（审计与 HLA）</td></tr>
+</tbody></table></div>
+
+<h2 data-for="board ai">路线图：三级台阶，每一级都是好结局</h2>
+<div class="grid" data-for="board ai">
+  <div class="card"><h3>第一级 · 2027–2029</h3><p class="q">育种决策闭环平台</p><p>猪、鸡、牛跨客户数据托管与决策；分成合同；验证带宽 ≥ 300 万样本/年。对标 Neogen 基因组 + Genus royalty。</p><p class="foot">本站：Demo 1、Demo 3</p></div>
+  <div class="card"><h3>第二级 · 2028–2031</h3><p class="q">跨物种读出层</p><p>国产跨物种甲基化芯片；犬猫药效读出；HLA 分型 + 算法审计；人类科研用途产品。对标 Illumina EPIC + Tempus。</p><p class="foot">本站：Demo 2、Demo 4（内部预测版）</p></div>
+  <div class="card"><h3>第三级 · 2031–2038</h3><p class="q">生命数据的默认记忆</p><p>人类队列、数据授权、伴随管线里程碑；读出与审计被主管部门或行业标准采纳。对标 IQVIA、Veeva、Tempus。</p><p class="foot">本站：台账与审计报告的形态已在 Demo 3 / Demo 4 里</p></div>
+</div>
+
+<h2>这个站里什么是真的、什么是模拟的</h2>
+<div class="tw"><table>
+<thead><tr><th>Demo</th><th>数据</th><th>引擎</th><th>结论的效力</th></tr></thead>
+<tbody>
+<tr><td>Demo 1 裁判（育种）</td><td>肉鸡式多品系模拟（真育种值已知）+ 公开 PIC 猪数据</td><td>真实的裁判：六道门、七臂、负对照、DSR 校正，与生产代码同一套</td><td>裁判本身的性质（零误晋级、拦截泄漏、不超上界）是真实结论；进展数字只对模拟成立</td></tr>
+<tr><td>Demo 2 跨物种时钟</td><td>模拟甲基化矩阵（假设明示）</td><td>真实的流水线（弹性网、留物种、热力学）跑在模拟数据上</td><td>展示流水线、验收口径与报告格式；准确度数字不能外推</td></tr>
+<tr><td>Demo 3 台账界面</td><td>refpop-agent 模拟器（种子 15，注入 62 个缺陷）</td><td>真实的管线与台账 API</td><td>流程与台账机制是真实的；采纳率是模拟器行为</td></tr>
+<tr><td>Demo 4 新抗原审计 + HLA</td><td>模拟人群单倍型；模拟患者 × 肽段</td><td>真实的审计纪律（留患者、六臂、Bonferroni）跑在模拟数据上</td><td>负对照零晋级与"不看算法内部也能出报告"是真实结论；命中率不能外推</td></tr>
+</tbody></table></div>
+<p>每个 Demo 目录都有 <code>CLAIMS.md</code>（可以说 / 不能说 / 需要什么数据才能说）与 <code>RUN.json</code>（种子、数据哈希、阈值哈希、时长、验证带宽），一条命令可以重建。技术细节见 <a href="engine.html">技术路线与引擎</a>，操作手册见 <a href="abl/index.html">手册与引擎</a>。</p>

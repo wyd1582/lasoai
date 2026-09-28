@@ -21,7 +21,7 @@ if str(_PROJECT) not in sys.path:          # `streamlit run dashboard/app.py` pu
 import pandas as pd  # noqa: E402
 import streamlit as st  # noqa: E402
 
-from common import paths  # noqa: E402
+from common import arms, paths  # noqa: E402
 from dashboard import control, i18n  # noqa: E402
 from dashboard.alarms import compute_alarms, notify  # noqa: E402
 from dashboard.i18n import t  # noqa: E402
@@ -87,6 +87,14 @@ def _hhmm(ts) -> str:
     return t.strftime("%m-%d %H:%M:%S") if t else "--:--:--"
 
 
+def _help(text: str) -> None:
+    """Beginner-mode caption under a panel title: what it is, how to read it, what counts as abnormal.
+    Takes the translated text (so the i18n key scanner sees the t() call); hidden when the sidebar
+    toggle is off, which defaults to on."""
+    if st.session_state.get("help_mode", True):
+        st.caption(text)
+
+
 # --------------------------------------------------------------------------------------------
 # LEFT — Learning
 # --------------------------------------------------------------------------------------------
@@ -138,7 +146,7 @@ def feed_panel() -> None:
     # gates record outcomes in SQL only, so their failures/promotions are merged in from the registry
     gate_evs = _gate_feed(FEED_ROWS)
     events = sorted(feed.snapshot()[-3 * FEED_ROWS:] + gate_evs, key=lambda e: str(e.get("ts") or ""))
-    st.subheader(t("app_feed_title"))
+    st.subheader(t("app_feed_title")); _help(t("app_help_feed"))
     only = st.toggle(t("app_feed_only"), key="feed_only")
     shown = 0
     with st.container(height=520):
@@ -163,7 +171,7 @@ def feed_panel() -> None:
 @st.fragment(run_every=REFRESH)
 def mechanism_panel(campaign: str | None) -> None:
     _apply_lang()
-    st.subheader(t("app_mech_title"))
+    st.subheader(t("app_mech_title")); _help(t("app_help_mech"))
     mm = _q("mechanism_map", campaign)
     if mm.empty:
         st.info(t("app_no_proposals"))
@@ -183,7 +191,7 @@ def mechanism_panel(campaign: str | None) -> None:
 @st.fragment(run_every=REFRESH)
 def funnel_panel(campaign: str | None) -> None:
     _apply_lang()
-    st.subheader(t("app_funnel_title"))
+    st.subheader(t("app_funnel_title")); _help(t("app_help_funnel"))
     fc = _q("funnel_compare", campaign)
     top = int(fc["campaign_to_date"].max() or 0) if len(fc) else 0
     stages = {"proposals": t("stage_proposals"), "reviewed": t("stage_reviewed"),
@@ -263,7 +271,7 @@ def _render_package(pkg: dict) -> None:
 @st.fragment(run_every=REFRESH)
 def explain_panel(campaign: str | None) -> None:
     _apply_lang()
-    st.subheader(t("app_explain_title"))
+    st.subheader(t("app_explain_title")); _help(t("app_help_explain"))
     cands = _q("candidates", campaign)
     if cands.empty:
         st.info(t("app_no_candidates"))
@@ -302,7 +310,7 @@ def explain_panel(campaign: str | None) -> None:
 @st.fragment(run_every=REFRESH)
 def budget_panel(campaign: str | None) -> None:
     _apply_lang()
-    st.subheader(t("app_budget_title"))
+    st.subheader(t("app_budget_title")); _help(t("app_help_budget"))
     b = _q("budget", campaign)
     if b.empty:
         st.info(t("app_no_campaign"))
@@ -326,7 +334,7 @@ def budget_panel(campaign: str | None) -> None:
 @st.fragment(run_every=REFRESH)
 def alarms_panel() -> None:
     _apply_lang()
-    st.subheader(t("app_alarms_title"))
+    st.subheader(t("app_alarms_title")); _help(t("app_help_alarms"))
     feed = _feed()
     feed.poll()
     alarms = compute_alarms(feed.alarm_events(), _CachedReader(), utcnow())
@@ -345,15 +353,21 @@ def alarms_panel() -> None:
 @st.fragment(run_every=REFRESH)
 def control_panel() -> None:
     _apply_lang()
-    st.subheader(t("app_controls_title"))
+    st.subheader(t("app_controls_title")); _help(t("app_help_controls"))
     if DEMO:                                       # public deployment: never expose the PAUSE switch
         st.info(t("app_demo_controls"))
         return
     s = control.control_state()
+    camps = _q("campaigns")
+    n_active = int(camps["active"].sum()) if not camps.empty else 0
+    feed = _feed(); feed.poll(); snap = feed.snapshot()
+    last_ts = _hhmm(snap[-1].get("ts")) if snap else "—"
     if s["paused"]:
         st.warning(t("app_paused"), icon=":material/pause_circle:")
+    elif s["run"] and n_active:
+        st.success(t("app_running_n", n=n_active, ts=last_ts), icon=":material/play_circle:")
     elif s["run"]:
-        st.success(t("app_running"), icon=":material/play_circle:")
+        st.info(t("app_ctl_no_active", ts=last_ts), icon=":material/info:")
     else:
         st.info(t("app_idle"), icon=":material/stop_circle:")
     c1, c2 = st.columns(2)
@@ -361,13 +375,13 @@ def control_panel() -> None:
     c1.button(t("app_btn_pause"), type="primary", disabled=s["paused"], key="btn_pause", **_FULL_WIDTH,
               on_click=control.pause)
     c2.button(t("app_btn_resume"), disabled=not s["paused"], key="btn_resume", on_click=control.resume, **_FULL_WIDTH)
-    st.caption(f"`{control.pause_file()}`")
+    st.caption(t("app_ctl_pause_explain", path=control.pause_file()))
 
 
 @st.fragment(run_every=REFRESH)
 def reliability_panel(campaign: str | None) -> None:
     _apply_lang()
-    st.subheader(t("app_reliability_title"))
+    st.subheader(t("app_reliability_title")); _help(t("app_help_reliability"))
     nc = _q("negative_control_reviews", campaign)
     fp = _q("false_promotions", campaign)
     n = len(nc)
@@ -412,8 +426,17 @@ def main() -> None:
     options = [ALL_CAMPAIGNS] + ids
     default = options.index(active[0]) if active else 0
     with st.sidebar:
+        lang = i18n.current_lang()
         choice = st.selectbox(t("app_campaign"), options, index=default, key="campaign",
-                              format_func=lambda c: t("app_all_campaigns") if c == ALL_CAMPAIGNS else c)
+                              format_func=lambda c: t("app_all_campaigns") if c == ALL_CAMPAIGNS else arms.display_name(c, lang))
+        if choice != ALL_CAMPAIGNS:
+            st.caption(f"`{choice}`")
+        st.toggle(t("app_help_toggle"), key="help_mode", value=True)
+        with st.expander(t("app_arms_legend")):
+            st.caption(t("app_arms_legend_intro"))
+            for a in arms.ARMS:
+                st.markdown(f"**{a.label(lang)}** — {a.question_zh if lang == 'zh' else a.question_en}"
+                            f"（{a.pass_zh if lang == 'zh' else a.pass_en}）")
         st.caption(t("app_abl_root", root=paths.root()))
         st.caption(t("app_registry_path", path=paths.registry_db())
                    + ("" if paths.registry_db().exists() else t("app_registry_missing")))
