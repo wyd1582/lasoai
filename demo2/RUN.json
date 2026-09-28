@@ -1,6 +1,6 @@
 {
  "demo": "demo2 · 跨物种时钟（内部预测版，模拟数据）",
- "generated_at": "2026-09-28T08:01:56.277295+00:00",
+ "generated_at": "2026-09-28T09:17:17.996226+00:00",
  "seed": 2,
  "config_hash": "e0f028db15c7",
  "assumptions": {
@@ -165,9 +165,9 @@
   }
  },
  "duration_seconds": {
-  "simulate": 2.1,
-  "fit_and_validate": 45.7,
-  "total": 50.4
+  "simulate": 3.5,
+  "fit_and_validate": 65.1,
+  "total": 72.5
  },
  "outputs_sha256": {
   "CLAIMS.md": "423d6811856e5968883432cd9587f92c47c55e646496efb70150d4ffc49e700c",

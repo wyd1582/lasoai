@@ -153,11 +153,12 @@ def simulate(rng: np.random.Generator) -> dict:
 # ------------------------------------------------------------------------------------------------
 def fit_clock(X: np.ndarray, y: np.ndarray, seed: int) -> ElasticNetCV:
     cv = KFold(5, shuffle=True, random_state=seed)
-    kw = dict(l1_ratio=0.5, cv=cv, max_iter=20000, tol=1e-4, random_state=seed, n_jobs=1)
-    try:                                  # scikit-learn ≥ 1.7 renamed n_alphas → alphas=<int>
-        m = ElasticNetCV(alphas=25, **kw)
-    except (TypeError, ValueError):
-        m = ElasticNetCV(n_alphas=25, **kw)
+    # 正则化网格自己算（scikit-learn 的 _alpha_grid 公式：alpha_max 到 alpha_max·1e-3，25 档，对数等距），
+    # 以数组形式传入：旧版只接受数组、新版把 n_alphas 改名了，显式网格在所有版本上行为一致。
+    l1_ratio = 0.5
+    alpha_max = float(np.abs(X.T @ (y - y.mean())).max()) / (len(y) * l1_ratio)
+    alphas = np.logspace(np.log10(alpha_max), np.log10(alpha_max * 1e-3), 25)
+    m = ElasticNetCV(l1_ratio=l1_ratio, alphas=alphas, cv=cv, max_iter=20000, tol=1e-4, random_state=seed, n_jobs=1)
     m.fit(X, y)
     return m
 
